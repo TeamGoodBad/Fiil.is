@@ -13,15 +13,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - uses: actions/setup-node@master
-      - uses: c-hive/gha-yarn-cache@v1
+        with:
+          cache: 'npm'
 
       - name: Install node modules
         run: |
-          yarn install
+          npm install
 
       - name: Run test
         run: |
-          yarn test-ci
+          npm test
 
       - name: Cache Gradle Wrapper
         uses: actions/cache@v2
@@ -50,7 +51,7 @@ jobs:
         with:
           releaseDirectory: android/app/build/outputs/bundle/release
           signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY }}
-          alias: ${{ secrets.ANDOID_SIGNING_ALIAS }}
+          alias: ${{ secrets.ANDROID_SIGNING_ALIAS }}
           keyStorePassword: ${{ secrets.ANDROID_SIGNING_STORE_PASSWORD }}
           keyPassword: ${{ secrets.ANDROID_SIGNING_KEY_PASSWORD }}
 
@@ -65,8 +66,6 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.ANDROID_SERVICE_ACCOUNT }}
           packageName: com.goodbad
-          releaseFile: a${{ steps.sign_app.outputs.signedReleaseFile }}
+          releaseFiles: ${{ steps.sign_app.outputs.signedReleaseFile }}
           track: internal
-          inAppUpdatePriority: 3
-          userFraction: 1
-          whatsNewDirectory: android/release-notes
+          #whatsNewDirectory: android/release-notes
