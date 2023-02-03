@@ -68,4 +68,5 @@ jobs:
           packageName: com.goodbad
           releaseFiles: ${{ steps.sign_app.outputs.signedReleaseFile }}
           track: internal
+          status: draft # Can be changed to "completed" after the app setup is ready
           #whatsNewDirectory: android/release-notes
