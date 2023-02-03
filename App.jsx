@@ -10,6 +10,7 @@ const App = () => {
         alignItems: 'center',
       }}>
       <Text>🎉 Hello, world! 🥳</Text>
+      <Text>CI/CD seems to be working as well!</Text>
     </View>
   );
 };
