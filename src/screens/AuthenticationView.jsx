@@ -1,11 +1,9 @@
 import {View, Text} from "react-native"
-import NavigationBar from "../components/NavigationBar";
 
 const AuthenticationView = ({navigation}) => {
   return (
-    <View> 
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}> 
       <Text>Authentication view</Text>
-      <NavigationBar navigation={navigation}/>
     </View>
   );
 }

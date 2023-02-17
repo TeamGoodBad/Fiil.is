@@ -1,11 +1,9 @@
 import {View, Text} from "react-native"
-import NavigationBar from "../components/NavigationBar";
 
 const AnalysisView = ({navigation}) => {
   return (
-    <View> 
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}> 
       <Text>Analysis View</Text>
-      <NavigationBar navigation={navigation}/>
     </View>
   );
 }
