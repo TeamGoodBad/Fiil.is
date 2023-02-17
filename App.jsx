@@ -1,18 +1,24 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import MainView from './src/screens/MainView';
+import CalendarView from './src/screens/CalendarView';
+import AnalysisView from './src/screens/AnalysisView';
+import SettingsView from './src/screens/SettingsView';
 
 const App = () => {
+  const Stack = createNativeStackNavigator();
+
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <Text>🎉 Hello, world! 🥳</Text>
-      <Text>CI/CD seems to be working as well!</Text>
-      <Text>Fiil.is</Text>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name='Main' component={MainView} />
+        <Stack.Screen name='Calendar' component={CalendarView} />
+        <Stack.Screen name='Analysis' component={AnalysisView} />
+        <Stack.Screen name='Settings' component={SettingsView} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 export default App;
