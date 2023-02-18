@@ -13,11 +13,43 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <Tab.Navigator labeled={true}>
-        <Tab.Screen name='Main' component={MainView} />
-        <Tab.Screen name='Calendar' component={CalendarView} />
-        <Tab.Screen name='Analysis' component={AnalysisView} />
-        <Tab.Screen name='Settings' component={SettingsView} />
+      <Tab.Navigator labeled={false}>
+        <Tab.Screen
+          name='Main'
+          component={MainView}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="notebook-edit" color={color} size={26} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name='Calendar'
+          component={CalendarView}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="calendar" color={color} size={26} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name='Analysis'
+          component={AnalysisView}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="lightbulb-on-outline" color={color} size={26} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name='Settings'
+          component={SettingsView}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="cog" color={color} size={26} />
+            ),
+          }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
