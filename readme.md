@@ -1,5 +1,5 @@
-# Fiil.is App
-GoodBad is an app which asks for diary entries along with star ratings of how good your day was. You can then analyse them and map out what things usually go along with your good or bad days. This is so you would have a better grasp on what really makes your days feel good (and what things you should avoid).
+# Fiil.is
+This app asks for diary entries along with star ratings of how good your day was. You can then analyse them and map out what things usually go along with your good or bad days. This is so you would have a better grasp on what really makes your days feel good (and what things you should avoid).
 
 The app keeps all your data on your device and does not send it anywhere. It's your diary, so it is your data.
 
