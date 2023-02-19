@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-navigation/material-bottom-tabs": "^6.2.13",
     "@react-navigation/native": "^6.1.4",
+    "@react-navigation/native-stack": "^6.9.10",
     "react": "18.2.0",
     "react-native": "0.71.3",
     "react-native-gesture-handler": "^2.9.0",

@@ -1,9 +1,10 @@
-import {View, Text} from "react-native"
+import { View, Text, Button } from "react-native"
 
-const AuthenticationView = ({navigation}) => {
+const AuthenticationView = ({ navigation }) => {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}> 
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Authentication view</Text>
+      <Button title="Authenticate!" onPress={() => navigation.navigate("Tabs")} />
     </View>
   );
 }
