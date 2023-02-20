@@ -65,8 +65,8 @@ jobs:
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.ANDROID_SERVICE_ACCOUNT }}
-          packageName: com.goodbad
+          packageName: com.goodbad.fiilis
           releaseFiles: ${{ steps.sign_app.outputs.signedReleaseFile }}
-          track: internal
-          status: draft # Can be changed to "completed" after the app setup is ready
+          track: alpha
+          status: completed
           #whatsNewDirectory: android/release-notes
