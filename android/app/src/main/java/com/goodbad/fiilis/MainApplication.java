@@ -1,4 +1,4 @@
-package com.goodbad;
+package com.goodbad.fiilis;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

@@ -93,12 +93,12 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.goodbad"
+    namespace "com.goodbad.fiilis"
     defaultConfig {
-        applicationId "com.goodbad"
+        applicationId "com.goodbad.fiilis"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 6
+        versionCode 1
         versionName "0.1 alpha"
     }
 
