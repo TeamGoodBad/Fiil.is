@@ -2,6 +2,8 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Provider as PaperProvider } from 'react-native-paper';
+
 
 import MainView from './src/screens/MainView';
 import CalendarView from './src/screens/CalendarView';
@@ -13,6 +15,7 @@ const App = () => {
 
   return (
     <NavigationContainer>
+       <PaperProvider>
       <Tab.Navigator labeled={false}>
         <Tab.Screen
           name='Main'
@@ -51,6 +54,7 @@ const App = () => {
           }}
         />
       </Tab.Navigator>
+      </PaperProvider>
     </NavigationContainer>
   );
 };
