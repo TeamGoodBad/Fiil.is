@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Provider as PaperProvider } from 'react-native-paper';
 
 import MainView from './src/screens/MainView';
 import CalendarView from './src/screens/CalendarView';
@@ -75,9 +76,11 @@ const App = () => {
   );
 
   return (
-    <NavigationContainer>
-      {AuthenticationWrapper}
-    </NavigationContainer>
+    <PaperProvider>
+      <NavigationContainer>
+        {AuthenticationWrapper}
+      </NavigationContainer>
+    </PaperProvider>
   );
 };
 export default App;
