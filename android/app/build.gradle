@@ -98,8 +98,8 @@ android {
         applicationId "com.goodbad.fiilis"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
-        versionName "0.1 alpha"
+        versionCode 3
+        versionName "0.0.3 alpha"
     }
 
     splits {

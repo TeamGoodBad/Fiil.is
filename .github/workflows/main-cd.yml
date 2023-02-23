@@ -67,6 +67,6 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.ANDROID_SERVICE_ACCOUNT }}
           packageName: com.goodbad.fiilis
           releaseFiles: ${{ steps.sign_app.outputs.signedReleaseFile }}
-          track: alpha
+          track: beta
           status: completed
           #whatsNewDirectory: android/release-notes
