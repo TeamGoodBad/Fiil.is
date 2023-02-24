@@ -1,12 +1,19 @@
-import { View, Text } from "react-native"
-import { ActivityIndicator, useTheme } from 'react-native-paper';
+import { useState } from 'react';
+import { View, Text } from "react-native";
+import { Switch, useTheme } from 'react-native-paper';
 
 const SettingsView = ({navigation}) => {
+  const [onOff, setOnOff] = useState(true);
   const theme = useTheme();
+  const color = onOff ? theme.colors.background : theme.colors.error
+  
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.colors.secondary }}> 
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: color }}> 
       <Text>Settings View</Text>
-      <ActivityIndicator animating={true} color={theme.colors.onSecondary} />
+      <Switch
+        color={'red'}
+        value={onOff}
+        onValueChange={() => setOnOff(onOff ? false : true)} />
     </View>
   );
 }
