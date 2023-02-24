@@ -12,7 +12,7 @@ import {
   MD3DarkTheme,
   MD3LightTheme
 } from 'react-native-paper';
-//import { useColorScheme } from 'react-native';
+import { useColorScheme } from 'react-native';
 
 import MainView from './src/screens/MainView';
 import CalendarView from './src/screens/CalendarView';
@@ -22,7 +22,7 @@ import AuthenticationView from './src/screens/AuthenticationView';
 
 
 const App = () => {
-  //const scheme = useColorScheme();
+  const scheme = useColorScheme();
   const CombinedDefaultTheme = {
     ...MD3LightTheme,
     ...NavigationDefaultTheme,
@@ -103,8 +103,8 @@ const App = () => {
   );
 
   return (
-    <PaperProvider theme={{CombinedDarkTheme}}>
-      <NavigationContainer theme={CombinedDarkTheme}>
+    <PaperProvider theme={scheme === 'dark' ? CombinedDarkTheme : CombinedDefaultTheme}>
+      <NavigationContainer theme={scheme === 'dark' ? CombinedDarkTheme : CombinedDefaultTheme}>
         {AuthenticationWrapper}
       </NavigationContainer>
     </PaperProvider>
