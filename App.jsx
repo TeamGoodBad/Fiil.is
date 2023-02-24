@@ -1,9 +1,17 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  DarkTheme as NavigationDarkTheme,
+  DefaultTheme as NavigationDefaultTheme,
+} from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Provider as PaperProvider } from 'react-native-paper';
+import {
+  Provider as PaperProvider,
+  MD2DarkTheme,
+  MD2LightTheme
+} from 'react-native-paper';
 
 import MainView from './src/screens/MainView';
 import CalendarView from './src/screens/CalendarView';
@@ -11,9 +19,27 @@ import AnalysisView from './src/screens/AnalysisView';
 import SettingsView from './src/screens/SettingsView';
 import AuthenticationView from './src/screens/AuthenticationView';
 
+
 const App = () => {
   const Tab = createMaterialBottomTabNavigator();
   const Stack = createNativeStackNavigator();
+
+  const CombinedDefaultTheme = {
+    ...MD2LightTheme,
+    ...NavigationDefaultTheme,
+    colors: {
+      ...MD2LightTheme.colors,
+      ...NavigationDefaultTheme.colors,
+    },
+  };
+  const CombinedDarkTheme = {
+    ...MD2DarkTheme,
+    ...NavigationDarkTheme,
+    colors: {
+      ...MD2DarkTheme.colors,
+      ...NavigationDarkTheme.colors,
+    },
+  };
 
   // Tab navigator
   const Tabs = () => {
@@ -76,8 +102,8 @@ const App = () => {
   );
 
   return (
-    <PaperProvider>
-      <NavigationContainer>
+    <PaperProvider theme={{CombinedDefaultTheme}}>
+      <NavigationContainer theme={CombinedDefaultTheme}>
         {AuthenticationWrapper}
       </NavigationContainer>
     </PaperProvider>
