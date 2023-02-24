@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { View, Text } from "react-native";
-import { Switch, useTheme } from 'react-native-paper';
+import { View } from "react-native";
+import { Switch, useTheme, Text } from 'react-native-paper';
 
 const SettingsView = ({navigation}) => {
   const [onOff, setOnOff] = useState(true);

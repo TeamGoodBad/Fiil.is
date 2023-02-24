@@ -1,6 +1,6 @@
 import React, {useState} from "react"
-import {View, Text} from "react-native"
-import { ActivityIndicator, MD2Colors } from 'react-native-paper';
+import { View } from "react-native"
+import { ActivityIndicator, MD2Colors, Text } from 'react-native-paper';
 
 
 

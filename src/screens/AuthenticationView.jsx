@@ -1,4 +1,5 @@
-import { View, Text, Button } from "react-native"
+import { View, Button } from "react-native"
+import { Text } from 'react-native-paper';
 
 const AuthenticationView = ({ navigation }) => {
   return (
