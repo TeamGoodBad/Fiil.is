@@ -5,13 +5,13 @@ import { Switch, useTheme } from 'react-native-paper';
 const SettingsView = ({navigation}) => {
   const [onOff, setOnOff] = useState(true);
   const theme = useTheme();
-  const color = onOff ? theme.colors.background : theme.colors.error
+  const color = onOff ? theme.colors.tertiaryContainer : theme.colors.background
   
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: color }}> 
       <Text>Settings View</Text>
       <Switch
-        color={'red'}
+        color={theme.colors.onTertiaryContainer}
         value={onOff}
         onValueChange={() => setOnOff(onOff ? false : true)} />
     </View>
