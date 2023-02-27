@@ -49,6 +49,8 @@ const SettingsView = ({navigation}) => {
         <Button mode="outlined">
           Nappi, joka ei tee mitään
         </Button>
+
+        <Text>{require('../../package.json').version}</Text>
       </View>
     </View>
   );
