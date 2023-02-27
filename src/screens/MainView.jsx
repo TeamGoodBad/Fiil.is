@@ -1,4 +1,5 @@
-import {View, Text, TextInput} from "react-native";
+import { View } from "react-native";
+import { Text, TextInput } from 'react-native-paper';
 
 const MainView = ({navigation}) => {
   return (
