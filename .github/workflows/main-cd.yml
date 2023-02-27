@@ -1,17 +1,17 @@
 name: Beta Distribution
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [published]
 
-jobs:
-  beta-distribution:
+jobs:    
+  distribution:
     runs-on: ubuntu-latest
-    name: Beta Distribution
+    name: Distribution
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      
       - uses: actions/setup-node@master
         with:
           cache: 'npm'
@@ -23,6 +23,15 @@ jobs:
       - name: Run test
         run: |
           npm test
+
+      - name: Set package version
+        run: |
+          npm version --no-git-tag-version ${{ github.event.release.name }}
+
+      - name: Commit and push changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: "package.json"
 
       - name: Cache Gradle Wrapper
         uses: actions/cache@v2
@@ -61,7 +70,7 @@ jobs:
           name: Signed App Bundle
           path: ${{ steps.sign_app.outputs.signedReleaseFile }}
 
-      - name: Deploy to Play Store (internaltest)
+      - name: Deploy to Play Store (Beta)
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.ANDROID_SERVICE_ACCOUNT }}
@@ -70,3 +79,8 @@ jobs:
           track: beta
           status: completed
           #whatsNewDirectory: android/release-notes
+
+      - name: Add signed app package to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ steps.sign_app.outputs.signedReleaseFile }}
