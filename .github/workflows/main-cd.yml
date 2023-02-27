@@ -2,7 +2,7 @@ name: Beta Distribution
 
 on:
   release:
-    types: [published]
+    types: [released]
 
 jobs:    
   distribution:
@@ -11,6 +11,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          ref: main
+
+      - name: Checkout main
+        run: |
+          git checkout main
       
       - uses: actions/setup-node@master
         with:
