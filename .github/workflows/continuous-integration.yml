@@ -1,0 +1,30 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - uses: actions/setup-node@master
+        with:
+          cache: 'npm'
+
+      - name: Install node modules
+        run: |
+          npm install
+      
+      - name: Run CI with Lefthook
+        run: |
+          npx lefthook run ci-hook
+
+      - name: Run test
+        run: |
+          npm test

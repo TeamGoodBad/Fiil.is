@@ -35,7 +35,7 @@ jobs:
       - name: Commit and push changes
         uses: EndBug/add-and-commit@v9
         with:
-          add: "package.json"
+          add: ["package.json", "package-lock.json"]
 
       - name: Cache Gradle Wrapper
         uses: actions/cache@v2
