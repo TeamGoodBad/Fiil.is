@@ -50,7 +50,7 @@
       "^.+.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!(react-native|@react-native|react-native-vector-icons)/)"
+      "node_modules/(?!(react-native|@react-native|react-native-vector-icons|react-native-pin-code)/)"
     ],
     "testEnvironment": "jsdom"
   }
