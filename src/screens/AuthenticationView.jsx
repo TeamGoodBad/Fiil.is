@@ -1,6 +1,7 @@
 import { View, Button } from "react-native"
 import { Text } from 'react-native-paper';
-import { MMKV } from "../storage/settings";
+import { SettingsDB } from "../storage/settings";
+
 
 const AuthenticationView = ({ navigation }) => {
   return (
