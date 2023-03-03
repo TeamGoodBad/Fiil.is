@@ -1,14 +1,18 @@
-import {useState} from 'react';
-import {Pressable, View, Dimensions} from 'react-native';
-import {Text, Button, TextInput, useTheme} from 'react-native-paper';
+import { useState } from 'react';
+import { Pressable, View, Dimensions } from 'react-native';
+import { Text, Button, TextInput, useTheme } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MMKVLoader, useMMKVStorage } from "react-native-mmkv-storage";
+
+import { UserDB } from "../storage/userdata";
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
-const MainView = ({navigation}) => {
+const MainView = ({ navigation }) => {
   const [stars, setStars] = useState([false, false, false, false, false]);
   const theme = useTheme();
+  const [testField, setTestField] = useMMKVStorage("test", UserDB, "");
 
   const handlePress = index => {
     const newStars = stars.map((s, i) => {
@@ -71,9 +75,11 @@ const MainView = ({navigation}) => {
           multiline={true}
           mode="outlined"
           placeholder={'Kerro lisää...'}
-          style={{height: WINDOW_HEIGHT * 0.4, width: '100%'}}
+          style={{ height: WINDOW_HEIGHT * 0.4, width: '100%' }}
+          value={testField}
+          onChangeText={text => setTestField(text)}
         />
-        <Button style={{margin: 20, width: 200}} mode="contained">
+        <Button style={{ margin: 20, width: 200 }} mode="contained">
           Tallenna
         </Button>
       </View>
