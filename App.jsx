@@ -15,8 +15,6 @@ import { CombinedDefaultTheme, CombinedDarkTheme } from "./src/theme";
 
 const App = () => {
   const scheme = useColorScheme();
-  const CombinedDefaultTheme = CombinedDefaultTheme;
-  const CombinedDarkTheme = CombinedDarkTheme;
 
   const Tab = createMaterialBottomTabNavigator();
   const Stack = createNativeStackNavigator();

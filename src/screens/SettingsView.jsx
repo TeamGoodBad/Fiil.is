@@ -1,60 +1,56 @@
 import { useState } from 'react';
 import { View, StyleSheet } from "react-native";
-import { Switch, useTheme, Button, Title, Text } from 'react-native-paper';
+import { Switch, useTheme, Button, Appbar, Text, Subheading} from 'react-native-paper';
 
-
-const SettingsView = ({ navigation }) => {
+const SettingsView = ({navigation}) => {
   const [isSwitchOn, setIsSwitchOn] = useState(true);
   const theme = useTheme();
-  const color = isSwitchOn ? theme.colors.tertiaryContainer : theme.colors.background
-
+  const color = isSwitchOn ? theme.colors.secondaryContainer : theme.colors.background
+  
   const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
+
   const styles = StyleSheet.create({
-    title: {
-      alignSelf: 'center',
-      paddingTop: 5,
-      paddingBottom: 5
-    },
     content: {
       flex: 1,
       justifyContent: 'center',
-      alignItems: 'center',
       backgroundColor: color,
     },
     setting: {
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-around'
-    }
+      justifyContent: 'space-between',
+      paddingRight: '20%',
+      paddingLeft: '20%',
+    },
   });
-
+  
   return (
-    <View style={{ flex: 1 }}>
-      <Title style={styles.title}>
-        Settings View
-      </Title>
+    <View style={{flex:1}}>
+      <Appbar.Header elevated={true}>
+        <Appbar.Content title="Settings View" />
+      </Appbar.Header>
       <View style={styles.content}>
         <View style={styles.setting}>
-          <Text>Värinvaihto</Text>
+          <Subheading>Värinvaihto</Subheading>
           <Switch
+            color={theme.colors.onSecondaryContainer}
             value={isSwitchOn}
             onValueChange={onToggleSwitch} />
         </View>
         <View style={styles.setting}>
-          <Text>Värinvaihto</Text>
+          <Text>Värinvaihto nro 2</Text>
           <Switch
             value={isSwitchOn}
             onValueChange={onToggleSwitch} />
         </View>
-
-        <Button mode="outlined">
+        <Button accessibilityLabel="Tyhjä nappi" mode="elevated">
           Nappi, joka ei tee mitään
         </Button>
-
-        <Text>{require('../../package.json').version}</Text>
       </View>
     </View>
   );
 }
+
+
 
 export default SettingsView;
