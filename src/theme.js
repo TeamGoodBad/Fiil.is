@@ -59,45 +59,45 @@ export const CombinedDarkTheme = {
     colors: {
         ...MD3DarkTheme.colors,
         ...NavigationDarkTheme.colors,
-        primary: "rgb(191, 194, 255)", // mm. contained napin väri
-        onPrimary: "rgb(20, 25, 148)", // mm. contained napin tekstin väri
-        primaryContainer: "rgb(48, 55, 170)",
-        onPrimaryContainer: "rgb(224, 224, 255)",
-        secondary: "rgb(197, 196, 221)",
-        onSecondary: "rgb(46, 47, 66)",
-        secondaryContainer: "rgb(68, 69, 89)", // tab boksin valintaväri
-        onSecondaryContainer: "rgb(225, 224, 249)", // tab boxin valitun iconin väri
-        tertiary: "rgb(232, 185, 213)",
-        onTertiary: "rgb(70, 38, 59)",
-        tertiaryContainer: "rgb(94, 60, 82)",
-        onTertiaryContainer: "rgb(255, 216, 238)",
+        primary: "rgb(91, 213, 250)", // mm. contained napin väri
+        onPrimary: "rgb(0, 53, 67)", // mm. contained napin tekstin väri
+        primaryContainer: "rgb(0, 78, 96)",
+        onPrimaryContainer: "rgb(181, 235, 255)",
+        secondary: "rgb(179, 202, 212)",
+        onSecondary: "rgb(29, 51, 59)",
+        secondaryContainer: "rgb(52, 74, 82)", // tab boksin valintaväri
+        onSecondaryContainer: "rgb(207, 230, 240)", // tab boxin valitun iconin väri
+        tertiary: "rgb(194, 195, 235)",
+        onTertiary: "rgb(43, 46, 77)",
+        tertiaryContainer: "rgb(66, 68, 101)",
+        onTertiaryContainer: "rgb(224, 224, 255)",
         error: "rgb(255, 180, 171)",
         onError: "rgb(105, 0, 5)",
         errorContainer: "rgb(147, 0, 10)",
         onErrorContainer: "rgb(255, 180, 171)",
-        background: "rgb(27, 27, 31)", // perus taustaväri
-        onBackground: "rgb(229, 225, 230)",
-        surface: "rgb(27, 27, 31)",
-        onSurface: "rgb(229, 225, 230)", // perus tekstin väri
-        surfaceVariant: "rgb(70, 70, 79)", // (ainakin) text inputin tausta
-        onSurfaceVariant: "rgb(199, 197, 208)", // tab boxin valitsemattomat iconit
-        outline: "rgb(145, 143, 154)",
-        outlineVariant: "rgb(70, 70, 79)",
+        background: "rgb(25, 28, 29)", // perus taustaväri
+        onBackground: "rgb(225, 227, 228)",
+        surface: "rgb(25, 28, 29)",
+        onSurface: "rgb(225, 227, 228)", // perus tekstin väri
+        surfaceVariant: "rgb(64, 72, 76)", // (ainakin) text inputin tausta
+        onSurfaceVariant: "rgb(191, 200, 204)", // tab boxin valitsemattomat iconit
+        outline: "rgb(137, 146, 150)",
+        outlineVariant: "rgb(64, 72, 76)",
         shadow: "rgb(0, 0, 0)",
         scrim: "rgb(0, 0, 0)",
-        inverseSurface: "rgb(229, 225, 230)",
-        inverseOnSurface: "rgb(48, 48, 52)",
-        inversePrimary: "rgb(73, 81, 195)",
+        inverseSurface: "rgb(225, 227, 228)",
+        inverseOnSurface: "rgb(46, 49, 50)",
+        inversePrimary: "rgb(0, 103, 126)",
         elevation: {
             level0: "transparent",
-            level1: "rgb(35, 35, 42)",
-            level2: "rgb(40, 40, 49)", // tab boxin tausta
-            level3: "rgb(45, 45, 56)",
-            level4: "rgb(47, 47, 58)",
-            level5: "rgb(50, 50, 62)"
+            level1: "rgb(28, 37, 40)",
+            level2: "rgb(30, 43, 47)", // tab boxin tausta
+            level3: "rgb(32, 48, 53)",
+            level4: "rgb(33, 50, 56)",
+            level5: "rgb(34, 54, 60)"
         },
-        surfaceDisabled: "rgba(229, 225, 230, 0.12)",
-        onSurfaceDisabled: "rgba(229, 225, 230, 0.38)",
-        backdrop: "rgba(48, 48, 56, 0.4)"
+        surfaceDisabled: "rgba(225, 227, 228, 0.12)",
+        onSurfaceDisabled: "rgba(225, 227, 228, 0.38)",
+        backdrop: "rgba(41, 50, 53, 0.4)"
     }
 };
