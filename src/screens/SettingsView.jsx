@@ -26,7 +26,7 @@ const SettingsView = ({navigation}) => {
   
   return (
     <View style={{flex:1}}>
-      <Appbar.Header mode={'center-aligned'} elevated={true}>
+      <Appbar.Header elevated={true}>
         <Appbar.Content title="Settings View" />
       </Appbar.Header>
       <View style={styles.content}>
