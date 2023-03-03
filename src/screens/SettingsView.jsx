@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { View, StyleSheet } from "react-native";
-import { Switch, useTheme, Button, Title, Text} from 'react-native-paper';
+import { Switch, useTheme, Button, Title, Text } from 'react-native-paper';
 
-const SettingsView = ({navigation}) => {
+
+const SettingsView = ({ navigation }) => {
   const [isSwitchOn, setIsSwitchOn] = useState(true);
   const theme = useTheme();
   const color = isSwitchOn ? theme.colors.tertiaryContainer : theme.colors.background
-  
+
   const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
   const styles = StyleSheet.create({
     title: {
@@ -26,9 +27,9 @@ const SettingsView = ({navigation}) => {
       justifyContent: 'space-around'
     }
   });
-  
+
   return (
-    <View style={{flex:1}}> 
+    <View style={{ flex: 1 }}>
       <Title style={styles.title}>
         Settings View
       </Title>
@@ -55,7 +56,5 @@ const SettingsView = ({navigation}) => {
     </View>
   );
 }
-
-
 
 export default SettingsView;

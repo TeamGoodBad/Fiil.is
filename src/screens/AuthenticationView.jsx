@@ -4,6 +4,7 @@ import CodePin from 'react-native-pin-code';
 
 import { SettingsDB } from "../storage/settings";
 
+
 const AuthenticationView = ({ navigation }) => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -12,13 +13,12 @@ const AuthenticationView = ({ navigation }) => {
       <CodePin
         number={4}
         code="1111" //TODO lisää linkki databaseen jolloin käyttäjän oma salasana
-        success={() => navigation.navigate("Tabs")} 
-        text="Kirjaa salasana" 
-        error="Väärin" 
-        autoFocusFirst={false} 
+        success={() => navigation.navigate("Tabs")}
+        text="Kirjaa salasana"
+        error="Väärin"
+        autoFocusFirst={false}
         keyboardType="numeric"
       />
-      
     </View>
   );
 }

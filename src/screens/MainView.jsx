@@ -9,6 +9,7 @@ import { UserDB } from "../storage/userdata";
 const WINDOW_WIDTH = Dimensions.get('window').width;
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
+
 const MainView = ({ navigation }) => {
   const [stars, setStars] = useState([false, false, false, false, false]);
   const theme = useTheme();
