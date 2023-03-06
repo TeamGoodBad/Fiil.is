@@ -1,12 +1,16 @@
 import { useState } from 'react';
 import { View, StyleSheet } from "react-native";
-import { Switch, useTheme, Button, Appbar, Text, Subheading} from 'react-native-paper';
+import { Switch, useTheme, Button, Appbar, Text, Subheading } from 'react-native-paper';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { List } from "react-native-paper";
 
-const SettingsView = ({navigation}) => {
+import { SettingsDB } from '../storage/settings';
+
+const DebugMenu = () => {
   const [isSwitchOn, setIsSwitchOn] = useState(true);
   const theme = useTheme();
   const color = isSwitchOn ? theme.colors.secondaryContainer : theme.colors.background
-  
+
   const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
 
   const styles = StyleSheet.create({
@@ -23,12 +27,9 @@ const SettingsView = ({navigation}) => {
       paddingLeft: '20%',
     },
   });
-  
+
   return (
-    <View style={{flex:1}}>
-      <Appbar.Header elevated={true}>
-        <Appbar.Content title="Settings View" />
-      </Appbar.Header>
+    <View style={{ flex: 1 }}>
       <View style={styles.content}>
         <View style={styles.setting}>
           <Subheading>Värinvaihto</Subheading>
@@ -49,8 +50,55 @@ const SettingsView = ({navigation}) => {
       </View>
     </View>
   );
+};
+
+
+const SettingsList = ({ navigation }) => {
+  const DebugViewListItem = () => {
+    // Return nothing if not in debug mode
+    if (!__DEV__) return;
+
+    return (
+      <List.Item 
+        title="Debug view"
+        description="Development shananigans"
+        left={(props) => <List.Icon {...props} icon="bug" />}
+        right={(props) => <List.Icon {...props} icon="chevron-right" />}
+        onPress={() => navigation.navigate("Debug")}
+      />
+    )
+  };
+
+  return (
+    <View>
+      <List.Item
+        title="Require PIN"
+        description="Ask for PIN-code on app start"
+        left={(props) => <List.Icon {...props} icon="safe" />}
+        right={() => <Switch />}
+      />
+      {DebugViewListItem()}
+    </View>
+  )
+};
+
+
+const SettingsView = ({ navigation }) => {
+  const Stack = createNativeStackNavigator();
+
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Settings"
+        component={SettingsList}
+        options={{ headerShown: false }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="Debug"
+        component={DebugMenu}
+      ></Stack.Screen>
+    </Stack.Navigator>
+  )
 }
-
-
 
 export default SettingsView;
