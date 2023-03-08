@@ -55,7 +55,11 @@
       "^.+.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!(react-native|@react-native|react-native-vector-icons|react-native-mmkv-storage|react-native-pin-code)/)"
+      "node_modules/(?!(",
+        "react-native|@react-native|react-native-vector-icons|",
+        "react-native-mmkv-storage|react-native-pin-code|react-native-calendars|",
+        "react-native-swipe-gestures",
+      ")/)"
     ],
     "testEnvironment": "jsdom",
     "setupFiles": [
