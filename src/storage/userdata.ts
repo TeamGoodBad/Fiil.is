@@ -17,11 +17,12 @@ interface Entry {
 }
 
 /**
- * 
- * @param {Date} date 
+ * Adds entry to db. Entry must be an object in form of:
+ * {rating: integer, text: string}.
  * @param {Entry} entry
+ * @param {Date} date
  */
-export const AddEntry = async (date: Date, entry: Entry) => {
+export const setEntry = async (entry: Entry, date: Date) => {
     let key = dateToEntryKey(date);
     UserDB.asyncSetMap(key, entry);
 }
@@ -33,7 +34,7 @@ export const AddEntry = async (date: Date, entry: Entry) => {
  * @returns {Entry} or `null` if not found
  */
 // Returns null if entry is not found.
-export const GetEntry = async (date: Date): Promise<Entry|null> => {
+export const getEntry = async (date: Date): Promise<Entry|null> => {
     let key = dateToEntryKey(date);
     return await UserDB.asyncGetMap(key);
 }
