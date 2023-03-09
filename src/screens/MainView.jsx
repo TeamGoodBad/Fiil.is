@@ -1,30 +1,18 @@
-import { useState } from 'react';
 import { Pressable, View, Dimensions } from 'react-native';
 import { Text, Button, TextInput, useTheme } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { MMKVLoader, useMMKVStorage } from "react-native-mmkv-storage";
 
 import { UserDB } from "../storage/userdata";
+import Stars from "../components/Stars";
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 
 const MainView = ({ navigation }) => {
-  const [stars, setStars] = useState([false, false, false, false, false]);
   const theme = useTheme();
   const [testField, setTestField] = useMMKVStorage("test", UserDB, "");
-
-  const handlePress = index => {
-    const newStars = stars.map((s, i) => {
-      if (i <= index) {
-        return true;
-      }
-      return false;
-    });
-    setStars(newStars);
-    return index;
-  };
 
   return (
     <View
@@ -45,26 +33,7 @@ const MainView = ({ navigation }) => {
           Miten päiväsi on mennyt?
         </Text>
       </View>
-      <View
-        style={{
-          height: WINDOW_HEIGHT * 0.15,
-          width: '100%',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexDirection: 'row',
-        }}>
-        {stars.map((star, index) => {
-          return (
-            <Pressable onPress={e => handlePress(index)} key={index}>
-              <MaterialCommunityIcons
-                color={'yellow'}
-                name={star ? 'star' : 'star-outline'}
-                size={76}
-              />
-            </Pressable>
-          );
-        })}
-      </View>
+      <Stars />
       <View
         style={{
           width: '100%',

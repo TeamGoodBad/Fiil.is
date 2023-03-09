@@ -49,7 +49,14 @@ export const CombinedDefaultTheme = {
       },
       surfaceDisabled: "rgba(25, 28, 29, 0.12)",
       onSurfaceDisabled: "rgba(25, 28, 29, 0.38)",
-      backdrop: "rgba(41, 50, 53, 0.4)"
+      backdrop: "rgba(41, 50, 53, 0.4)",
+      stars: {
+        star0: "#5a71ff",
+        star1: "#0ca4d6",
+        star2: "#0bcf63",
+        star3: "#b0d812",
+        star4: "#f7e900"
+  }
     },
 };
 
@@ -98,6 +105,13 @@ export const CombinedDarkTheme = {
         },
         surfaceDisabled: "rgba(225, 227, 228, 0.12)",
         onSurfaceDisabled: "rgba(225, 227, 228, 0.38)",
-        backdrop: "rgba(41, 50, 53, 0.4)"
+        backdrop: "rgba(41, 50, 53, 0.4)",
+        stars: {
+            star0: "#5a71ff",
+            star1: "#0ca4d6",
+            star2: "#0bcf63",
+            star3: "#b0d812",
+            star4: "#f7e900"
+      }
     }
 };
