@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { View, StyleSheet } from "react-native";
 import { Switch, useTheme, Button, Text, Subheading } from 'react-native-paper';
+import { clearPin } from '../storage/settings';
+
 
 export const DebugView = () => {
     const [isSwitchOn, setIsSwitchOn] = useState(true);
@@ -40,8 +42,8 @@ export const DebugView = () => {
               value={isSwitchOn}
               onValueChange={onToggleSwitch} />
           </View>
-          <Button accessibilityLabel="Tyhjä nappi" mode="elevated">
-            Nappi, joka ei tee mitään
+          <Button accessibilityLabel="Tyhjä nappi" mode="elevated" onPress={clearPin}>
+            Nappi, joka nollaa pin-koodin
           </Button>
         </View>
       </View>

@@ -1,28 +1,38 @@
-import { MMKVLoader } from "react-native-mmkv-storage";
+import { MMKVLoader, useMMKVStorage } from "react-native-mmkv-storage";
 
-const PIN_KEY = "pin";
+export const PIN_KEY = "pin";
 
 export const SettingsDB = new MMKVLoader()
-        .withInstanceID("settings")
-        .initialize();
+    .withInstanceID("settings")
+    .withEncryption()
+    .initialize();
 
 
-// Retruns true if user has set key
-export const HasPin = async (pin) => {
-    return SettingsDB.indexer.hasKey(PIN_KEY);
-}
+/**
+ * Retruns true if user has set pin. 
+ * @returns `true` if user has set pin
+ */
+export const hasPin = () => SettingsDB.getString(PIN_KEY, "") != "";
 
 
-// Returns true if pin is correct, false if not.
-// Always returns true if pin has not been set!
-export const CheckPin = async (pin) => {
-    if (!HasPin(pin)) return true;
-    let pin2 = await SettingsDB.getStringAsync(PIN_KEY, null);
-    return pin == pin2;
-}
+/**
+ * Returns true if pin is correct, false if not.
+ * Always returns false if pin has not been set!
+ * @param {string} pin 
+ * @returns `true` if given pin is correct
+ */
+export const checkPin = async (pin) => await SettingsDB.getStringAsync(PIN_KEY, "") == pin;
 
 
 // Sets new pin
-export const SetPin = async (pin) => {
-    await SettingsDB.setStringAsync(PIN_KEY, pin);
-}
+/**
+ * Sets new pin overriding the current one
+ * @param {string} pin
+ */
+export const setPin = async (pin) => await SettingsDB.setStringAsync(PIN_KEY, pin);
+
+
+/**
+ * Clears pin
+ */
+export const clearPin = async () => await SettingsDB.setStringAsync(PIN_KEY, "");
