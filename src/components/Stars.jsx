@@ -5,9 +5,12 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
-
-const Stars = ({ navigation }) => {
-  const [stars, setStars] = useState([false, false, false, false, false]);
+// rating - how many stars checked
+// editable - is it possible to change rating
+const Stars = ({ rating, editable }) => {
+  const [stars, setStars] = useState(
+    Array(5).fill(true).fill(false, rating)
+  );
   const theme = useTheme();
 
   const handlePress = index => {
@@ -31,7 +34,7 @@ const Stars = ({ navigation }) => {
     }}>
       {stars.map((star, index) => {
         return (
-          <Pressable onPress={e => handlePress(index)} key={index}>
+          <Pressable onPress={e => editable ? handlePress(index) : null} key={index}>
             <MaterialCommunityIcons
               color={theme.colors.stars[("star"+index)]}
               name={star ? 'star' : 'star-outline'}

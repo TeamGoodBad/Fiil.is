@@ -33,7 +33,7 @@ const MainView = ({ navigation }) => {
           Miten päiväsi on mennyt?
         </Text>
       </View>
-      <Stars />
+      <Stars rating={0} editable={true} />
       <View
         style={{
           width: '100%',
