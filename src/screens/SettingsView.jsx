@@ -1,4 +1,4 @@
-import { View, Platform, StyleSheet } from "react-native";
+import { View, Platform, StyleSheet, Dimensions } from "react-native";
 import { Snackbar, Switch, useTheme } from 'react-native-paper';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { List } from "react-native-paper";
@@ -9,6 +9,8 @@ import { SettingsDB, setPin, clearPin, PIN_KEY } from '../storage/settings';
 import { useMMKVStorage } from "react-native-mmkv-storage";
 import { useState } from "react";
 
+const WINDOW_WIDTH = Dimensions.get('window').width;
+const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 const SettingsList = ({ navigation }) => {
   const [pin, _] = useMMKVStorage(PIN_KEY, SettingsDB, "");
@@ -67,14 +69,18 @@ const SetPinView = ({ navigation }) => {
   const pinStyle = StyleSheet.create({
     container: {
       height: 150,
+      width: WINDOW_WIDTH,
       backgroundColor: theme.colors.background,
     },
     containerPin: {
       height: 40,
+      width: WINDOW_WIDTH,
       flexDirection: 'row',
       justifyContent: 'space-around',
       alignItems: 'center',
-      marginTop: 20
+      paddingLeft: 15,
+      paddingRight: 15,
+      marginTop: 20,
     },
     pin: {
       backgroundColor: theme.colors.surfaceVariant,
@@ -104,7 +110,7 @@ const SetPinView = ({ navigation }) => {
   // 1st time pin
   if (pinToConfirm == "") {
     return (
-      <View>
+      <View style={{justifyContent: "center"}}>
         <CodePin
           number={4}
           checkPinCode={(code, callback) => {
