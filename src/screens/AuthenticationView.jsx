@@ -39,7 +39,7 @@ const AuthenticationView = ({ navigation }) => {
     },
     text: {
       textAlign: 'center',
-      color: theme.colors.onSurfaceVariant,
+      color: theme.colors.onBackground,
       fontSize: 20,
       marginTop: 30
     },
