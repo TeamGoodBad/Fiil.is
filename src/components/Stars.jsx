@@ -5,9 +5,9 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
-// rating - how many stars checked
+// rating - how many stars checked by indexes: 0,1,2,3,4
 // editable - is it possible to change rating
-const Stars = ({ rating, editable }) => {
+const Stars = ({ rating, editable, onChange }) => {
   const [stars, setStars] = useState(
     Array(5).fill(true).fill(false, rating)
   );
@@ -21,6 +21,7 @@ const Stars = ({ rating, editable }) => {
       return false;
     });
     setStars(newStars);
+    if (editable) onChange(index);
     return index;
   };
 
