@@ -22,7 +22,7 @@ const SettingsList = ({ navigation }) => {
 
     return (
       <List.Item
-        title="Debug view"
+        title="Debug"
         description="Development shananigans"
         left={(props) => <List.Icon {...props} icon="bug" />}
         right={(props) => <List.Icon {...props} icon={PlatformRight()} />}
@@ -43,8 +43,8 @@ const SettingsList = ({ navigation }) => {
   return (
     <View>
       <List.Item
-        title="Require PIN"
-        description="Ask for PIN-code on app start"
+        title="PIN-lukitus"
+        description="Lukitse sovellus PIN koodilla"
         left={(props) => <List.Icon {...props} icon="safe" />}
         right={() => <Switch
           value={pin != ""}
