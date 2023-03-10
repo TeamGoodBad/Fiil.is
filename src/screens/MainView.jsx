@@ -45,11 +45,10 @@ const MainView = ({ navigation }) => {
           multiline={true}
           mode="outlined"
           placeholder={'Kerro lisää...'}
-          style={{ height: WINDOW_HEIGHT * 0.4, width: '100%' }}
-          value={testField}
-          onChangeText={text => setTestField(text)}
+
+          style={{height: WINDOW_HEIGHT * 0.3, width: '100%'}}
         />
-        <Button style={{ margin: 20, width: 200 }} mode="contained">
+        <Button style={{margin: '5%', width: 200}} mode="contained">
           Tallenna
         </Button>
       </View>
