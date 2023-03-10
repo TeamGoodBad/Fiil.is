@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { useColorScheme } from 'react-native';
+import { useMMKVStorage } from 'react-native-mmkv-storage';
 
 import MainView from './src/screens/MainView';
 import CalendarView from './src/screens/CalendarView';
@@ -12,6 +13,7 @@ import AnalysisView from './src/screens/AnalysisView';
 import SettingsView from './src/screens/SettingsView';
 import AuthenticationView from './src/screens/AuthenticationView';
 import { CombinedDefaultTheme, CombinedDarkTheme } from "./src/theme";
+import { PIN_KEY, SettingsDB } from './src/storage/settings';
 
 const App = () => {
   const scheme = useColorScheme();
@@ -19,7 +21,9 @@ const App = () => {
   const Tab = createMaterialBottomTabNavigator();
   const Stack = createNativeStackNavigator();
 
-  // Tab navigator
+  const [pin, _] = useMMKVStorage(PIN_KEY, SettingsDB, "");
+
+  /** Tab navigator */
   const Tabs = () => {
     return (
       <Tab.Navigator labeled={false}>
@@ -63,9 +67,9 @@ const App = () => {
     );
   }
 
-  // Wraps authentication view with rest of the app
+  /** Wraps authentication view with rest of the app */
   const AuthenticationWrapper = (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName={pin != "" ? "Authentication" : "Tabs"}>
       <Stack.Screen
         name="Authentication"
         component={AuthenticationView}
