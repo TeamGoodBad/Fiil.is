@@ -1,23 +1,29 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 import { useTheme } from "react-native-paper";
 import CodePin from 'react-native-pin-code';
 
 import { checkPin } from "../storage/settings";
 
+const WINDOW_WIDTH = Dimensions.get('window').width;
+const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 const AuthenticationView = ({ navigation }) => {
   const theme = useTheme();
   const pinStyle = StyleSheet.create({
     container: {
       height: 150,
+      width: WINDOW_WIDTH,
       backgroundColor: theme.colors.background,
     },
     containerPin: {
       height: 40,
+      width: WINDOW_WIDTH,
       flexDirection: 'row',
       justifyContent: 'space-around',
       alignItems: 'center',
-      marginTop: 20
+      paddingLeft: 15,
+      paddingRight: 15,
+      marginTop: 20,
     },
     pin: {
       backgroundColor: theme.colors.surfaceVariant,
