@@ -110,7 +110,7 @@ const SetPinView = ({ navigation }) => {
   // 1st time pin
   if (pinToConfirm == "") {
     return (
-      <View style={{justifyContent: "center"}}>
+      <View style={{flex:1}}>
         <CodePin
           number={4}
           checkPinCode={(code, callback) => {
