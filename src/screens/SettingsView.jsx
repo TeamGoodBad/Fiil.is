@@ -1,5 +1,5 @@
-import { View, Platform } from "react-native";
-import { Snackbar, Switch } from 'react-native-paper';
+import { View, Platform, StyleSheet, Dimensions } from "react-native";
+import { Snackbar, Switch, useTheme } from 'react-native-paper';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { List } from "react-native-paper";
 import CodePin from 'react-native-pin-code';
@@ -9,6 +9,8 @@ import { SettingsDB, setPin, clearPin, PIN_KEY } from '../storage/settings';
 import { useMMKVStorage } from "react-native-mmkv-storage";
 import { useState } from "react";
 
+const WINDOW_WIDTH = Dimensions.get('window').width;
+const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 const SettingsList = ({ navigation }) => {
   const [pin, _] = useMMKVStorage(PIN_KEY, SettingsDB, "");
@@ -62,11 +64,53 @@ const SettingsList = ({ navigation }) => {
 const SetPinView = ({ navigation }) => {
   const [pinToConfirm, setPinToConfirm] = useState("");
   const [hasFailedPinConfirm, setHasFailedPinConfirm] = useState(false);
+  const theme = useTheme();
+
+  const pinStyle = StyleSheet.create({
+    container: {
+      height: 150,
+      width: WINDOW_WIDTH,
+      backgroundColor: theme.colors.background,
+    },
+    containerPin: {
+      height: 40,
+      width: WINDOW_WIDTH,
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      paddingLeft: 15,
+      paddingRight: 15,
+      marginTop: 20,
+    },
+    pin: {
+      backgroundColor: theme.colors.surfaceVariant,
+      textAlign: 'center',
+      flex: 1,
+      marginLeft: 20,
+      marginRight: 20,
+      borderRadius: 5,
+      shadowColor: '#00000000',
+      shadowOffset: {width: 1,height : 1},
+      shadowRadius: 5,
+      shadowOpacity : 0.4
+    },
+    text: {
+      textAlign: 'center',
+      color: theme.colors.onBackground,
+      fontSize: 20,
+      marginTop: 30
+    },
+    error: {
+      textAlign: 'center',
+      color: theme.colors.error,
+      paddingTop: 10 
+    }
+  });
 
   // 1st time pin
   if (pinToConfirm == "") {
     return (
-      <View>
+      <View style={{flex:1}}>
         <CodePin
           number={4}
           checkPinCode={(code, callback) => {
@@ -77,6 +121,11 @@ const SetPinView = ({ navigation }) => {
           keyboardType="numeric"
           success={() => {}}
           obfuscation={true}
+          containerStyle={pinStyle.container}
+          containerPinStyle={pinStyle.containerPin}
+          pinStyle={pinStyle.pin}
+          textStyle={pinStyle.text}
+          errorStyle={pinStyle.error}
         />
         <Snackbar
           visible={hasFailedPinConfirm}
@@ -111,6 +160,11 @@ const SetPinView = ({ navigation }) => {
       text="Vahvista PIN"
       keyboardType="numeric"
       obfuscation={true}
+      containerStyle={pinStyle.container}
+      containerPinStyle={pinStyle.containerPin}
+      pinStyle={pinStyle.pin}
+      textStyle={pinStyle.text}
+      errorStyle={pinStyle.error}
     />
   );
 };
@@ -118,6 +172,7 @@ const SetPinView = ({ navigation }) => {
 
 const SettingsView = () => {
   const Stack = createNativeStackNavigator();
+
 
   return (
     <Stack.Navigator>
