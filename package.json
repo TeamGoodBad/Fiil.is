@@ -1,6 +1,6 @@
 {
   "name": "fiilis",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -56,9 +56,9 @@
     },
     "transformIgnorePatterns": [
       "node_modules/(?!(",
-        "react-native|@react-native|react-native-vector-icons|",
-        "react-native-mmkv-storage|react-native-pin-code|react-native-calendars|",
-        "react-native-swipe-gestures",
+      "react-native|@react-native|react-native-vector-icons|",
+      "react-native-mmkv-storage|react-native-pin-code|react-native-calendars|",
+      "react-native-swipe-gestures",
       ")/)"
     ],
     "testEnvironment": "jsdom",
