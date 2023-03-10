@@ -1,5 +1,5 @@
-import {useState} from 'react';
-import {Pressable, View, Dimensions} from 'react-native';
+import { useState } from 'react';
+import { Pressable, View, Dimensions } from 'react-native';
 import {
   Text,
   Button,
@@ -8,23 +8,18 @@ import {
   useTheme,
   Chip,
 } from 'react-native-paper';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import Stars from "../components/Stars";
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 const AnalysisView = ({navigation}) => {
-  const [stars, setStars] = useState([false, false, false, false, false]);
+  const [rating, setRating] = useState(0);
   const theme = useTheme();
 
   const handlePress = index => {
-    const newStars = stars.map((s, i) => {
-      if (i <= index) {
-        return true;
-      }
-      return false;
-    });
-    setStars(newStars);
+    setRating(index);
     return index;
   };
 
@@ -46,26 +41,10 @@ const AnalysisView = ({navigation}) => {
         </Text>
       </View>
 
-      <View
-        style={{
-          height: WINDOW_HEIGHT * 0.15,
-          width: '100%',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexDirection: 'row',
-        }}>
-        {stars.map((star, index) => {
-          return (
-            <Pressable onPress={e => handlePress(index)} key={index}>
-              <MaterialCommunityIcons
-                color={'yellow'}
-                name={star ? 'star' : 'star-outline'}
-                size={76}
-              />
-            </Pressable>
-          );
-        })}
-      </View>
+      <Stars
+        rating={rating}
+        editable={true}
+        onChange={(handlePress)} />
 
       <View
         style={{
@@ -74,7 +53,7 @@ const AnalysisView = ({navigation}) => {
           justifyContent: 'center',
         }}>
         <Text variant="headlineMedium" color={theme.colors.onSurface}>
-          {stars.filter(s => s).length} tähden päivissä sanoja
+          {rating+1} tähden päivissä sanoja
         </Text>
       </View>
       <Divider />

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Pressable, View, Dimensions } from 'react-native';
 import { Text, Button, TextInput, useTheme } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -13,6 +14,12 @@ const WINDOW_HEIGHT = Dimensions.get('window').height;
 const MainView = ({ navigation }) => {
   const theme = useTheme();
   const [testField, setTestField] = useMMKVStorage("test", UserDB, "");
+  const [rating, setRating] = useState(0);
+
+  const handlePress = index => {
+    setRating(index);
+    return index;
+  }
 
   return (
     <View
@@ -33,7 +40,12 @@ const MainView = ({ navigation }) => {
           Miten päiväsi on mennyt?
         </Text>
       </View>
-      <Stars rating={0} editable={true} />
+
+      <Stars
+        rating={rating}
+        editable={true}
+        onChange={(handlePress)} />
+
       <View
         style={{
           width: '100%',
@@ -45,10 +57,11 @@ const MainView = ({ navigation }) => {
           multiline={true}
           mode="outlined"
           placeholder={'Kerro lisää...'}
-
-          style={{height: WINDOW_HEIGHT * 0.3, width: '100%'}}
+          style={{ height: WINDOW_HEIGHT * 0.4, width: '100%' }}
+          value={testField}
+          onChangeText={text => setTestField(text)}
         />
-        <Button style={{margin: '5%', width: 200}} mode="contained">
+        <Button style={{ margin: 20, width: 200 }} mode="contained">
           Tallenna
         </Button>
       </View>
