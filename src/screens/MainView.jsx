@@ -4,7 +4,7 @@ import { Text, Button, TextInput, useTheme } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { MMKVLoader, useMMKVStorage } from "react-native-mmkv-storage";
 
-import { UserDB } from "../storage/userdata";
+import { CURRENT_TEXT_KEY, CURRENT_RATING_KEY, UserDB, setEntry } from "../storage/userdata";
 import Stars from "../components/Stars";
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
@@ -13,13 +13,29 @@ const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 const MainView = ({ navigation }) => {
   const theme = useTheme();
-  const [testField, setTestField] = useMMKVStorage("test", UserDB, "");
-  const [rating, setRating] = useState(0);
+
+  const [text, setText] = useMMKVStorage(CURRENT_TEXT_KEY, UserDB, "");
+  const [rating, setRating] = useMMKVStorage(CURRENT_RATING_KEY, UserDB, -1);
+
 
   const handlePress = index => {
     setRating(index);
     return index;
   }
+
+
+  /**
+   * Saves current temporary entry to database with given date
+   * @param {Date} date Entry date. Time of day is ignored.
+   */
+  const saveEntry = async () => {
+    const entry = {
+      rating: rating,
+      text: text,
+    };
+    await setEntry(entry, new Date()); // Save to db with current date
+  }
+
 
   return (
     <View
@@ -58,10 +74,14 @@ const MainView = ({ navigation }) => {
           mode="outlined"
           placeholder={'Kerro lisää...'}
           style={{ height: WINDOW_HEIGHT * 0.4, width: '100%' }}
-          value={testField}
-          onChangeText={text => setTestField(text)}
+          value={text}
+          onChangeText={text => setText(text)}
         />
-        <Button style={{ margin: 20, width: 200 }} mode="contained">
+        <Button
+          style={{ margin: 20, width: 200 }}
+          mode="contained"
+          onPress={() => saveEntry()}
+        >
           Tallenna
         </Button>
       </View>
