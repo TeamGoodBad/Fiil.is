@@ -32,8 +32,9 @@ const MainView = ({ navigation }) => {
     const entry = {
       rating: rating,
       text: text,
+      date: new Date(),
     };
-    await setEntry(entry, new Date()); // Save to db with current date
+    await setEntry(entry); // Save to db with current date
   }
 
 

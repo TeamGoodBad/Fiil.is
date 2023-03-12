@@ -1,16 +1,18 @@
 import { View, Platform, StyleSheet, Dimensions } from "react-native";
+import { useState } from "react";
 import { Snackbar, Switch, useTheme } from 'react-native-paper';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { List } from "react-native-paper";
 import CodePin from 'react-native-pin-code';
+import { useMMKVStorage } from "react-native-mmkv-storage";
 
 import { DebugView } from "./DebugView";
 import { SettingsDB, setPin, clearPin, PIN_KEY } from '../storage/settings';
-import { useMMKVStorage } from "react-native-mmkv-storage";
-import { useState } from "react";
+import EntryList from "../components/EntryList";
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
 const WINDOW_HEIGHT = Dimensions.get('window').height;
+
 
 const SettingsList = ({ navigation }) => {
   const [pin, _] = useMMKVStorage(PIN_KEY, SettingsDB, "");
@@ -188,6 +190,10 @@ const SettingsView = () => {
       <Stack.Screen
         name="Set PIN"
         component={SetPinView}
+      />
+      <Stack.Screen
+        name="Entry List"
+        component={EntryList}
       />
     </Stack.Navigator>
   )

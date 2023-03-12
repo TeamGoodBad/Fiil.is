@@ -6,7 +6,7 @@ export const CURRENT_TEXT_KEY = "currentText";
 export const CURRENT_RATING_KEY = "currentRating";
 
 const dateToKey = (date: Date) => `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
-const dateToEntryKey = (date: Date) => `${ENTRY_KEY}:${dateToKey(date)}`;
+const dateToEntryKey = (date: Date) => `${ENTRY_KEY}.${dateToKey(date)}`;
 
 export const UserDB: any = new MMKVLoader()
     .withEncryption()
@@ -17,6 +17,7 @@ export const UserDB: any = new MMKVLoader()
 interface Entry {
     rating: number,
     text: string,
+    date: Date,
 }
 
 
@@ -52,17 +53,16 @@ export const dump: () => Promise<string> = async () => {
  * Adds entry to db. Entry must be an object in form of:
  * {rating: integer, text: string}.
  * @param {Entry} entry
- * @param {Date} date
  */
-export const setEntry = async (entry: Entry, date: Date) => {
+export const setEntry = async (entry: Entry) => {
     // Add to db
-    const entryKey = dateToEntryKey(date);
+    const entryKey = dateToEntryKey(entry.date);
     await UserDB.setMapAsync(entryKey, entry);
 
     // Update indexes
     let index = await UserDB.getArrayAsync(ENTRIES_INDEX_KEY);
     if (index == null) index = [];
-    index.push(entryKey);
+    if (!index.includes(entryKey)) index.push(entryKey);
     await UserDB.setArrayAsync(ENTRIES_INDEX_KEY, index);
 }
 
@@ -76,4 +76,21 @@ export const setEntry = async (entry: Entry, date: Date) => {
 export const getEntry = async (date: Date): Promise<Entry|null> => {
     const key = dateToEntryKey(date);
     return await UserDB.getMapAsync(key);
+}
+
+
+/**
+ * Clears all user data
+ */
+export const clearUserDB = () => UserDB.clearStore();
+
+
+/**
+ * @returns All entries in db
+ */
+export const getEntries = async (): Promise<Entry[]> => {
+    let index = await UserDB.getArrayAsync(ENTRIES_INDEX_KEY);
+    if (index == null) index = [];
+    const entries = await Promise.all(index.map((key: string) => UserDB.getMapAsync(key)));
+    return entries;
 }
