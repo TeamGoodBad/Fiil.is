@@ -1,20 +1,20 @@
-import { View, Platform } from "react-native";
-import { Snackbar, Switch } from 'react-native-paper';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { List } from "react-native-paper";
+import {View, Platform, SafeAreaView} from 'react-native';
+import {Snackbar, Switch} from 'react-native-paper';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {List} from 'react-native-paper';
 import CodePin from 'react-native-pin-code';
 
-import { DebugView } from "./DebugView";
-import { SettingsDB, setPin, clearPin, PIN_KEY } from '../storage/settings';
-import { useMMKVStorage } from "react-native-mmkv-storage";
-import { useState } from "react";
+import {DebugView} from './DebugView';
+import {SettingsDB, setPin, clearPin, PIN_KEY} from '../storage/settings';
+import {useMMKVStorage} from 'react-native-mmkv-storage';
+import {useState} from 'react';
 
-
-const SettingsList = ({ navigation }) => {
-  const [pin, _] = useMMKVStorage(PIN_KEY, SettingsDB, "");
+const SettingsList = ({navigation}) => {
+  const [pin, _] = useMMKVStorage(PIN_KEY, SettingsDB, '');
 
   /** Returns correct right arrow -like icon for current platform */
-  const PlatformRight = () => Platform.OS == "ios" ? "chevron-right" : "arrow-right";
+  const PlatformRight = () =>
+    Platform.OS == 'ios' ? 'chevron-right' : 'arrow-right';
 
   const DebugViewListItem = () => {
     // Return nothing if not in debug mode
@@ -24,32 +24,29 @@ const SettingsList = ({ navigation }) => {
       <List.Item
         title="Debug"
         description="Development shananigans"
-        left={(props) => <List.Icon {...props} icon="bug" />}
-        right={(props) => <List.Icon {...props} icon={PlatformRight()} />}
-        onPress={() => navigation.navigate("Debug")}
+        left={props => <List.Icon {...props} icon="bug" />}
+        right={props => <List.Icon {...props} icon={PlatformRight()} />}
+        onPress={() => navigation.navigate('Debug')}
       />
     );
   };
 
   // Called when user toggles pin setting
   const togglePin = async () => {
-    if (pin == "") {
-      navigation.navigate("Set PIN");
+    if (pin == '') {
+      navigation.navigate('Set PIN');
     } else {
       await clearPin();
     }
-  }
+  };
 
   return (
     <View>
       <List.Item
         title="PIN-lukitus"
         description="Lukitse sovellus PIN koodilla"
-        left={(props) => <List.Icon {...props} icon="safe" />}
-        right={() => <Switch
-          value={pin != ""}
-          onValueChange={togglePin}
-        />}
+        left={props => <List.Icon {...props} icon="safe" />}
+        right={() => <Switch value={pin != ''} onValueChange={togglePin} />}
         onPress={togglePin}
       />
       {DebugViewListItem()}
@@ -57,14 +54,13 @@ const SettingsList = ({ navigation }) => {
   );
 };
 
-
 /** View for setting new pin */
-const SetPinView = ({ navigation }) => {
-  const [pinToConfirm, setPinToConfirm] = useState("");
+const SetPinView = ({navigation}) => {
+  const [pinToConfirm, setPinToConfirm] = useState('');
   const [hasFailedPinConfirm, setHasFailedPinConfirm] = useState(false);
 
   // 1st time pin
-  if (pinToConfirm == "") {
+  if (pinToConfirm == '') {
     return (
       <View>
         <CodePin
@@ -82,8 +78,9 @@ const SetPinView = ({ navigation }) => {
           visible={hasFailedPinConfirm}
           onDismiss={() => setHasFailedPinConfirm(false)}
           duration={Snackbar.DURATION_MEDIUM}
-          action={{ icon: "close" }}
-        > Annetut PIN-koodit erosivat toisistaan!
+          action={{icon: 'close'}}>
+          {' '}
+          Annetut PIN-koodit erosivat toisistaan!
         </Snackbar>
       </View>
     );
@@ -97,13 +94,13 @@ const SetPinView = ({ navigation }) => {
         if (pinToConfirm == code) {
           // Pins match
           setPin(pinToConfirm);
-          setPinToConfirm("");
+          setPinToConfirm('');
           setHasFailedPinConfirm(false);
-          navigation.navigate("Top");
+          navigation.navigate('Top');
         } else {
           // Pins did not match
           setHasFailedPinConfirm(true);
-          setPinToConfirm("");
+          setPinToConfirm('');
         }
         callback(true);
       }}
@@ -115,27 +112,22 @@ const SetPinView = ({ navigation }) => {
   );
 };
 
-
 const SettingsView = () => {
   const Stack = createNativeStackNavigator();
 
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Top"
-        component={SettingsList}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Debug"
-        component={DebugView}
-      />
-      <Stack.Screen
-        name="Set PIN"
-        component={SetPinView}
-      />
-    </Stack.Navigator>
-  )
-}
+    <SafeAreaView style={{flex: 1}}>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Top"
+          component={SettingsList}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen name="Debug" component={DebugView} />
+        <Stack.Screen name="Set PIN" component={SetPinView} />
+      </Stack.Navigator>
+    </SafeAreaView>
+  );
+};
 
 export default SettingsView;
