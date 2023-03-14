@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, Modal, Pressable} from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker';
+
+import { getEntry } from "../storage/userdata";
 
 
 
@@ -8,8 +10,15 @@ import CalendarPicker from 'react-native-calendar-picker';
 const CalendarView = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
-  const startDate = selectedStartDate ? selectedStartDate.format('YYYY-MM-DD').toString() : ''; //Ota valittu päivä
+  const startDate = selectedStartDate ? selectedStartDate.format('DD.MM.YYYY').toString() : ''; //Ota valittu päivä
 
+  const [entry, setEntry] = useState({date: new Date(2023, 2, 1), rating: 0, text: "This is madness"});
+
+  const handlePress = async (date) => {
+    setSelectedStartDate(date);
+    setEntry({date: date, rating: 2, text:"changed to " + date.format('DD.MM.YYYY').toString()});
+    setModalVisible(true);
+  }
 
   return (
     
@@ -24,7 +33,10 @@ const CalendarView = ({ navigation }) => {
           }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>{startDate}</Text>
+            <Text style={styles.modalText}>Valittu: {startDate}</Text>
+            <Text style={styles.modalText}>
+              {entry.date.toString()} {entry.text}
+            </Text>
             <Pressable
               style={[styles.button, styles.buttonClose]}
               
@@ -34,14 +46,7 @@ const CalendarView = ({ navigation }) => {
           </View>
         </View>
       </Modal>
-
-
-      <CalendarPicker onDateChange={setSelectedStartDate} />
-      <Pressable    onPress={() => setModalVisible(true)}>
-      <Text >valittu Päivä: {startDate} </Text>
-      </Pressable>
-
-      
+      <CalendarPicker onDateChange={handlePress} />
     </View>
 
   );
