@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { View, StyleSheet } from "react-native";
 import { Switch, useTheme, Button, Text, Subheading } from 'react-native-paper';
-import { clearPin } from '../storage/settings';
+import { dump, clearUserDB } from '../storage/userdata';
 
 
-export const DebugView = () => {
+export const DebugView = ({ navigation }) => {
     const [isSwitchOn, setIsSwitchOn] = useState(true);
     const theme = useTheme();
     const color = isSwitchOn ? theme.colors.secondaryContainer : theme.colors.background
@@ -42,8 +42,14 @@ export const DebugView = () => {
               value={isSwitchOn}
               onValueChange={onToggleSwitch} />
           </View>
-          <Button accessibilityLabel="Tyhjä nappi" mode="elevated" onPress={clearPin}>
-            Nappi, joka nollaa pin-koodin
+          <Button mode="elevated" onPress={async () => console.log(await dump())}>
+            Dumppaa UserDB konsoliin
+          </Button>
+          <Button onPress={() => clearUserDB()}>
+            Pyyhi UserDB
+          </Button>
+          <Button mode="elevated" onPress={() => navigation.navigate("Entry List")}>
+            Sivulistaus
           </Button>
         </View>
       </View>
