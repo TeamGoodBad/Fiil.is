@@ -18,7 +18,7 @@ const EntryList = () => {
 
   return (
     <View>
-      {entries.map(entry => <List.Item title={entry.date} description={entry.text} key={entry.date}/>)}
+      {entries.map(entry => <List.Item title={entry.date.toString()} description={entry.text} key={entry.date.toString()}/>)}
     </View>
   );
 };
