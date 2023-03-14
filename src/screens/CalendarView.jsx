@@ -27,6 +27,7 @@ const CalendarView = ({ navigation }) => {
             <Text style={styles.modalText}>{startDate}</Text>
             <Pressable
               style={[styles.button, styles.buttonClose]}
+              
               onPress={() => setModalVisible(!modalVisible)}>
               <Text style={styles.textStyle}>Hide Modal</Text>
             </Pressable>
