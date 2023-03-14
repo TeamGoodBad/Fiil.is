@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Button, Text, Modal, Portal, Provider} from 'react-native-paper';
 import CalendarPicker from 'react-native-calendar-picker';
-import useCalendarStyles from '../styles/useCalendarStyles';
 
 const CalendarView = ({ navigation }) => {
-  const styles = useCalendarStyles();
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
