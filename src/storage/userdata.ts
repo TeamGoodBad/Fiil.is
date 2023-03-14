@@ -120,13 +120,19 @@ export const getEntries = async (filter: EntryFilter = {}): Promise<Entry[]> => 
     }));
 
     // Apply filters
-    // FIXME: Date filtering takes time of day into concideration although it shouldn't
+    
     if (filter.minDate) {
-        entries = entries.filter((entry) => entry.date.getTime() >= filter.minDate!.getTime());
+        // Don't take time of day into consideration
+        const f = filter.maxDate!;
+        const date = new Date(f.getFullYear(), f.getMonth(), f.getDate());
+        entries = entries.filter((entry) => entry.date.getTime() >= date.getTime());
     }
 
     if (filter.maxDate) {
-        entries = entries.filter((entry) => entry.date.getTime() <= filter.maxDate!.getTime());
+        // Same as above
+        const f = filter.maxDate!;
+        const date = new Date(f.getFullYear(), f.getMonth(), f.getDate() + 1);
+        entries = entries.filter((entry) => entry.date.getTime() < date.getTime());
     }
 
     if (filter.minRating) {
@@ -145,19 +151,17 @@ export const getEntries = async (filter: EntryFilter = {}): Promise<Entry[]> => 
     if (filter.containsWords) {
         // TODO: Optimize with word indexes
         entries = entries.filter((entry) => {
-            // Split by new lines and spaces, and convert to lowercase
             const entryWords: string[] = entry.text
+                // Split to words by new lines and spaces
                 .split("\n")
                 .flatMap(a => a.split(" "))
+                // and convert to lowercase
                 .map(a => a.toLocaleLowerCase());
             const filterWords: string[] = filter.containsWords!.map(a => a.toLocaleLowerCase());
 
             // Filter entry out if any of the words was not found in entry
-            for (let word of filterWords) {
-                if (!entryWords.includes(word)) {
-                    console.log(`entryWords ${entryWords} does not include ${word}`);
-                    return false;
-                }
+            for (const word of filterWords) {
+                if (!entryWords.includes(word)) return false;
             }
             return true;
         });
