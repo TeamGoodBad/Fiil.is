@@ -73,7 +73,7 @@ export const setEntry = async (entry: Entry) => {
  * @returns {Entry} or `null` if not found
  */
 // Returns null if entry is not found.
-export const getEntry = async (date: Date): Promise<Entry|null> => {
+export const getEntry = async (date: Date): Promise<Entry | null> => {
     const key = dateToEntryKey(date);
     return await UserDB.getMapAsync(key);
 }
@@ -85,12 +85,87 @@ export const getEntry = async (date: Date): Promise<Entry|null> => {
 export const clearUserDB = () => UserDB.clearStore();
 
 
+interface EntryFilter {
+    minDate?: Date,
+    maxDate?: Date,
+    minRating?: number,
+    maxRating?: number,
+    containsText?: string,
+    containsWords?: string[],
+}
+
+
 /**
- * @returns All entries in db
+ * Returns all entries from db with given filtering options applied
+ * @param {EntryFilter} [filter] filtering rules
+ * @returns {Promise<Entry[]>} Array of matching entries
+ * @example
+ * // Returns all entries in db
+ * await getEntries();
+ * // Returns all entries with minimum rating of 4 from or after 12.3.2023
+ * await getEntries({ minRating: 4, minDate: new Date(2023, 3, 12)});
  */
-export const getEntries = async (): Promise<Entry[]> => {
+export const getEntries = async (filter: EntryFilter = {}): Promise<Entry[]> => {
+    // Get list of all entry keys in db
     let index = await UserDB.getArrayAsync(ENTRIES_INDEX_KEY);
     if (index == null) index = [];
-    const entries = await Promise.all(index.map((key: string) => UserDB.getMapAsync(key)));
+
+    // Retrieve all entries in db
+    // TODO: Optimize with saving month indexes
+    let entries: Entry[] = await Promise.all(index.map(async (key: string) => {
+        // Turn date string into date object
+        let entry = await UserDB.getMapAsync(key);
+        entry.date = new Date(entry.date);
+        return entry;
+    }));
+
+    // Apply filters
+    
+    if (filter.minDate) {
+        // Don't take time of day into consideration
+        const f = filter.maxDate!;
+        const date = new Date(f.getFullYear(), f.getMonth(), f.getDate());
+        entries = entries.filter((entry) => entry.date.getTime() >= date.getTime());
+    }
+
+    if (filter.maxDate) {
+        // Same as above
+        const f = filter.maxDate!;
+        const date = new Date(f.getFullYear(), f.getMonth(), f.getDate() + 1);
+        entries = entries.filter((entry) => entry.date.getTime() < date.getTime());
+    }
+
+    if (filter.minRating) {
+        entries = entries.filter((entry) => entry.rating >= filter.minRating!);
+    }
+
+    if (filter.maxRating) {
+        entries = entries.filter((entry) => entry.rating <= filter.maxRating!)
+    }
+
+    if (filter.containsText) {
+        entries = entries.filter((entry) =>
+            entry.text.toLocaleLowerCase().includes(filter.containsText!.toLocaleLowerCase()));
+    }
+
+    if (filter.containsWords) {
+        // TODO: Optimize with word indexes
+        entries = entries.filter((entry) => {
+            const entryWords: string[] = entry.text
+                // Split to words by new lines and spaces
+                .split("\n")
+                .flatMap(a => a.split(" "))
+                // and convert to lowercase
+                .map(a => a.toLocaleLowerCase());
+            const filterWords: string[] = filter.containsWords!.map(a => a.toLocaleLowerCase());
+
+            // Filter entry out if any of the words was not found in entry
+            for (const word of filterWords) {
+                if (!entryWords.includes(word)) return false;
+            }
+            return true;
+        });
+    }
+
     return entries;
 }
