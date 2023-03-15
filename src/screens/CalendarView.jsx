@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { Button, Text, Modal, Portal, Provider} from 'react-native-paper';
+import { Button, Text, Modal, Portal, useTheme } from 'react-native-paper';
 import CalendarPicker from 'react-native-calendar-picker';
 
 const CalendarView = ({ navigation }) => {
@@ -10,6 +10,8 @@ const CalendarView = ({ navigation }) => {
   const startDate = selectedStartDate ? selectedStartDate.format('DD.MM.YYYY').toString() : ''; //Ota valittu päivä
 
   const [entry, setEntry] = useState({date: new Date(2023, 2, 1), rating: 0, text: "This is madness"});
+
+  const theme = useTheme();
 
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
@@ -21,7 +23,7 @@ const CalendarView = ({ navigation }) => {
   }
 
 
-  const containerStyle = {backgroundColor: 'white', padding: 20};
+  const containerStyle = {backgroundColor: theme.colors.background, padding: 20};
   return (
     
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
