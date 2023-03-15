@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Button, Text, Modal, Portal, useTheme } from 'react-native-paper';
 import CalendarPicker from 'react-native-calendar-picker';
 
@@ -7,14 +7,36 @@ const CalendarView = ({ navigation }) => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
-  const startDate = selectedStartDate ? selectedStartDate.format('DD.MM.YYYY').toString() : ''; //Ota valittu päivä
+  
 
   const [entry, setEntry] = useState({date: new Date(2023, 2, 1), rating: 0, text: "This is madness"});
 
+  const finDays = ['Ma','Ti','Ke','To','Pe','La','Su'];
+  const finMonths = ['Tammikuu','Helmikuu','Maaliskuu',
+                      'Huhtikuu','Toukokuu','Kesäkuu',
+                      'Heinäkuu','Elokuu','Syyskuu',
+                      'Lokakuu','Marraskuu','Joulukuu'];
+  const startDate = selectedStartDate ? 
+    selectedStartDate.format('DD.MM.YYYY').toString() : '';
+  
   const theme = useTheme();
-
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      padding: 10,
+      backgroundColor: theme.colors.background,
+    },
+    modalContainer: {
+      backgroundColor: theme.colors.background,
+      padding: 20,
+    },
+    text: {
+      color: theme.colors.onBackground,
+    }
+  });
 
   const handlePress = async (date) => {
     setSelectedStartDate(date);
@@ -22,16 +44,14 @@ const CalendarView = ({ navigation }) => {
     showModal();
   }
 
-
-  const containerStyle = {backgroundColor: theme.colors.background, padding: 20};
   return (
     
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{ flex: 1, alignItems: 'center'}}>
       <Portal>
         <Modal
           visible={modalVisible}
           onDismiss={hideModal}
-          contentContainerStyle={containerStyle}>
+          contentContainerStyle={styles.modalContainer}>
           <Text>Valittu: {startDate}</Text>
           <Text>
             {entry.date.toString()} {entry.text}
@@ -43,7 +63,16 @@ const CalendarView = ({ navigation }) => {
           </Button>
         </Modal>
       </Portal>
-      <CalendarPicker onDateChange={handlePress} />
+      <CalendarPicker
+        weekdays={finDays}
+        months={finMonths}
+        startFromMonday={true}
+        showDayStragglers={true}
+        previousTitle={"Edellinen"}
+        nextTitle={"Seuraava"}
+        textStyle={styles.text}
+        onDateChange={handlePress}
+      />
     </View>
 
   );
