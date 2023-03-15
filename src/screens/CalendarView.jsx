@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ScrollView} from 'react-native';
 import { Button, Text, Modal, Portal, useTheme } from 'react-native-paper';
 import CalendarPicker from 'react-native-calendar-picker';
 
@@ -38,9 +38,11 @@ const CalendarView = ({ navigation }) => {
     }
   });
 
+  const testiteksti = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis leo aliquet massa bibendum sagittis id consectetur sem. Nam et ligula ullamcorper, luctus ipsum ac, consequat nisi. Maecenas ornare elit vitae justo maximus finibus. Vestibulum tincidunt sapien at mi ullamcorper, pellentesque scelerisque arcu tempus. Quisque eu libero augue. Praesent cursus purus nec neque pulvinar tempor. Morbi non enim eu sapien ullamcorper molestie sed blandit tellus. Aliquam erat volutpat. Integer ac pellentesque sem, id pharetra odio. Sed egestas non ex eget commodo. Duis tellus felis, accumsan in velit id, tempus pretium purus. Sed quis euismod purus. Quisque nec metus vestibulum, ultricies erat mollis, mattis turpis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis arcu vel velit commodo aliquet. Sed nec libero eget risus vehicula viverra. \nMaecenas venenatis ornare est. In urna diam, consectetur at feugiat et, porttitor ut augue. Duis elementum nec erat ut ullamcorper. Cras gravida mattis tempor. Etiam sed tempor nulla. Etiam velit turpis, aliquet sed ligula vitae, lacinia cursus magna. Nunc semper consectetur mollis. Nam commodo risus lacinia ultrices volutpat. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed bibendum augue sed dapibus aliquam. Pellentesque tristique urna ac sodales luctus. Duis urna quam, molestie quis elementum consequat, sollicitudin in purus. Mauris gravida in justo sed feugiat. Phasellus cursus, ligula quis sodales aliquam, velit nibh lacinia felis, ut aliquet lorem dolor a nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Duis vel sapien in erat maximus sagittis. \nNam at viverra est. Sed id imperdiet libero, vitae ullamcorper elit. Fusce eget nibh nec mi hendrerit consectetur non id nulla. Vivamus vel commodo est, nec lobortis massa. Sed pretium in lacus vitae posuere. Aenean ullamcorper commodo nulla dapibus consectetur. Nullam non magna vitae turpis pulvinar porta nec sit amet lectus. Pellentesque tincidunt odio vel elementum elementum. Nulla posuere quam malesuada convallis ornare. Integer consectetur sodales mauris, eu molestie metus blandit non. Praesent fringilla tempus ullamcorper. Cras nec diam mauris. Morbi eu egestas dui. Vivamus vitae erat mollis, lacinia est at, varius neque.";
+
   const handlePress = async (date) => {
     setSelectedStartDate(date);
-    setEntry({date: date, rating: 2, text:"changed to " + date.format('DD.MM.YYYY').toString()});
+    setEntry({date: date, rating: 2, text:"changed to " + date.format('DD.MM.YYYY').toString() + testiteksti});
     showModal();
   }
 
@@ -52,15 +54,17 @@ const CalendarView = ({ navigation }) => {
           visible={modalVisible}
           onDismiss={hideModal}
           contentContainerStyle={styles.modalContainer}>
-          <Text>Valittu: {startDate}</Text>
-          <Text>
-            {entry.date.toString()} {entry.text}
-          </Text>
-          <Button
-            mode="elevated"
-            onPress={hideModal}>
-            Hide
-          </Button>
+          <ScrollView>
+            <Text>Valittu: {startDate}</Text>
+            <Text>
+              {entry.date.toString()} {entry.text}
+            </Text>
+            <Button
+              mode="elevated"
+              onPress={hideModal}>
+              Hide
+            </Button>
+          </ScrollView>
         </Modal>
       </Portal>
       <CalendarPicker
@@ -68,8 +72,8 @@ const CalendarView = ({ navigation }) => {
         months={finMonths}
         startFromMonday={true}
         showDayStragglers={true}
-        previousTitle={"Edellinen"}
-        nextTitle={"Seuraava"}
+        previousTitle={"◄"} // "Edellinen"
+        nextTitle={"►"}     // "Seuraava"
         textStyle={styles.text}
         onDateChange={handlePress}
       />
