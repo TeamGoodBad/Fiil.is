@@ -67,6 +67,4 @@ it("adds and retrieves entries", async () => {
     // Filter by words
     const results5 = await userdata.getEntries({containsWords: ["COOL", "dImEnSiOn"]});
     expect(results5).toStrictEqual([entry4]);
-
-    userdata.getEntries
 });
