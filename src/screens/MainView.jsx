@@ -3,6 +3,7 @@ import { Pressable, View, Dimensions } from 'react-native';
 import { Text, Button, TextInput, useTheme } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { MMKVLoader, useMMKVStorage } from "react-native-mmkv-storage";
+import moment from 'moment';
 
 import { CURRENT_TEXT_KEY, CURRENT_RATING_KEY, UserDB, setEntry } from "../storage/userdata";
 import Stars from "../components/Stars";
@@ -53,8 +54,8 @@ const MainView = ({ navigation }) => {
           alignItems: 'center',
           justifyContent: 'flex-end',
         }}>
-        <Text variant="headlineLarge" color={theme.colors.onSurface}>
-          Miten päiväsi on mennyt?
+        <Text variant="titleMedium">
+          {moment().format('DD.MM.YYYY').toString()}
         </Text>
       </View>
 
