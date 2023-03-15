@@ -27,8 +27,7 @@ const Stars = ({ rating, editable, onChange }) => {
 
   return (
     <View style={{
-      height: WINDOW_HEIGHT * 0.15,
-      width: '100%',
+      height: '12%',
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',
@@ -39,7 +38,7 @@ const Stars = ({ rating, editable, onChange }) => {
             <MaterialCommunityIcons
               color={theme.colors.stars[("star"+index)]}
               name={star ? 'star' : 'star-outline'}
-              size={76}
+              size={60}
             />
           </Pressable>
         );
