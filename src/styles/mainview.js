@@ -23,7 +23,7 @@ export const stylesMain = (theme) => StyleSheet.create({
         justifyContent: 'center',
     },
     textInputStyle: {
-      height: WINDOW_HEIGHT * 0.4,
+      flex: 5,
       width: '95%',
     }
 });

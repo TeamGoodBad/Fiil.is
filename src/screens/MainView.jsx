@@ -45,24 +45,21 @@ const MainView = ({ navigation }) => {
         rating={rating}
         editable={true}
         onChange={(handlePress)} />
-
-      <View style={styles.viewForTextInputAndButton}>
-        <TextInput
-          multiline={true}
-          mode="outlined"
-          placeholder={'Kerro lisää...'}
-          style={styles.textInputStyle}
-          value={text}
-          onChangeText={text => setText(text)}
-        />
-        <Button
-          style={{ margin: 20, width: 200 }}
-          mode="contained"
-          onPress={() => saveEntry()}
-        >
-          Tallenna
-        </Button>
-      </View>
+      <TextInput
+        multiline={true}
+        mode="outlined"
+        placeholder={'Kerro lisää...'}
+        style={styles.textInputStyle}
+        value={text}
+        onChangeText={text => setText(text)}
+      />
+      <Button
+        style={{ margin: 20, width: 200 }}
+        mode="contained"
+        onPress={() => saveEntry()}
+      >
+        Tallenna
+      </Button>
     </View>
   );
 };
