@@ -1,19 +1,16 @@
-import { useState } from 'react';
-import { Pressable, View, Dimensions } from 'react-native';
+import { View } from 'react-native';
 import { Text, Button, TextInput, useTheme } from 'react-native-paper';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { MMKVLoader, useMMKVStorage } from "react-native-mmkv-storage";
+import { useMMKVStorage } from "react-native-mmkv-storage";
 import moment from 'moment';
 
 import { CURRENT_TEXT_KEY, CURRENT_RATING_KEY, UserDB, setEntry } from "../storage/userdata";
 import Stars from "../components/Stars";
-
-const WINDOW_WIDTH = Dimensions.get('window').width;
-const WINDOW_HEIGHT = Dimensions.get('window').height;
+import { stylesMain } from "../styles/mainview";
 
 
 const MainView = ({ navigation }) => {
   const theme = useTheme();
+  const styles = stylesMain(theme);
 
   const [text, setText] = useMMKVStorage(CURRENT_TEXT_KEY, UserDB, "");
   const [rating, setRating] = useMMKVStorage(CURRENT_RATING_KEY, UserDB, -1);
@@ -38,44 +35,23 @@ const MainView = ({ navigation }) => {
     await setEntry(entry); // Save to db with current date
   }
 
-
   return (
     <View
-      style={{
-        flex: 1,
-        backgroundColor: theme.colors.background,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-      }}>
-      <View
-        style={{
-          display: 'flex',
-          height: WINDOW_HEIGHT * 0.2,
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-        }}>
-        <Text variant="titleMedium">
-          {moment().format('DD.MM.YYYY').toString()}
-        </Text>
-      </View>
-
+      style={styles.container}>
+      <Text variant="titleMedium">
+        {moment().format('DD.MM.YYYY').toString()}
+      </Text>
       <Stars
         rating={rating}
         editable={true}
         onChange={(handlePress)} />
 
-      <View
-        style={{
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
+      <View style={styles.viewForTextInputAndButton}>
         <TextInput
           multiline={true}
           mode="outlined"
           placeholder={'Kerro lisää...'}
-          style={{ height: WINDOW_HEIGHT * 0.4, width: '100%' }}
+          style={styles.textInputStyle}
           value={text}
           onChangeText={text => setText(text)}
         />
