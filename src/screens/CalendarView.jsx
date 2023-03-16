@@ -38,7 +38,7 @@ const CalendarView = ({ navigation }) => {
     getEntries({ minDate: monthStart, maxDate: monthEnd }).then((entries) => {
       setCustomDatesStyles(entries.map(entry => {
         return {
-          date: entry.date,
+          date: moment(entry.date),
           style: {backgroundColor: theme.colors.stars[`star${entry.rating}`]},
           textStyle: {color: 'black'}, // sets the font color
           containerStyle: [], // extra styling for day container
@@ -54,7 +54,10 @@ const CalendarView = ({ navigation }) => {
     if (!selectedDate) return;
 
     getEntries({minDate: selectedDate.toDate(), maxDate: selectedDate.toDate()}).then((results) => {
-      if (results.length == 0) return;
+      if (results.length == 0) {
+        setSelectedEntry(EMPTY_ENTRY);
+        return;
+      };
       const result = results[0];
       setSelectedEntry(result);
     });
