@@ -29,7 +29,7 @@ export const stylesMain = (theme) => StyleSheet.create({
       margin: 10,
     },
     topView: {
-      flex:3,
+      height: 100,
       justifyContent: 'flex-start',
       alignItems: 'center',
     }
