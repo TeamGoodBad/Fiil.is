@@ -31,6 +31,7 @@ const Stars = ({ rating, editable, onChange }) => {
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',
+      paddingBottom: 10,
     }}>
       {stars.map((star, index) => {
         return (

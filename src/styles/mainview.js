@@ -34,5 +34,6 @@ export const getStyles = (theme) => StyleSheet.create({
       height: 100,
       justifyContent: 'flex-start',
       alignItems: 'center',
+      marginBottom: 10,
     }
 });

@@ -10,11 +10,13 @@ export const getStyles = (theme) => StyleSheet.create({
       backgroundColor: theme.colors.background,
     },
     modalContainer: {
-      flex: 3,
+      minHeight: 200,
       backgroundColor: theme.colors.background,
       padding: 15,
       margin: 20,
-      marginTop: 40,
+      marginTop: 60,
+      marginBottom: 60,
+      borderRadius: 10,
     },
     text: {
       color: theme.colors.onBackground,
