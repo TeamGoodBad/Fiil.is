@@ -1,10 +1,9 @@
 import { StyleSheet } from 'react-native';
 import { getStyle } from './baseStyle';
 
-const basestyle = getStyle();
 
 export const getStyles = (theme) => StyleSheet.create({
-    base: basestyle.container,
+    base: getStyle().container,
     containerCenter: {
         alignItems: 'center',
         justifyContent: 'center',

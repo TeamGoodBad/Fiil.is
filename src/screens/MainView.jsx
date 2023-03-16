@@ -37,30 +37,32 @@ const MainView = ({ navigation }) => {
 
   return (
     <View
-      style={styles.container}>
-      <View style={styles.topView}>
-        <Title>
-          {moment().format('DD.MM.YYYY').toString()}
-        </Title>
-        <Stars
-          rating={rating}
-          editable={true}
-          onChange={(handlePress)} />
+      style={styles.base}>
+      <View style={styles.container}>
+        <View style={styles.topView}>
+          <Title>
+            {moment().format('DD.MM.YYYY').toString()}
+          </Title>
+          <Stars
+            rating={rating}
+            editable={true}
+            onChange={(handlePress)} />
+        </View>
+        <TextInput
+          multiline={true}
+          mode="outlined"
+          placeholder={'Tänään...'}
+          style={styles.textInputStyle}
+          value={text}
+          onChangeText={text => setText(text)}
+        />
+        <Button
+          style={styles.buttonStyle}
+          mode="contained"
+          onPress={() => saveEntry()}>
+          Tallenna
+        </Button>
       </View>
-      <TextInput
-        multiline={true}
-        mode="outlined"
-        placeholder={'Tänään...'}
-        style={styles.textInputStyle}
-        value={text}
-        onChangeText={text => setText(text)}
-      />
-      <Button
-        style={styles.buttonStyle}
-        mode="contained"
-        onPress={() => saveEntry()}>
-        Tallenna
-      </Button>
     </View>
   );
 };

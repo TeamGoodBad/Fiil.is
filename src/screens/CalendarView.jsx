@@ -4,6 +4,7 @@ import { Button, Text, Modal, Portal, useTheme, Paragraph } from 'react-native-p
 import CalendarPicker from 'react-native-calendar-picker';
 import moment from 'moment';
 import Stars from '../components/Stars';
+import { getStyles } from '../styles/calendarView';
 
 
 const CalendarView = ({ navigation }) => {
@@ -27,24 +28,7 @@ const CalendarView = ({ navigation }) => {
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      padding: 10,
-      backgroundColor: theme.colors.background,
-    },
-    modalContainer: {
-      flex: 3,
-      backgroundColor: theme.colors.background,
-      padding: 15,
-      margin: 20,
-      marginTop: 40,
-    },
-    text: {
-      color: theme.colors.onBackground,
-    }
-  });
-
+  const styles = getStyles(theme);
 
   const handleMonthPress = async (date) => {
     // toiminta kuukautta vaihtaessa tähän (setMonthEntries)
@@ -59,7 +43,7 @@ const CalendarView = ({ navigation }) => {
 
   return (
     
-    <View style={{ flex: 1, alignItems: 'center'}}>
+    <View style={styles.base}>
       <Portal>
         <Modal
           visible={modalVisible}

@@ -26,7 +26,7 @@ const AnalysisView = ({navigation}) => {
   const styles = getStyles(theme);
 
   return (
-    <View>
+    <View style={styles.base}>
       <View style={styles.containerCenter}>
         <Title>
           Valitse haluamasi tähtimäärä
