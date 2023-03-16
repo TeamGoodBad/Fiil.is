@@ -18,5 +18,16 @@ export const getStyles = (theme) => StyleSheet.create({
     },
     text: {
       color: theme.colors.onBackground,
+      fontFamily: theme.fontFamily,
+      fontVariant: 'title',
     }
 });
+
+export const getFin = () => {
+  const finDays = ['Ma','Ti','Ke','To','Pe','La','Su'];
+  const finMonths = ['Tammikuu','Helmikuu','Maaliskuu',
+                      'Huhtikuu','Toukokuu','Kesäkuu',
+                      'Heinäkuu','Elokuu','Syyskuu',
+                      'Lokakuu','Marraskuu','Joulukuu'];
+  return {days: finDays, months: finMonths};
+}

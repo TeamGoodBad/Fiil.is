@@ -1,34 +1,27 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView} from 'react-native';
+import { View, ScrollView} from 'react-native';
 import { Button, Text, Modal, Portal, useTheme, Paragraph } from 'react-native-paper';
 import CalendarPicker from 'react-native-calendar-picker';
 import moment from 'moment';
 import Stars from '../components/Stars';
-import { getStyles } from '../styles/calendarView';
+import { getStyles, getFin } from '../styles/calendarView';
 
 
 const CalendarView = ({ navigation }) => {
   const theme = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
-  
   const [customDatesStyles, setCustomDatesStyles] = useState(makeMockData(new Date, theme));
-
   const [selectedEntry, setSelectedEntry] = useState({date: new Date(2023, 2, 1), rating: 0, text: "This is madness"});
 
-  const finDays = ['Ma','Ti','Ke','To','Pe','La','Su'];
-  const finMonths = ['Tammikuu','Helmikuu','Maaliskuu',
-                      'Huhtikuu','Toukokuu','Kesäkuu',
-                      'Heinäkuu','Elokuu','Syyskuu',
-                      'Lokakuu','Marraskuu','Joulukuu'];
   const startDate = selectedStartDate ? 
     selectedStartDate.format('DD.MM.YYYY').toString() : '';
   
+  const fin = getFin();
+  const styles = getStyles(theme);
   
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
-
-  const styles = getStyles(theme);
 
   const handleMonthPress = async (date) => {
     // toiminta kuukautta vaihtaessa tähän (setMonthEntries)
@@ -42,7 +35,6 @@ const CalendarView = ({ navigation }) => {
   }
 
   return (
-    
     <View style={styles.base}>
       <Portal>
         <Modal
@@ -62,12 +54,11 @@ const CalendarView = ({ navigation }) => {
             style={{margin: 5}}>
             Takaisin
           </Button>
-          
         </Modal>
       </Portal>
       <CalendarPicker
-        weekdays={finDays}
-        months={finMonths}
+        weekdays={fin.days}
+        months={fin.months}
         startFromMonday={true}
         previousTitle={"⟽"} // "Edellinen"
         nextTitle={"⟾"}     // "Seuraava"
@@ -77,7 +68,6 @@ const CalendarView = ({ navigation }) => {
         onMonthChange={handleMonthPress}
       />
     </View>
-
   );
 }
 
