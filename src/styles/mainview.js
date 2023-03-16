@@ -4,7 +4,7 @@ import { getStyle } from './baseStyle';
 const WINDOW_WIDTH = Dimensions.get('window').width;
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
-export const stylesMain = (theme) => StyleSheet.create({
+export const getStyles = (theme) => StyleSheet.create({
     base: getStyle().container,
     container: {
       flex: 1,

@@ -5,12 +5,12 @@ import moment from 'moment';
 
 import { CURRENT_TEXT_KEY, CURRENT_RATING_KEY, UserDB, setEntry } from "../storage/userdata";
 import Stars from "../components/Stars";
-import { stylesMain } from "../styles/mainview";
+import { getStyles } from "../styles/mainview";
 
 
 const MainView = ({ navigation }) => {
   const theme = useTheme();
-  const styles = stylesMain(theme);
+  const styles = getStyles(theme);
 
   const [text, setText] = useMMKVStorage(CURRENT_TEXT_KEY, UserDB, "");
   const [rating, setRating] = useMMKVStorage(CURRENT_RATING_KEY, UserDB, -1);
