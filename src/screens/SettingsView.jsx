@@ -9,9 +9,8 @@ import { useMMKVStorage } from "react-native-mmkv-storage";
 import { DebugView } from "./DebugView";
 import { SettingsDB, setPin, clearPin, PIN_KEY } from '../storage/settings';
 import EntryList from "../components/EntryList";
+import { getStyles, getPinStyles } from "../styles/settingsView";
 
-const WINDOW_WIDTH = Dimensions.get('window').width;
-const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 
 const SettingsList = ({ navigation }) => {
@@ -68,46 +67,7 @@ const SetPinView = ({ navigation }) => {
   const [hasFailedPinConfirm, setHasFailedPinConfirm] = useState(false);
   const theme = useTheme();
 
-  const pinStyle = StyleSheet.create({
-    container: {
-      height: 150,
-      width: WINDOW_WIDTH,
-      backgroundColor: theme.colors.background,
-    },
-    containerPin: {
-      height: 40,
-      width: WINDOW_WIDTH,
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      alignItems: 'center',
-      paddingLeft: 15,
-      paddingRight: 15,
-      marginTop: 20,
-    },
-    pin: {
-      backgroundColor: theme.colors.surfaceVariant,
-      textAlign: 'center',
-      flex: 1,
-      marginLeft: 20,
-      marginRight: 20,
-      borderRadius: 5,
-      shadowColor: '#00000000',
-      shadowOffset: {width: 1,height : 1},
-      shadowRadius: 5,
-      shadowOpacity : 0.4
-    },
-    text: {
-      textAlign: 'center',
-      color: theme.colors.onBackground,
-      fontSize: 20,
-      marginTop: 30
-    },
-    error: {
-      textAlign: 'center',
-      color: theme.colors.error,
-      paddingTop: 10 
-    }
-  });
+  const pinStyle = getPinStyles(theme);
 
   // 1st time pin
   if (pinToConfirm == "") {
@@ -174,28 +134,31 @@ const SetPinView = ({ navigation }) => {
 
 const SettingsView = () => {
   const Stack = createNativeStackNavigator();
-
+  const theme = useTheme();
+  const styles = getStyles(theme);
 
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Top"
-        component={SettingsList}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Debug"
-        component={DebugView}
-      />
-      <Stack.Screen
-        name="Set PIN"
-        component={SetPinView}
-      />
-      <Stack.Screen
-        name="Entry List"
-        component={EntryList}
-      />
-    </Stack.Navigator>
+    <View style={styles.base}>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Top"
+          component={SettingsList}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Debug"
+          component={DebugView}
+        />
+        <Stack.Screen
+          name="Set PIN"
+          component={SetPinView}
+        />
+        <Stack.Screen
+          name="Entry List"
+          component={EntryList}
+        />
+      </Stack.Navigator>
+    </View>
   )
 }
 
