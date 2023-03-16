@@ -27,7 +27,7 @@ const Stars = ({ rating, editable, onChange }) => {
 
   return (
     <View style={{
-      height: '12%',
+      height: WINDOW_HEIGHT * 0.12,
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',

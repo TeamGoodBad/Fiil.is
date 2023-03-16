@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, ScrollView} from 'react-native';
-import { Button, Text, Modal, Portal, useTheme } from 'react-native-paper';
+import { Button, Text, Modal, Portal, useTheme, Paragraph } from 'react-native-paper';
 import CalendarPicker from 'react-native-calendar-picker';
 import moment from 'moment';
 import Stars from '../components/Stars';
@@ -34,6 +34,7 @@ const CalendarView = ({ navigation }) => {
       backgroundColor: theme.colors.background,
     },
     modalContainer: {
+      flex: 3,
       backgroundColor: theme.colors.background,
       padding: 15,
       margin: 20,
@@ -67,9 +68,9 @@ const CalendarView = ({ navigation }) => {
           <Text>Valittu: {startDate}</Text>
           <Stars rating={selectedEntry.rating} editable={false} />
           <ScrollView>
-            <Text>
+            <Paragraph>
               {selectedEntry.date.toString()} {selectedEntry.text}
-            </Text>
+            </Paragraph>
           </ScrollView>
           <Button
             mode="elevated"

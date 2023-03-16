@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { Text, Button, TextInput, useTheme } from 'react-native-paper';
+import { Title, Button, TextInput, useTheme, } from 'react-native-paper';
 import { useMMKVStorage } from "react-native-mmkv-storage";
 import moment from 'moment';
 
@@ -38,26 +38,27 @@ const MainView = ({ navigation }) => {
   return (
     <View
       style={styles.container}>
-      <Text variant="titleMedium">
-        {moment().format('DD.MM.YYYY').toString()}
-      </Text>
-      <Stars
-        rating={rating}
-        editable={true}
-        onChange={(handlePress)} />
+      <View style={styles.topView}>
+        <Title>
+          {moment().format('DD.MM.YYYY').toString()}
+        </Title>
+        <Stars
+          rating={rating}
+          editable={true}
+          onChange={(handlePress)} />
+      </View>
       <TextInput
         multiline={true}
         mode="outlined"
-        placeholder={'Kerro lisää...'}
+        placeholder={'Tänään...'}
         style={styles.textInputStyle}
         value={text}
         onChangeText={text => setText(text)}
       />
       <Button
-        style={{ margin: 20, width: 200 }}
+        style={styles.buttonStyle}
         mode="contained"
-        onPress={() => saveEntry()}
-      >
+        onPress={() => saveEntry()}>
         Tallenna
       </Button>
     </View>

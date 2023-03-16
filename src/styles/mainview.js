@@ -11,7 +11,6 @@ export const stylesMain = (theme) => StyleSheet.create({
       alignItems: 'center',
     },
     earlierViewThatHadTextInside: {
-      display: 'flex',
       height: WINDOW_HEIGHT * 0.2,
       alignItems: 'center',
       justifyContent: 'flex-end',
@@ -25,5 +24,13 @@ export const stylesMain = (theme) => StyleSheet.create({
     textInputStyle: {
       flex: 5,
       width: '95%',
+    },
+    buttonStyle: {
+      margin: 10,
+    },
+    topView: {
+      flex:3,
+      justifyContent: 'flex-start',
+      alignItems: 'center',
     }
 });
