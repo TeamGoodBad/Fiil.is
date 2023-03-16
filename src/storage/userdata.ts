@@ -21,6 +21,13 @@ interface Entry {
 }
 
 
+export const EMPTY_ENTRY: Entry = {
+    rating: -1,
+    text: "",
+    date: new Date(0),
+}
+
+
 /**
  * @returns the whole database in JSON format
  */
@@ -119,11 +126,12 @@ export const getEntries = async (filter: EntryFilter = {}): Promise<Entry[]> => 
         return entry;
     }));
 
+
     // Apply filters
     
     if (filter.minDate) {
         // Don't take time of day into consideration
-        const f = filter.maxDate!;
+        const f = filter.minDate!;
         const date = new Date(f.getFullYear(), f.getMonth(), f.getDate());
         entries = entries.filter((entry) => entry.date.getTime() >= date.getTime());
     }
