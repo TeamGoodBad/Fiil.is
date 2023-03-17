@@ -5,7 +5,7 @@ const ENTRY_KEY = "entry";
 export const CURRENT_TEXT_KEY = "currentText";
 export const CURRENT_RATING_KEY = "currentRating";
 
-const dateToKey = (date: Date) => `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+const dateToKey = (date: Date) => `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 const dateToEntryKey = (date: Date) => `${ENTRY_KEY}.${dateToKey(date)}`;
 
 export const UserDB: any = new MMKVLoader()
