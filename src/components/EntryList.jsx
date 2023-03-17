@@ -1,5 +1,5 @@
 import { List } from "react-native-paper";
-import { View } from "react-native";
+import { ScrollView } from "react-native";
 import { getEntries } from "../storage/userdata";
 import { useEffect, useState } from "react";
 
@@ -17,9 +17,9 @@ const EntryList = () => {
 
 
   return (
-    <View>
+    <ScrollView>
       {entries.map(entry => <List.Item title={entry.date.toString()} description={entry.text} key={entry.date.toString()}/>)}
-    </View>
+    </ScrollView>
   );
 };
 

@@ -5,7 +5,7 @@ const ENTRY_KEY = "entry";
 export const CURRENT_TEXT_KEY = "currentText";
 export const CURRENT_RATING_KEY = "currentRating";
 
-const dateToKey = (date: Date) => `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+const dateToKey = (date: Date) => `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 const dateToEntryKey = (date: Date) => `${ENTRY_KEY}.${dateToKey(date)}`;
 
 export const UserDB: any = new MMKVLoader()
@@ -18,6 +18,13 @@ interface Entry {
     rating: number,
     text: string,
     date: Date,
+}
+
+
+export const EMPTY_ENTRY: Entry = {
+    rating: -1,
+    text: "",
+    date: new Date(0),
 }
 
 
@@ -119,11 +126,12 @@ export const getEntries = async (filter: EntryFilter = {}): Promise<Entry[]> => 
         return entry;
     }));
 
+
     // Apply filters
     
     if (filter.minDate) {
         // Don't take time of day into consideration
-        const f = filter.maxDate!;
+        const f = filter.minDate!;
         const date = new Date(f.getFullYear(), f.getMonth(), f.getDate());
         entries = entries.filter((entry) => entry.date.getTime() >= date.getTime());
     }

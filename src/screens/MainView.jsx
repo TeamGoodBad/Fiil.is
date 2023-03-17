@@ -1,18 +1,16 @@
-import { useState } from 'react';
-import { Pressable, View, Dimensions } from 'react-native';
-import { Text, Button, TextInput, useTheme } from 'react-native-paper';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { MMKVLoader, useMMKVStorage } from "react-native-mmkv-storage";
+import { View } from 'react-native';
+import { Title, Button, TextInput, useTheme, } from 'react-native-paper';
+import { useMMKVStorage } from "react-native-mmkv-storage";
+import moment from 'moment';
 
 import { CURRENT_TEXT_KEY, CURRENT_RATING_KEY, UserDB, setEntry } from "../storage/userdata";
 import Stars from "../components/Stars";
-
-const WINDOW_WIDTH = Dimensions.get('window').width;
-const WINDOW_HEIGHT = Dimensions.get('window').height;
+import { getStyles } from "../styles/mainview";
 
 
 const MainView = ({ navigation }) => {
   const theme = useTheme();
+  const styles = getStyles(theme);
 
   const [text, setText] = useMMKVStorage(CURRENT_TEXT_KEY, UserDB, "");
   const [rating, setRating] = useMMKVStorage(CURRENT_RATING_KEY, UserDB, -1);
@@ -37,52 +35,31 @@ const MainView = ({ navigation }) => {
     await setEntry(entry); // Save to db with current date
   }
 
-
   return (
     <View
-      style={{
-        flex: 1,
-        backgroundColor: theme.colors.background,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-      }}>
-      <View
-        style={{
-          display: 'flex',
-          height: WINDOW_HEIGHT * 0.2,
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-        }}>
-        <Text variant="headlineLarge" color={theme.colors.onSurface}>
-          Miten päiväsi on mennyt?
-        </Text>
-      </View>
-
-      <Stars
-        rating={rating}
-        editable={true}
-        onChange={(handlePress)} />
-
-      <View
-        style={{
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
+      style={styles.base}>
+      <View style={styles.container}>
+        <View style={styles.topView}>
+          <Title>
+            {moment().format('DD.MM.YYYY').toString()}
+          </Title>
+          <Stars
+            rating={rating}
+            editable={true}
+            onChange={(handlePress)} />
+        </View>
         <TextInput
           multiline={true}
           mode="outlined"
-          placeholder={'Kerro lisää...'}
-          style={{ height: WINDOW_HEIGHT * 0.4, width: '100%' }}
+          placeholder={'Tänään...'}
+          style={styles.textInputStyle}
           value={text}
           onChangeText={text => setText(text)}
         />
         <Button
-          style={{ margin: 20, width: 200 }}
+          style={styles.buttonStyle}
           mode="contained"
-          onPress={() => saveEntry()}
-        >
+          onPress={() => saveEntry()}>
           Tallenna
         </Button>
       </View>

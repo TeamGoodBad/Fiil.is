@@ -2,14 +2,14 @@ import { useState } from 'react';
 import { Pressable, View, Dimensions } from 'react-native';
 import {
   Text,
-  Button,
-  TextInput,
+  Title,
   Divider,
   useTheme,
   Chip,
 } from 'react-native-paper';
 
 import Stars from "../components/Stars";
+import { getStyles } from "../styles/analysisView"
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
 const WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -23,22 +23,14 @@ const AnalysisView = ({navigation}) => {
     return index;
   };
 
+  const styles = getStyles(theme);
+
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: theme.colors.background,
-        marginTop: '20%',
-      }}>
-      <View
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <Text variant="headlineLarge" color={theme.colors.onSurface}>
+    <View style={styles.base}>
+      <View style={styles.containerCenter}>
+        <Title>
           Valitse haluamasi tähtimäärä
-        </Text>
+        </Title>
       </View>
 
       <Stars
@@ -46,25 +38,14 @@ const AnalysisView = ({navigation}) => {
         editable={true}
         onChange={(handlePress)} />
 
-      <View
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <Text variant="headlineMedium" color={theme.colors.onSurface}>
-          {rating+1} tähden päivissä sanoja
-        </Text>
+      <View style={styles.containerCenter}>
+        <Title>
+          {rating+1} tähden päivissä sanoja:
+        </Title>
       </View>
       <Divider />
       <View
-        style={{
-          overflow: 'scroll',
-          display: 'flex',
-          flexDirection: 'column',
-          rowGap: 10,
-          padding: '5%',
-        }}>
+        style={styles.chipContainer}>
         <Chip>Sana</Chip>
         <Chip>Sana</Chip>
         <Chip>Sana</Chip>
