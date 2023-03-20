@@ -1,5 +1,5 @@
-import { View } from 'react-native';
-import { Title, Button, TextInput, useTheme, } from 'react-native-paper';
+import { View, Keyboard } from 'react-native';
+import { Title, Button, TextInput, useTheme } from 'react-native-paper';
 import { useMMKVStorage } from "react-native-mmkv-storage";
 import moment from 'moment';
 
@@ -33,6 +33,7 @@ const MainView = ({ navigation }) => {
       date: new Date(),
     };
     await setEntry(entry); // Save to db with current date
+    Keyboard.dismiss();
   }
 
   return (
