@@ -4,6 +4,7 @@ const ENTRIES_INDEX_KEY = "entriesIndex";
 const ENTRY_KEY = "entry";
 export const CURRENT_TEXT_KEY = "currentText";
 export const CURRENT_RATING_KEY = "currentRating";
+export const CURRENT_EDITING_STARTED = "currentEditingStarted";
 
 const dateToKey = (date: Date) => `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 const dateToEntryKey = (date: Date) => `${ENTRY_KEY}.${dateToKey(date)}`;

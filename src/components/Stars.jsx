@@ -11,7 +11,7 @@ const Stars = ({ rating, editable, onChange }) => {
   const [stars, setStars] = useState([]);
   
   useEffect(() => {
-    if(rating < 0 ){
+    if(rating < -1 ){
       return;
     }
     const newArray = Array(5).fill(true).fill(false, rating+1)
