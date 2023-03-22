@@ -2,6 +2,8 @@ import { MMKVLoader } from "react-native-mmkv-storage";
 
 /** Key value for getting pin code from `SettingsDB` */
 export const PIN_KEY = "pin";
+export const DAY_CHANGE_KEY = "changeDayAt3am";
+
 
 /** MMKV key-value database object for settings */
 export const SettingsDB = new MMKVLoader()
