@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { green100 } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 import { getStyle } from './baseStyle';
 
 
@@ -9,8 +10,9 @@ export const getStyles = (theme) => StyleSheet.create({
       padding: 10,
       backgroundColor: theme.colors.background,
     },
+
     modalContainer: {
-      minHeight: 200,
+      minHeight: "60%",
       backgroundColor: theme.colors.background,
       padding: 15,
       margin: 20,
@@ -22,6 +24,10 @@ export const getStyles = (theme) => StyleSheet.create({
       color: theme.colors.onBackground,
       fontFamily: theme.fontFamily,
       fontVariant: 'title',
+    },
+    dateSyles: {
+      marginLeft: "30%",
+      fontSize: 30,
     }
 });
 

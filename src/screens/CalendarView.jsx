@@ -69,7 +69,7 @@ const CalendarView = ({ navigation }) => {
   return (
     <View style={styles.base}>
       <Portal>
-        <Modal
+{/*         <Modal
           visible={modalVisible}
           onDismiss={hideModal}
           contentContainerStyle={styles.modalContainer}>
@@ -86,7 +86,26 @@ const CalendarView = ({ navigation }) => {
             style={{ margin: 5 }}>
             Takaisin
           </Button>
-        </Modal>
+        </Modal> */}
+        
+        <Modal visible={modalVisible} onDismiss={hideModal} contentContainerStyle={styles.modalContainer}>
+          <Text style={styles.dateSyles}>{startDate}</Text>
+          <Stars rating={selectedEntry.rating} editable={false} />
+          <ScrollView>
+            <Paragraph>
+              {/* {selectedEntry.date.toString()} */}
+              
+               {selectedEntry.text}
+            </Paragraph>
+          </ScrollView>
+          <Button
+            mode="elevated"
+            onPress={hideModal}
+            style={{ margin: 5 }}>
+            Takaisin
+          </Button>
+        </Modal> 
+
       </Portal>
       <CalendarPicker
         weekdays={fin.days}
