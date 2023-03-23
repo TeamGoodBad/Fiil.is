@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pressable, View, Dimensions } from 'react-native';
+import { Pressable, View, Dimensions, SafeAreaView } from 'react-native';
 import {
   Text,
   Title,
@@ -26,6 +26,7 @@ const AnalysisView = ({navigation}) => {
   const styles = getStyles(theme);
 
   return (
+    <SafeAreaView style={{flex:1}} > 
     <View style={styles.base}>
       <View style={styles.containerCenter}>
         <Title>
@@ -52,6 +53,7 @@ const AnalysisView = ({navigation}) => {
         <Chip>Sana</Chip>
       </View>
     </View>
+    </SafeAreaView>
   );
 };
 
