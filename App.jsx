@@ -7,7 +7,7 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import { useColorScheme } from 'react-native';
 import { useMMKVStorage } from 'react-native-mmkv-storage';
 
-import TabScreens from './src/components/TabScreens';
+import TabScreens from './src/routes/TabScreens';
 import AuthenticationView from './src/screens/AuthenticationView';
 import { CombinedDefaultTheme, CombinedDarkTheme } from "./src/theme";
 import { PIN_KEY, SettingsDB } from './src/storage/settings';
