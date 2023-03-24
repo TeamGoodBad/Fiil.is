@@ -10,6 +10,13 @@ import { EMPTY_ENTRY, getEntries } from '../storage/userdata';
 
 
 const CalendarView = ({ navigation }) => {
+  //Navigoi main menuun
+  const handleEditPress = () => {
+    console.log(selectedEntry)
+    hideModal();
+    navigation.navigate('Main', { selectedEntry: JSON.stringify(selectedEntry)});
+  };
+
   const theme = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
   const [customDatesStyles, setCustomDatesStyles] = useState([]);
@@ -98,6 +105,13 @@ const CalendarView = ({ navigation }) => {
                {selectedEntry.text}
             </Paragraph>
           </ScrollView>
+          <Button
+            title="Edit" 
+            onPress={handleEditPress}
+            mode="elevated"
+            style={{ margin: 5 }}>
+            muokkaa
+          </Button>
           <Button
             mode="elevated"
             onPress={hideModal}

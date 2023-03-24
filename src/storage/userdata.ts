@@ -51,7 +51,7 @@ export const dump: () => Promise<string> = async () => {
         // and indexes
         Promise.all((await UserDB.indexer.arrays.getAll())
             .map(async (field: [string, string[]]) => object[field[0]] = field[1])),
-    ]);
+    ]); 
 
     return JSON.stringify(object);
 }
