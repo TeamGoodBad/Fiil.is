@@ -7,7 +7,10 @@ export const CURRENT_RATING_KEY = "currentRating";
 export const CURRENT_EDITING_STARTED = "currentEditingStarted";
 const SCHEMA_VERSION_KEY = "schema";
 const MONTH_INDEX_KEY = "month";
-const MONTH_INDEXES_KEY = "monthIndex"; // Index of all indexes
+const MONTH_INDEXES_KEY = "monthIndex"; // Index of all month indexes
+const RATING_INDEX_KEY = "rating";
+const WORD_INDEX_KEY = "word";
+const WORD_INDEXES_KEY = "wordIndex"; // Index of all word indexes
 
 const dateToKey = (date: Date) => `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 const dateToEntryKey = (date: Date) => `${ENTRY_KEY}.${dateToKey(date)}`;
@@ -21,6 +24,9 @@ const entryKeyToMonthIndexKey = (entryKey: string) => {
     explodedDate.pop();
     return MONTH_INDEX_KEY + "." + explodedDate.join("-");
 }
+const ratingToRatingIndexKey = (rating: number) => `${RATING_INDEX_KEY}.${rating}`;
+const wordToWordIndexKey = (word: string) => `${WORD_INDEX_KEY}.${word}`;
+
 
 export const UserDB: MMKVInstance = new MMKVLoader()
     .withEncryption()
@@ -71,6 +77,17 @@ export const dump: () => Promise<string> = async () => {
 
 
 /**
+ * Splits text to individual words in lowercase
+ */
+const splitToWords = (text: string): string[] => text
+    .toLocaleLowerCase()
+    .split("\n") // Split string by newlines
+    .flatMap(a => a.split(" ")) // ...and spaces
+    .map(a => a.replace(/[^A-Za-z0-9]/g, '')) // Remove all non-alphanumeric characters)
+    .filter(a => a != ""); // Remove empty "words"
+
+
+/**
  * Adds entry to db. Entry must be an object in form of:
  * {rating: integer, text: string}.
  * @param {Entry} entry
@@ -89,6 +106,19 @@ export const setEntry = async (entry: Entry) => {
     
     // Update index of month indexes
     await pushToIndex(MONTH_INDEXES_KEY, monthIndexKey);
+
+    // Update rating indexes
+    const ratingIndexKey = ratingToRatingIndexKey(entry.rating);
+    await pushToIndex(ratingIndexKey, entryKey);
+
+    // Update indexes for all individual words
+    await Promise.all(splitToWords(entry.text).map(async (word) => {
+        const wordIndexKey = wordToWordIndexKey(word);
+        // Word indexes
+        await pushToIndex(wordIndexKey, entryKey);
+        // Index of word indexes
+        await pushToIndex(WORD_INDEXES_KEY, wordIndexKey);
+    }));
 }
 
 
@@ -186,12 +216,7 @@ export const getEntries = async (filter: EntryFilter = {}): Promise<Entry[]> => 
     if (filter.containsWords) {
         // TODO: Optimize with word indexes
         entries = entries.filter((entry) => {
-            const entryWords: string[] = entry.text
-                // Split to words by new lines and spaces
-                .split("\n")
-                .flatMap(a => a.split(" "))
-                // and convert to lowercase
-                .map(a => a.toLocaleLowerCase());
+            const entryWords = splitToWords(entry.text);
             const filterWords: string[] = filter.containsWords!.map(a => a.toLocaleLowerCase());
 
             // Filter entry out if any of the words was not found in entry
@@ -220,9 +245,28 @@ const update = async () => {
                 // Index of month indexes
                 await pushToIndex(MONTH_INDEXES_KEY, monthIndexKey);
             }));
+        case 1:
+            console.log("Upgrading db to v2");
+
+            await Promise.all((UserDB.getArray(ENTRIES_INDEX_KEY) as string[]).map(async (entryKey) => {
+                const entry = await UserDB.getMapAsync(entryKey) as Entry;
+                
+                // Rating indexes
+                const ratingIndexKey = ratingToRatingIndexKey(entry.rating);
+                await pushToIndex(ratingIndexKey, entryKey);
+
+                // Indexes for all individual words
+                await Promise.all(splitToWords(entry.text).map(async (word) => {
+                    const wordIndexKey = wordToWordIndexKey(word);
+                    // Word indexes
+                    await pushToIndex(wordIndexKey, entryKey);
+                    // Index of word indexes
+                    await pushToIndex(WORD_INDEXES_KEY, wordIndexKey);
+                }));
+            }));
     }
 
     // Bump schema version
-    UserDB.setInt(SCHEMA_VERSION_KEY, 1);
+    UserDB.setInt(SCHEMA_VERSION_KEY, 2);
 }
 update();
