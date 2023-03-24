@@ -7,46 +7,25 @@ export const CURRENT_RATING_KEY = "currentRating";
 export const CURRENT_EDITING_STARTED = "currentEditingStarted";
 const SCHEMA_VERSION_KEY = "schema";
 const MONTH_INDEX_KEY = "month";
+const MONTH_INDEXES_KEY = "monthIndex"; // Index of all indexes
 
 const dateToKey = (date: Date) => `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 const dateToEntryKey = (date: Date) => `${ENTRY_KEY}.${dateToKey(date)}`;
 const dateToMonthIndexKey = (date: Date) => `${MONTH_INDEX_KEY}.${date.getFullYear()}-${date.getMonth() + 1}`
 const entryKeyToMonthIndexKey = (entryKey: string) => {
-    const exploded = entryKey.split(":");
-    if (exploded.length != 2) console.error("Entry key is not of correct form!");
+    const exploded = entryKey.split(".");
+    if (exploded.length != 2) console.error(`Entry key is not of correct form: ${entryKey}`);
     const date = exploded[1];
     let explodedDate = date.split("-");
-    if (explodedDate.length != 3) console.error("Entry key is not of correct form!");
+    if (explodedDate.length != 3) console.error(`Entry key is not of correct form: ${entryKey}`);
     explodedDate.pop();
-    return explodedDate.join("-");
+    return MONTH_INDEX_KEY + "." + explodedDate.join("-");
 }
 
 export const UserDB: MMKVInstance = new MMKVLoader()
     .withEncryption()
     .withInstanceID("userdata")
     .initialize();
-
-// Upgrade database schema if required
-{
-    const version = UserDB.getInt(SCHEMA_VERSION_KEY);
-    switch (version) {
-        case null: // Schema version prior to 1 did not contain version information
-            // Upgrade from v0 to v1
-            console.log("Upgrading db to v1");
-
-            // Build month indexes
-            for (const entryKey of UserDB.getArray(ENTRIES_INDEX_KEY) as string[]) {
-                const monthIndexKey = entryKeyToMonthIndexKey(entryKey);
-                let monthIndex = UserDB.getArray(monthIndexKey);
-                if (monthIndex == null) monthIndex = [];
-                if (!monthIndex.includes(entryKey)) monthIndex.push(entryKey);
-                UserDB.setArray(monthIndexKey, monthIndex);    
-            }
-    }
-
-    // Bump schema version
-    UserDB.setInt(SCHEMA_VERSION_KEY, 1);
-}
 
 
 interface Entry {
@@ -102,17 +81,22 @@ export const setEntry = async (entry: Entry) => {
     await UserDB.setMapAsync(entryKey, entry);
 
     // Update entry index
-    let index = await UserDB.getArrayAsync(ENTRIES_INDEX_KEY);
-    if (index == null) index = [];
-    if (!index.includes(entryKey)) index.push(entryKey);
-    await UserDB.setArrayAsync(ENTRIES_INDEX_KEY, index);
+    await pushToIndex(ENTRIES_INDEX_KEY, entryKey);
 
     // Update month index
     const monthIndexKey = dateToMonthIndexKey(entry.date);
-    let monthIndex = await UserDB.getArrayAsync(monthIndexKey);
-    if (monthIndex == null) monthIndex = [];
-    if (!monthIndex.includes(entryKey)) monthIndex.push(entryKey);
-    await UserDB.setArrayAsync(monthIndexKey, monthIndex);    
+    await pushToIndex(monthIndexKey, entryKey);
+    
+    // Update index of month indexes
+    await pushToIndex(MONTH_INDEXES_KEY, monthIndexKey);
+}
+
+
+const pushToIndex = async (indexKey: string, data: string): Promise<void> => {
+    let index = await UserDB.getArrayAsync(indexKey);
+    if (index == null) index = [];
+    if (!index.includes(data)) index.push(data);
+    await UserDB.setArrayAsync(indexKey, index);
 }
 
 
@@ -220,3 +204,25 @@ export const getEntries = async (filter: EntryFilter = {}): Promise<Entry[]> => 
 
     return entries;
 }
+
+
+// Upgrade database schema if required
+const update = async () => {
+    const version = UserDB.getInt(SCHEMA_VERSION_KEY);
+    switch (version) {
+        case null: // Schema version prior to 1 did not contain version information
+            console.log("Upgrading db to v1");
+
+            Promise.all((UserDB.getArray(ENTRIES_INDEX_KEY) as string[]).map(async (entryKey) => {
+                const monthIndexKey = entryKeyToMonthIndexKey(entryKey);
+                // Month index
+                await pushToIndex(monthIndexKey, entryKey);
+                // Index of month indexes
+                await pushToIndex(MONTH_INDEXES_KEY, monthIndexKey);
+            }));
+    }
+
+    // Bump schema version
+    UserDB.setInt(SCHEMA_VERSION_KEY, 1);
+}
+update();
