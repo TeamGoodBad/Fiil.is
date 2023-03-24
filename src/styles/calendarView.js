@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { green100 } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 import { getStyle } from './baseStyle';
 
 
