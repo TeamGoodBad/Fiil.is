@@ -7,14 +7,15 @@ import CodePin from 'react-native-pin-code';
 import { useMMKVStorage } from "react-native-mmkv-storage";
 
 import { DebugView } from "./DebugView";
-import { SettingsDB, setPin, clearPin, PIN_KEY } from '../storage/settings';
+import { SettingsDB, setPin, clearPin, PIN_KEY, DAY_CHANGE_KEY } from '../storage/settings';
 import EntryList from "../components/EntryList";
 import { getStyles, getPinStyles } from "../styles/settingsView";
 
 
 
 const SettingsList = ({ navigation }) => {
-  const [pin, _] = useMMKVStorage(PIN_KEY, SettingsDB, "");
+  const [pin] = useMMKVStorage(PIN_KEY, SettingsDB, "");
+  const [dayChange, setDayChange] = useMMKVStorage(DAY_CHANGE_KEY, SettingsDB, false);
 
   /** Returns correct right arrow -like icon for current platform */
   const PlatformRight = () => Platform.OS == "ios" ? "chevron-right" : "arrow-right";
@@ -26,7 +27,7 @@ const SettingsList = ({ navigation }) => {
     return (
       <List.Item
         title="Debug"
-        description="Development shananigans"
+        description="Development shananigans."
         left={(props) => <List.Icon {...props} icon="bug" />}
         right={(props) => <List.Icon {...props} icon={PlatformRight()} />}
         onPress={() => navigation.navigate("Debug")}
@@ -43,17 +44,29 @@ const SettingsList = ({ navigation }) => {
     }
   }
 
+  const toggleDayChange = () => setDayChange(!dayChange);
+
   return (
     <View>
       <List.Item
         title="PIN-lukitus"
-        description="Lukitse sovellus PIN koodilla"
+        description="Lukitsee sovelluksen PIN koodilla."
         left={(props) => <List.Icon {...props} icon="safe" />}
         right={() => <Switch
           value={pin != ""}
           onValueChange={togglePin}
         />}
         onPress={togglePin}
+      />
+      <List.Item
+        title="Aloita päivä kello 3:00"
+        description="Asettaa sivun vaihtumisen ajankohdan keskiyöstä kolmeen aamuyöstä."
+        left={(props) => <List.Icon {...props} icon="weather-night" />}
+        right={() => <Switch
+          value={dayChange}
+          onValueChange={toggleDayChange}
+        />}
+        onPress={toggleDayChange}
       />
       {DebugViewListItem()}
     </View>
