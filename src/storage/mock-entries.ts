@@ -49,7 +49,7 @@ const loremLipsum = () => {
 
 
 /**
- * Fills 
+ * Puts some fake entries to userdata
  */
 export const generateMockEntries = async () => {
     const maxEntries = 30;
