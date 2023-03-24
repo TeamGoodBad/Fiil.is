@@ -35,7 +35,7 @@ const MainView = ({ navigation, route }) => {
     }
   }, [route.params]);
 
-  // Lataa muistista tallennetun entryn halutulle päivälle
+  // Lataa muistista tallennetun entryn halutulle päivälle. Jos entryä ei ole, ei tee mitään.
   const loadEntryFromDateIfSaved = async (date) => {
     getEntries({minDate: date, maxDate: date}).then(entries => {
       if (entries.length > 0) {
@@ -53,13 +53,6 @@ const MainView = ({ navigation, route }) => {
     if (now.getMonth() * 40 + now.getDate() != then.getMonth() * 40 + then.getDate()) {
       setText("");
       setRating(-1);
-      // Load entry from memory if there is one for today
-/*       getEntries({minDate: now, maxDate: now}).then(entries => {
-        if (entries.length > 0) {
-          setText(entries[0].text);
-          setRating(entries[0].rating);
-        }
-      }); */
       loadEntryFromDateIfSaved(now);
       //loadEntryFromDateIfSaved(new Date());
       setEditingStarted(now.toISOString());
