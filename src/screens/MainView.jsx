@@ -3,14 +3,15 @@ import { Title, Button, TextInput, useTheme } from 'react-native-paper';
 import { useMMKVStorage } from "react-native-mmkv-storage";
 import moment from 'moment';
 
-import { CURRENT_TEXT_KEY, CURRENT_RATING_KEY, UserDB, setEntry, CURRENT_EDITING_STARTED } from "../storage/userdata";
+import { CURRENT_TEXT_KEY, CURRENT_RATING_KEY, UserDB, setEntry, getEntries, CURRENT_EDITING_STARTED } from "../storage/userdata";
 import Stars from "../components/Stars";
 import { getStyles } from "../styles/mainview";
-import { useEffect } from 'react';
+import {  useEffect, useState } from 'react';
 import { DAY_CHANGE_KEY, SettingsDB } from '../storage/settings';
 
 
-const MainView = ({ navigation }) => {
+
+const MainView = ({ navigation, route }) => {
   const theme = useTheme();
   const styles = getStyles(theme);
 
@@ -24,6 +25,29 @@ const MainView = ({ navigation }) => {
     return index;
   }
 
+  // Change to older entry if editing
+  useEffect(() => {
+    if (route.params && route.params.selectedEntry) {
+      const { selectedEntry } = route.params;
+      const parsedSelectedEntry = JSON.parse(selectedEntry);
+
+      setText(parsedSelectedEntry.text);
+      setRating(parsedSelectedEntry.rating);
+      setEditingStarted(moment(parsedSelectedEntry.date).toISOString());
+      console.log(parsedSelectedEntry);
+    }
+  }, [route.params]);
+
+  // Lataa muistista tallennetun entryn halutulle päivälle. Jos entryä ei ole, ei tee mitään.
+  const loadEntryFromDateIfSaved = async (date) => {
+    getEntries({minDate: date, maxDate: date}).then(entries => {
+      if (entries.length > 0) {
+        setText(entries[0].text);
+        setRating(entries[0].rating);
+      }
+    });
+  }
+
   // Wipe current entry if editing of it was started "yesterday"
   useEffect(() => {
     let now = new Date();
@@ -34,8 +58,10 @@ const MainView = ({ navigation }) => {
     if (now.getMonth() * 40 + now.getDate() != then.getMonth() * 40 + then.getDate()) {
       setText("");
       setRating(-1);
+      loadEntryFromDateIfSaved(now);
+      //loadEntryFromDateIfSaved(new Date());
+      setEditingStarted(now.toISOString());
     }
-    setEditingStarted(now.toISOString());
   }, []);
 
 
@@ -47,11 +73,11 @@ const MainView = ({ navigation }) => {
     const entry = {
       rating: rating,
       text: text,
-      date: new Date(),
+      date: new Date(editingStarted),
     };
-    await setEntry(entry); // Save to db with current date
+    await setEntry(entry); // Save to db
     Keyboard.dismiss();
-  }
+  };
 
   return (
     <View

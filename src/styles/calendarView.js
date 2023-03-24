@@ -9,8 +9,9 @@ export const getStyles = (theme) => StyleSheet.create({
       padding: 10,
       backgroundColor: theme.colors.background,
     },
+
     modalContainer: {
-      minHeight: 200,
+      minHeight: "60%",
       backgroundColor: theme.colors.background,
       padding: 15,
       margin: 20,
@@ -22,6 +23,10 @@ export const getStyles = (theme) => StyleSheet.create({
       color: theme.colors.onBackground,
       fontFamily: theme.fontFamily,
       fontVariant: 'title',
+    },
+    dateSyles: {
+      marginLeft: "30%",
+      fontSize: 30,
     }
 });
 

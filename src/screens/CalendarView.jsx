@@ -10,6 +10,13 @@ import { EMPTY_ENTRY, getEntries } from '../storage/userdata';
 
 
 const CalendarView = ({ navigation }) => {
+  //Navigoi main menuun
+  const handleEditPress = () => {
+    console.log(selectedEntry)
+    hideModal();
+    navigation.navigate('Main', { selectedEntry: JSON.stringify(selectedEntry)});
+  };
+
   const theme = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
   const [customDatesStyles, setCustomDatesStyles] = useState([]);
@@ -69,7 +76,7 @@ const CalendarView = ({ navigation }) => {
   return (
     <View style={styles.base}>
       <Portal>
-        <Modal
+{/*         <Modal
           visible={modalVisible}
           onDismiss={hideModal}
           contentContainerStyle={styles.modalContainer}>
@@ -86,7 +93,33 @@ const CalendarView = ({ navigation }) => {
             style={{ margin: 5 }}>
             Takaisin
           </Button>
-        </Modal>
+        </Modal> */}
+        
+        <Modal visible={modalVisible} onDismiss={hideModal} contentContainerStyle={styles.modalContainer}>
+          <Text style={styles.dateSyles}>{startDate}</Text>
+          <Stars rating={selectedEntry.rating} editable={false} />
+          <ScrollView>
+            <Paragraph>
+              {/* {selectedEntry.date.toString()} */}
+              
+               {selectedEntry.text}
+            </Paragraph>
+          </ScrollView>
+          <Button
+            title="Edit" 
+            onPress={handleEditPress}
+            mode="elevated"
+            style={{ margin: 5 }}>
+            muokkaa
+          </Button>
+          <Button
+            mode="elevated"
+            onPress={hideModal}
+            style={{ margin: 5 }}>
+            Takaisin
+          </Button>
+        </Modal> 
+
       </Portal>
       <CalendarPicker
         weekdays={fin.days}
