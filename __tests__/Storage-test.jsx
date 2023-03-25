@@ -52,19 +52,20 @@ it("adds and retrieves entries", async () => {
 
     // Filter by date
     const results = await userdata.getEntries({minDate: entry1.date, maxDate: entry1.date});
-    expect(results).toStrictEqual([entry1]);
+    console.log(await userdata.dump());
+    expect(results).toIncludeSameMembers([entry1]);
 
     // Filter by rating
     const results2 = await userdata.getEntries({minRating: 2, maxRating: 4});
-    expect(results2).toStrictEqual([entry2, entry3, entry4]);
+    expect(results2).toIncludeSameMembers([entry2, entry3, entry4]);
 
     // Filter by text
     const results3 = await userdata.getEntries({containsText: "TEST"});
-    expect(results3).toStrictEqual([entry1, entry2]);
+    expect(results3).toIncludeSameMembers([entry1, entry2]);
     const results4 = await userdata.getEntries({containsText: "⭐"});
-    expect(results4).toStrictEqual([entry5]);
+    expect(results4).toIncludeSameMembers([entry5]);
 
     // Filter by words
     const results5 = await userdata.getEntries({containsWords: ["COOL", "dImEnSiOn"]});
-    expect(results5).toStrictEqual([entry4]);
+    expect(results5).toIncludeSameMembers([entry4]);
 });

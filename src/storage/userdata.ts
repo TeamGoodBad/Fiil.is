@@ -13,19 +13,23 @@ const WORD_INDEX_KEY = "word";
 const WORD_INDEXES_KEY = "wordIndex"; // Index of all word indexes
 /** Current schema version */
 const SCHEMA_VERSION = 2;
+/** Worst possible rating */
+const MIN_RATING = -1;
+/** Best possible rating */
+const MAX_RATING = 4;
 
 
 const dateToKey = (date: Date) => `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 const dateToEntryKey = (date: Date) => `${ENTRY_KEY}.${dateToKey(date)}`;
 const dateToMonthIndexKey = (date: Date) => `${MONTH_INDEX_KEY}.${date.getFullYear()}-${date.getMonth() + 1}`
 const entryKeyToMonthIndexKey = (entryKey: string) => {
-    const exploded = entryKey.split(".");
-    if (exploded.length != 2) console.error(`Entry key is not of correct form: ${entryKey}`);
-    const date = exploded[1];
-    let explodedDate = date.split("-");
-    if (explodedDate.length != 3) console.error(`Entry key is not of correct form: ${entryKey}`);
-    explodedDate.pop();
-    return MONTH_INDEX_KEY + "." + explodedDate.join("-");
+    let exploded = entryKey.match(/\d+/g);
+    if (!exploded || exploded.length != 3) {
+        console.error(`Entry key is not of correct form: ${entryKey}`);
+        return "error";
+    }
+    exploded.pop();
+    return MONTH_INDEX_KEY + "." + exploded.join("-");
 }
 const ratingToRatingIndexKey = (rating: number) => `${RATING_INDEX_KEY}.${rating}`;
 const wordToWordIndexKey = (word: string) => `${WORD_INDEX_KEY}.${word}`;
@@ -100,7 +104,7 @@ const splitToWords = (text: string): string[] => text
 export const setEntry = async (entry: Entry) => {
     // Remove entry first if it is already saved
     await removeEntry(entry.date);
-    
+
     // Add to db
     const entryKey = dateToEntryKey(entry.date);
     await UserDB.setMapAsync(entryKey, entry);
@@ -111,7 +115,7 @@ export const setEntry = async (entry: Entry) => {
     // Update month index
     const monthIndexKey = dateToMonthIndexKey(entry.date);
     await pushToIndex(monthIndexKey, entryKey);
-    
+
     // Update index of month indexes
     await pushToIndex(MONTH_INDEXES_KEY, monthIndexKey);
 
@@ -242,24 +246,93 @@ interface EntryFilter {
  * await getEntries({ minRating: 4, minDate: new Date(2023, 3, 12)});
  */
 export const getEntries = async (filter: EntryFilter = {}): Promise<Entry[]> => {
-    // Get list of all entry keys in db
-    let index = await UserDB.getArrayAsync(ENTRIES_INDEX_KEY) as string[];
-    if (index == null) index = [];
+    let keys: string[] = [];
 
-    // Retrieve all entries in db
-    // TODO: Optimize with saving month indexes
-    let entries: Entry[] = await Promise.all(index.map(async (key: string) => {
+    // Go from most advantageous optimization to least advantageous because only one can be applied
+    // at once. If no optimizations can be utilized, just get all entries.
+
+    // Optimize with word indexes
+    if (filter.containsWords) {
+        const words = filter.containsWords!;
+        keys = [...new Set( // Convert array to set and back to array to eliminate duplicates
+            (await Promise.all(
+                words.map(async (word: string) => {
+
+                    // Get keys for entries containing word from db
+                    const lowerCaseWord = word.toLocaleLowerCase();
+                    const entiresWithWord: string[] | null | undefined = 
+                        await UserDB.getArrayAsync(wordToWordIndexKey(lowerCaseWord));
+
+                    // And push them to keys
+                    if (!entiresWithWord) return [];
+                    return entiresWithWord;
+                })
+            )).flat()
+        )];
+    }
+
+    // Optimize with month indexes
+    else if (filter.minDate || filter.maxDate) {
+        const monthIndexes: string[] = await UserDB.getArrayAsync(MONTH_INDEXES_KEY) || [];
+        for (const monthKey of monthIndexes) {
+
+            // Get year and month from month index key
+            const exploded = monthKey.match(/\d+/g);
+            if (!exploded || exploded.length != 2) return [];
+            const [year, month] = exploded.map(str => Number(str));
+            
+            // Don't proceed if the month is not in range
+            if (filter.minDate) {
+                if (year == filter.minDate.getFullYear()) {
+                    if (month < filter.minDate.getMonth() + 1) continue;
+                }
+                else if (year < filter.minDate.getFullYear()) continue;
+            }
+            if (filter.maxDate) {
+                if (year == filter.maxDate.getFullYear()) {
+                    if (month > filter.maxDate.getMonth() + 1) continue;
+                }
+                else if (year > filter.maxDate.getFullYear()) continue;
+            }
+
+            // Add all entry keys from month
+            const entryKeys: string[] = await UserDB.getArrayAsync(monthKey) || [];
+            for (const key of entryKeys) keys.push(key);
+        }
+    }
+
+    // Optimize with rating indexes
+    else if (filter.minRating || filter.maxRating) {
+        const minRating = filter.minRating || MIN_RATING;
+        const maxRating = filter.maxRating || MAX_RATING;
+        for (let rating = minRating; rating <= maxRating; rating++) {
+            const ratingIndexKey = ratingToRatingIndexKey(rating);
+            const entryKeys: string[] = await UserDB.getArrayAsync(ratingIndexKey) || [];
+            for (const key of entryKeys) keys.push(key);
+        }
+    }
+
+    // Don't optimize
+    else {
+        keys = await UserDB.getArrayAsync(ENTRIES_INDEX_KEY) || [];
+    };
+
+    // No need to proceed if we have no keys
+    if (keys.length == 0) return [];
+    
+    // Fetch entries for keys
+    let entries: Entry[] = await Promise.all(keys.map(async (key: string) => {
         let entry = await UserDB.getMapAsync<Entry | undefined | null>(key);
         if (!entry) entry = EMPTY_ENTRY;
 
         // Turn date string into date object
         entry.date = new Date(entry.date);
         return entry;
-    }));
+    }))
 
 
     // Apply filters
-    
+
     if (filter.minDate) {
         // Don't take time of day into consideration
         const f = filter.minDate!;
@@ -334,7 +407,7 @@ const update = async () => {
 
             await Promise.all(entries.map(async (entryKey) => {
                 const entry = await UserDB.getMapAsync(entryKey) as Entry;
-                
+
                 // Rating indexes
                 const ratingIndexKey = ratingToRatingIndexKey(entry.rating);
                 await pushToIndex(ratingIndexKey, entryKey);
