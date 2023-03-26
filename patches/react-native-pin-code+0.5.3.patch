@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-pin-code/pin-code.js b/node_modules/react-native-pin-code/pin-code.js
+index 18815ac..0eae39e 100644
+--- a/node_modules/react-native-pin-code/pin-code.js
++++ b/node_modules/react-native-pin-code/pin-code.js
+@@ -27,7 +27,7 @@ class CodePin extends Component {
+     this.onKeyPress = this.onKeyPress.bind(this);
+   }
+ 
+-  componentWillReceiveProps(newProps) {
++  UNSAFE_componentWillReceiveProps(newProps) {
+     const codeLength = newProps.number || newProps.code.length;
+ 
+     if (newProps.number !== this.props.number) {
