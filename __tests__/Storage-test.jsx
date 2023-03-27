@@ -38,7 +38,7 @@ it("adds and retrieves entries", async () => {
     const entry1 = {date: new Date(2000, 1, 1), rating: 5, text: "Test text"};
     const entry2 = {date: new Date(2000, 2, 1), rating: 4, text: "More test text"};
     const entry3 = {date: new Date(2000, 1, 2), rating: 3, text: "Something else entirely"};
-    const entry4 = {date: new Date(2001, 1, 1), rating: 2, text: "A whole new dimension of cool"};
+    const entry4 = {date: new Date(2001, 1, 1), rating: 2, text: "A whole new dimension of cool?"};
     const entry5 = {date: new Date(1999, 1, 1), rating: 1, text: "⭐😄🏇"};
     await userdata.setEntry(entry1);
     await userdata.setEntry(entry2);
@@ -52,7 +52,6 @@ it("adds and retrieves entries", async () => {
 
     // Filter by date
     const results = await userdata.getEntries({minDate: entry1.date, maxDate: entry1.date});
-    console.log(await userdata.dump());
     expect(results).toIncludeSameMembers([entry1]);
 
     // Filter by rating

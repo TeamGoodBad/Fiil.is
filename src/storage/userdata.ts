@@ -41,7 +41,7 @@ export const UserDB: MMKVInstance = new MMKVLoader()
     .initialize();
 
 
-/** Represents one diary entry */
+/** Represents one diary entry. */
 interface Entry {
     rating: number,
     text: string,
@@ -49,7 +49,7 @@ interface Entry {
 }
 
 
-/** A dummy entry */
+/** A dummy entry. */
 export const EMPTY_ENTRY: Entry = {
     rating: -1,
     text: "",
@@ -85,9 +85,7 @@ export const dump: () => Promise<string> = async () => {
 }
 
 
-/**
- * Splits text to individual words in lowercase
- */
+/** Splits text to individual words in lowercase. */
 const splitToWords = (text: string): string[] => text
     .toLocaleLowerCase()
     .split("\n") // Split string by newlines
@@ -97,8 +95,7 @@ const splitToWords = (text: string): string[] => text
 
 
 /**
- * Adds entry to db. Entry must be an object in form of:
- * {rating: integer, text: string}.
+ * Adds entry to db.
  * @param {Entry} entry
  */
 export const setEntry = async (entry: Entry) => {
@@ -135,7 +132,7 @@ export const setEntry = async (entry: Entry) => {
 
 
 /**
- * Removes entry from db
+ * Removes entry from db.
  * @param date entry date to be cleared
  */
 export const removeEntry = async (date: Date) => {
@@ -179,7 +176,7 @@ export const removeEntry = async (date: Date) => {
 }
 
 
-/** Pushes string data to index */
+/** Pushes string data to index. */
 const pushToIndex = async (indexKey: string, data: string): Promise<void> => {
     let index = await UserDB.getArrayAsync(indexKey);
     if (index == null) index = [];
@@ -188,7 +185,7 @@ const pushToIndex = async (indexKey: string, data: string): Promise<void> => {
 }
 
 
-/** Removes string data from index */
+/** Removes string data from index. */
 const removeFromIndex = async (indexKey: string, data: string): Promise<void> => {
     const index: string[] | null | undefined = await UserDB.getArrayAsync(indexKey);
     if (!index) return;
@@ -205,7 +202,7 @@ const removeFromIndex = async (indexKey: string, data: string): Promise<void> =>
 
 
 /**
- * Retrieves entry from db by specific date
+ * Retrieves entry from db by specific date.
  * @param {Date} date with time of day ignored
  * @returns {Entry} or `null` if not found
  */
@@ -219,12 +216,12 @@ export const getEntry = async (date: Date): Promise<Entry | null> => {
 
 
 /**
- * Clears all user data
+ * Clears all user data.
  */
 export const clearUserDB = () => UserDB.clearStore();
 
 
-/** Represents a search query for entries. Used as an argument for `getEntries(...)` */
+/** Represents a search query for entries. Used as an argument for `getEntries(...)`. */
 interface EntryFilter {
     minDate?: Date,
     maxDate?: Date,
@@ -236,7 +233,7 @@ interface EntryFilter {
 
 
 /**
- * Returns all entries from db with given filtering options applied
+ * Returns all entries from db with given filtering options applied.
  * @param {EntryFilter} [filter] filtering rules
  * @returns {Promise<Entry[]>} Array of matching entries
  * @example
@@ -248,13 +245,13 @@ interface EntryFilter {
 export const getEntries = async (filter: EntryFilter = {}): Promise<Entry[]> => {
     let keys: string[] = [];
 
-    // Go from most advantageous optimization to least advantageous because only one can be applied
+    // Go from most advantageous optimization to least advantageous, because only one can be applied
     // at once. If no optimizations can be utilized, just get all entries.
 
     // Optimize with word indexes
     if (filter.containsWords) {
         const words = filter.containsWords!;
-        keys = [...new Set( // Convert array to set and back to array to eliminate duplicates
+        keys = [...new Set( // Convert array to set and back to array in order to eliminate duplicates
             (await Promise.all(
                 words.map(async (word: string) => {
 
@@ -313,17 +310,14 @@ export const getEntries = async (filter: EntryFilter = {}): Promise<Entry[]> => 
     }
 
     // Don't optimize
-    else {
-        keys = await UserDB.getArrayAsync(ENTRIES_INDEX_KEY) || [];
-    };
+    else keys = await UserDB.getArrayAsync(ENTRIES_INDEX_KEY) || [];
 
     // No need to proceed if we have no keys
     if (keys.length == 0) return [];
     
     // Fetch entries for keys
     let entries: Entry[] = await Promise.all(keys.map(async (key: string) => {
-        let entry = await UserDB.getMapAsync<Entry | undefined | null>(key);
-        if (!entry) entry = EMPTY_ENTRY;
+        let entry = await UserDB.getMapAsync<Entry | undefined | null>(key) || EMPTY_ENTRY;
 
         // Turn date string into date object
         entry.date = new Date(entry.date);
@@ -337,6 +331,7 @@ export const getEntries = async (filter: EntryFilter = {}): Promise<Entry[]> => 
         // Don't take time of day into consideration
         const f = filter.minDate!;
         const date = new Date(f.getFullYear(), f.getMonth(), f.getDate());
+
         entries = entries.filter((entry) => entry.date.getTime() >= date.getTime());
     }
 
@@ -344,6 +339,7 @@ export const getEntries = async (filter: EntryFilter = {}): Promise<Entry[]> => 
         // Same as above
         const f = filter.maxDate!;
         const date = new Date(f.getFullYear(), f.getMonth(), f.getDate() + 1);
+
         entries = entries.filter((entry) => entry.date.getTime() < date.getTime());
     }
 
@@ -352,7 +348,7 @@ export const getEntries = async (filter: EntryFilter = {}): Promise<Entry[]> => 
     }
 
     if (filter.maxRating) {
-        entries = entries.filter((entry) => entry.rating <= filter.maxRating!)
+        entries = entries.filter((entry) => entry.rating <= filter.maxRating!);
     }
 
     if (filter.containsText) {
@@ -361,7 +357,6 @@ export const getEntries = async (filter: EntryFilter = {}): Promise<Entry[]> => 
     }
 
     if (filter.containsWords) {
-        // TODO: Optimize with word indexes
         entries = entries.filter((entry) => {
             const entryWords = splitToWords(entry.text);
             const filterWords: string[] = filter.containsWords!.map(a => a.toLocaleLowerCase());
@@ -378,11 +373,11 @@ export const getEntries = async (filter: EntryFilter = {}): Promise<Entry[]> => 
 }
 
 
-// Upgrade database schema if required
-const update = async () => {
+/** Updates database schema. Ran automatically on app start. */
+const update: () => Promise<void> = async () => {
     const entries: string[] | null | undefined = await UserDB.getArrayAsync(ENTRIES_INDEX_KEY);
 
-    // Just write current schema version if db is completely empty
+    // Just write current schema version if db is empty
     if (!Array.isArray(entries)) {
         UserDB.setInt(SCHEMA_VERSION_KEY, SCHEMA_VERSION);
         console.log("Db initiated");
@@ -426,4 +421,5 @@ const update = async () => {
     // Bump schema version
     UserDB.setInt(SCHEMA_VERSION_KEY, SCHEMA_VERSION);
 }
+// Update on init
 update();
