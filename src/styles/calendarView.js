@@ -1,12 +1,13 @@
-import { StyleSheet } from 'react-native';
-import { getStyle } from './baseStyle';
+import {StyleSheet} from 'react-native';
+import {getStyle} from './baseStyle';
 
-
-export const getStyles = (theme) => StyleSheet.create({
+export const getStyles = theme =>
+  StyleSheet.create({
     base: getStyle().container,
     container: {
       flex: 1,
       padding: 10,
+      height: '100%',
       backgroundColor: theme.colors.background,
     },
     modalContainer: {
@@ -21,15 +22,24 @@ export const getStyles = (theme) => StyleSheet.create({
     text: {
       color: theme.colors.onBackground,
       fontFamily: theme.fontFamily,
-      fontVariant: 'title',
-    }
-});
+    },
+  });
 
 export const getFin = () => {
-  const finDays = ['Ma','Ti','Ke','To','Pe','La','Su'];
-  const finMonths = ['Tammikuu','Helmikuu','Maaliskuu',
-                      'Huhtikuu','Toukokuu','Kesäkuu',
-                      'Heinäkuu','Elokuu','Syyskuu',
-                      'Lokakuu','Marraskuu','Joulukuu'];
+  const finDays = ['Ma', 'Ti', 'Ke', 'To', 'Pe', 'La', 'Su'];
+  const finMonths = [
+    'Tammikuu',
+    'Helmikuu',
+    'Maaliskuu',
+    'Huhtikuu',
+    'Toukokuu',
+    'Kesäkuu',
+    'Heinäkuu',
+    'Elokuu',
+    'Syyskuu',
+    'Lokakuu',
+    'Marraskuu',
+    'Joulukuu',
+  ];
   return {days: finDays, months: finMonths};
-}
+};
