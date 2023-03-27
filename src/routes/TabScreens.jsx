@@ -10,7 +10,9 @@ const Tab = createMaterialBottomTabNavigator();
 
 export default TabScreens = () => {
     return (
-      <Tab.Navigator labeled={false}>
+      <Tab.Navigator
+        labeled={true}
+        shifting={true}>
         <Tab.Screen
           name='Main'
           component={MainView}
