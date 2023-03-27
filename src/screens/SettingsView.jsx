@@ -1,4 +1,4 @@
-import { View, Platform, StyleSheet, Dimensions } from "react-native";
+import { View, Platform } from "react-native";
 import { useState } from "react";
 import { Snackbar, Switch, useTheme } from 'react-native-paper';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';

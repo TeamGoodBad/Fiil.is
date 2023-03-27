@@ -3,9 +3,10 @@ import { getStyle } from './baseStyle';
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
 const WINDOW_HEIGHT = Dimensions.get('window').height;
+const basestyle = getStyle();
 
 export const getStyles = (theme) => StyleSheet.create({
-    base: getStyle().container,
+    ...basestyle,
     containerCenter: {
         alignItems: 'center',
         justifyContent: 'center',

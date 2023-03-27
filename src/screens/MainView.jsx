@@ -82,18 +82,18 @@ const MainView = ({ navigation, route }) => {
   return (
     <View style={{flex: 1}}>
       <View style={styles.container}>
-        <View style={styles.dateText}>
+        <View style={styles.titleContainer}>
           <Title>
             {moment(editingStarted).format('DD.MM.YYYY').toString()}
           </Title>
         </View>
-        <View style={{flex: 1, minHeight: 20}}>
+        <View style={styles.starsContainer}>
           <Stars
             rating={rating}
             editable={true}
             onChange={(handlePress)} />
         </View>
-        <View style={{flex: 6}}>
+        <View style={styles.textInputContainer}>
           <TextInput
             multiline={true}
             mode="outlined"
@@ -103,7 +103,7 @@ const MainView = ({ navigation, route }) => {
             onChangeText={text => { setText(text) }}
           />
         </View>
-        <View style={{flex:1, padding: 5, minHeight: 20}}>
+        <View style={styles.buttonContainer}>
           <Button
             mode="contained"
             onPress={() => saveEntry()}>

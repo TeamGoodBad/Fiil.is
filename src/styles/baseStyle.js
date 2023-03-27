@@ -5,8 +5,16 @@ import { StyleSheet } from 'react-native';
  * @returns style, which should be used as the base
  */
 export const getStyle = () => StyleSheet.create({
-    container: {
+    base: {
         flex: 1,
-        marginTop: 20,
+        /* marginTop: 20, */
+    },
+    starsContainer: {
+        flex: 1,
+        minHeight: 20,
+      },
+    titleContainer: {
+        flex: 1,
+        alignItems: 'center',
     },
 });
