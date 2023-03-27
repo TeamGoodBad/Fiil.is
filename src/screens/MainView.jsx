@@ -80,32 +80,36 @@ const MainView = ({ navigation, route }) => {
   };
 
   return (
-    <View
-      style={styles.base}>
+    <View style={{flex: 1}}>
       <View style={styles.container}>
-        <View style={styles.topView}>
+        <View style={styles.dateText}>
           <Title>
             {moment(editingStarted).format('DD.MM.YYYY').toString()}
           </Title>
+        </View>
+        <View style={{flex: 1, minHeight: 20}}>
           <Stars
             rating={rating}
             editable={true}
             onChange={(handlePress)} />
         </View>
-        <TextInput
-          multiline={true}
-          mode="outlined"
-          placeholder={'Tänään...'}
-          style={styles.textInputStyle}
-          value={text}
-          onChangeText={text => { setText(text) }}
-        />
-        <Button
-          style={styles.buttonStyle}
-          mode="contained"
-          onPress={() => saveEntry()}>
-          Tallenna
-        </Button>
+        <View style={{flex: 6}}>
+          <TextInput
+            multiline={true}
+            mode="outlined"
+            placeholder={'Tänään...'}
+            style={styles.textInputStyle}
+            value={text}
+            onChangeText={text => { setText(text) }}
+          />
+        </View>
+        <View style={{flex:1, padding: 5, minHeight: 20}}>
+          <Button
+            mode="contained"
+            onPress={() => saveEntry()}>
+            Tallenna
+          </Button>
+        </View>
       </View>
     </View>
   );
