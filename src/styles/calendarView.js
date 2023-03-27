@@ -25,8 +25,18 @@ export const getStyles = (theme) => StyleSheet.create({
       fontVariant: 'title',
     },
     dateSyles: {
-      marginLeft: "30%",
+      marginLeft: "5%",
       fontSize: 30,
+    },
+    backButton: {
+      marginLeft: "25%",
+      fontSize: 30,
+      width: "5%",
+      height: "90%" ,
+      
+    },
+    ModalTopContainer: {
+      flexDirection: 'row',
     }
 });
 

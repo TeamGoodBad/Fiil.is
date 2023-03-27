@@ -12,7 +12,6 @@ import { EMPTY_ENTRY, getEntries } from '../storage/userdata';
 const CalendarView = ({ navigation }) => {
   //Navigoi main menuun
   const handleEditPress = () => {
-    console.log(selectedEntry)
     hideModal();
     navigation.navigate('Main', { selectedEntry: JSON.stringify(selectedEntry)});
   };
@@ -76,27 +75,17 @@ const CalendarView = ({ navigation }) => {
   return (
     <View style={styles.base}>
       <Portal>
-{/*         <Modal
-          visible={modalVisible}
-          onDismiss={hideModal}
-          contentContainerStyle={styles.modalContainer}>
-          <Text>Valittu: {startDate}</Text>
-          <Stars rating={selectedEntry.rating} editable={false} />
-          <ScrollView>
-            <Paragraph>
-              {selectedEntry.date.toString()} {selectedEntry.text}
-            </Paragraph>
-          </ScrollView>
-          <Button
-            mode="elevated"
-            onPress={hideModal}
-            style={{ margin: 5 }}>
-            Takaisin
-          </Button>
-        </Modal> */}
-        
         <Modal visible={modalVisible} onDismiss={hideModal} contentContainerStyle={styles.modalContainer}>
-          <Text style={styles.dateSyles}>{startDate}</Text>
+        <View style={styles.ModalTopContainer}>
+          <Text style={styles.dateSyles}>{startDate}</Text> 
+            <Button
+              mode="elevated"
+              onPress={hideModal}
+              style={styles.backButton}>
+              X
+            </Button>
+        </View>
+          
           <Stars rating={selectedEntry.rating} editable={false} />
           <ScrollView>
             <Paragraph>
@@ -112,12 +101,7 @@ const CalendarView = ({ navigation }) => {
             style={{ margin: 5 }}>
             muokkaa
           </Button>
-          <Button
-            mode="elevated"
-            onPress={hideModal}
-            style={{ margin: 5 }}>
-            Takaisin
-          </Button>
+
         </Modal> 
 
       </Portal>
