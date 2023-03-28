@@ -30,8 +30,8 @@ const App = () => {
 
   async function onCreateTriggerNotification() {
     const date = new Date(Date.now());
-    date.setHours(21);
-    date.setMinutes(48);
+    date.setHours(16);
+    date.setMinutes(11);
 
     // Create a time-based trigger
     const trigger: TimestampTrigger = {
@@ -52,14 +52,7 @@ const App = () => {
       trigger,
     );
   }
-
-  useEffect(() => {
-    try {
-      onCreateTriggerNotification;
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
+  onCreateTriggerNotification;
 
   /** Tab navigator */
   const Tabs = () => {
