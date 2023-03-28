@@ -16,9 +16,9 @@ export const getStyles = (theme) => StyleSheet.create({
       flex: 1,
       backgroundColor: theme.colors.background,
       padding: 15,
-      margin: 20,
-      marginTop: 50,
-      marginBottom: 50,
+      marginHorizontal: "5%",
+      marginTop: "10%",
+      marginBottom: "15%",
       borderRadius: 10,
     },
     text: {

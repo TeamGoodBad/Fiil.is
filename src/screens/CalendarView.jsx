@@ -85,7 +85,7 @@ const CalendarView = ({ navigation }) => {
             stars={{rating:selectedEntry.rating, editable: false}}
             titleContent={startDate} />
           <View style={{flex:8}}>
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={true}>
               <Paragraph>
                 {selectedEntry.text}
               </Paragraph>
