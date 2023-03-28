@@ -9,6 +9,7 @@ import {
 } from 'react-native-paper';
 
 import Stars from "../components/Stars";
+import TitleAndStars from '../components/TitleAndStars';
 import { getStyles } from "../styles/analysisView";
 
 
@@ -25,31 +26,22 @@ const AnalysisView = ({navigation}) => {
 
   return (
     <View style={styles.base}>
-      <View style={styles.titleContainer}>
-        <Title>
-          Valitse haluamasi tähtimäärä
-        </Title>
-      </View>
-
-      <View style={styles.starsContainer}>
-        <Stars
-          rating={rating}
-          editable={true}
-          onChange={(handlePress)} />
-      </View>
-      
-      <View style={styles.containerCenter}>
-        <Title>
-          {rating+1} tähden päivissä sanoja:
-        </Title>
-      </View>
-      <Divider />
-      
-      <View style={styles.chipContainer}>
-        <Chip>Sana</Chip>
-        <Chip>Sana</Chip>
-        <Chip>Sana</Chip>
-        <Chip>Sana</Chip>
+      <TitleAndStars
+        stars={{rating: rating, editable: true, onChange: handlePress}}
+        titleContent={"Valitse haluamasi tähtimäärä"} />
+      <View style={styles.midContainer}>
+        <View style={styles.titleContainer}>
+          <Title>
+            {rating+1} tähden päivissä sanoja:
+          </Title>
+        </View>
+        
+        <View style={styles.chipContainer}>
+          <Chip>Sana</Chip>
+          <Chip>Sana</Chip>
+          <Chip>Sana</Chip>
+          <Chip>Sana</Chip>
+        </View>
       </View>
     </View>
   );

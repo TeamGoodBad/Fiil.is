@@ -1,9 +1,9 @@
 import { StyleSheet, Dimensions } from 'react-native';
-import { getStyle } from './baseStyle';
+import { getBaseStyle } from './baseStyle';
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
 const WINDOW_HEIGHT = Dimensions.get('window').height;
-const basestyle = getStyle();
+const basestyle = getBaseStyle();
 
 export const getStyles = (theme) => StyleSheet.create({
     ...basestyle,

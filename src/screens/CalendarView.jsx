@@ -7,6 +7,7 @@ import moment from 'moment';
 import Stars from '../components/Stars';
 import { getStyles, getFin } from '../styles/calendarView';
 import { EMPTY_ENTRY, getEntries } from '../storage/userdata';
+import TitleAndStars from '../components/TitleAndStars';
 
 
 const CalendarView = ({ navigation }) => {
@@ -75,49 +76,34 @@ const CalendarView = ({ navigation }) => {
 
   return (
     <View style={styles.base}>
-      <Portal>
-{/*         <Modal
+      <Portal> 
+        <Modal
           visible={modalVisible}
           onDismiss={hideModal}
           contentContainerStyle={styles.modalContainer}>
-          <Text>Valittu: {startDate}</Text>
-          <Stars rating={selectedEntry.rating} editable={false} />
-          <ScrollView>
-            <Paragraph>
-              {selectedEntry.date.toString()} {selectedEntry.text}
-            </Paragraph>
-          </ScrollView>
-          <Button
-            mode="elevated"
-            onPress={hideModal}
-            style={{ margin: 5 }}>
-            Takaisin
-          </Button>
-        </Modal> */}
-        
-        <Modal visible={modalVisible} onDismiss={hideModal} contentContainerStyle={styles.modalContainer}>
-          <Text style={styles.dateSyles}>{startDate}</Text>
-          <Stars rating={selectedEntry.rating} editable={false} />
-          <ScrollView>
-            <Paragraph>
-              {/* {selectedEntry.date.toString()} */}
-              
-               {selectedEntry.text}
-            </Paragraph>
-          </ScrollView>
-          <Button
-            title="Edit" 
-            onPress={handleEditPress}
-            mode="elevated"
-            style={{ margin: 5 }}>
-            muokkaa
-          </Button>
-          <Button
-            mode="elevated"
-            onPress={hideModal}
-            style={{ margin: 5 }}>
-            Takaisin
-          </Button>
+          <TitleAndStars
+            stars={{rating:selectedEntry.rating, editable: false}}
+            titleContent={startDate} />
+          <View style={{flex:8}}>
+            <ScrollView>
+              <Paragraph>
+                {selectedEntry.text}
+              </Paragraph>
+            </ScrollView>
+            <Button
+              title="Edit" 
+              onPress={handleEditPress}
+              mode="elevated"
+              style={{ margin: 5 }}>
+              muokkaa
+            </Button>
+            <Button
+              mode="elevated"
+              onPress={hideModal}
+              style={{ margin: 5 }}>
+              Takaisin
+            </Button>
+          </View>
         </Modal> 
 
       </Portal>
