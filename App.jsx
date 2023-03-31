@@ -20,6 +20,7 @@ import AuthenticationView from './src/screens/AuthenticationView';
 import {CombinedDefaultTheme, CombinedDarkTheme} from './src/theme';
 import {PIN_KEY, SettingsDB} from './src/storage/settings';
 
+
 const App = () => {
   const scheme = useColorScheme();
 

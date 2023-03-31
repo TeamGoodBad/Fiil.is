@@ -6,46 +6,23 @@ import {
   SafeAreaView,
   Button,
 } from 'react-native';
-import {useState} from 'react';
-import {Snackbar, Switch, useTheme} from 'react-native-paper';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {List} from 'react-native-paper';
+import { useState } from "react";
+import { Snackbar, Switch, useTheme } from 'react-native-paper';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { List } from "react-native-paper";
 import CodePin from 'react-native-pin-code';
-import {useMMKVStorage} from 'react-native-mmkv-storage';
-import notifee from '@notifee/react-native';
+import { useMMKVStorage } from "react-native-mmkv-storage";
 
-import {DebugView} from './DebugView';
-import {SettingsDB, setPin, clearPin, PIN_KEY} from '../storage/settings';
-import EntryList from '../components/EntryList';
-import {getStyles, getPinStyles} from '../styles/settingsView';
+import { DebugView } from "./DebugView";
+import { SettingsDB, setPin, clearPin, PIN_KEY, DAY_CHANGE_KEY } from '../storage/settings';
+import EntryList from "../components/EntryList";
+import { getStyles, getPinStyles } from "../styles/settingsView";
 
-const SettingsList = ({navigation}) => {
-  const [pin, _] = useMMKVStorage(PIN_KEY, SettingsDB, '');
 
-  async function onDisplayNotification() {
-    // Request permissions (required for iOS)
-    await notifee.requestPermission();
 
-    // Create a channel (required for Android)
-    const channelId = await notifee.createChannel({
-      id: 'default',
-      name: 'Default Channel',
-    });
-
-    // Display a notification
-    await notifee.displayNotification({
-      title: 'Notification Title',
-      body: 'Main body content of the notification',
-      android: {
-        channelId,
-        smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
-        // pressAction is needed if you want the notification to open the app when pressed
-        pressAction: {
-          id: 'default',
-        },
-      },
-    });
-  }
+const SettingsList = ({ navigation }) => {
+  const [pin] = useMMKVStorage(PIN_KEY, SettingsDB, "");
+  const [dayChange, setDayChange] = useMMKVStorage(DAY_CHANGE_KEY, SettingsDB, false);
 
   /** Returns correct right arrow -like icon for current platform */
   const PlatformRight = () =>
@@ -58,10 +35,10 @@ const SettingsList = ({navigation}) => {
     return (
       <List.Item
         title="Debug"
-        description="Development shananigans"
-        left={props => <List.Icon {...props} icon="bug" />}
-        right={props => <List.Icon {...props} icon={PlatformRight()} />}
-        onPress={() => navigation.navigate('Debug')}
+        description="Development shananigans."
+        left={(props) => <List.Icon {...props} icon="bug" />}
+        right={(props) => <List.Icon {...props} icon={PlatformRight()} />}
+        onPress={() => navigation.navigate("Debug")}
       />
     );
   };
@@ -75,6 +52,8 @@ const SettingsList = ({navigation}) => {
     }
   };
 
+  const toggleDayChange = () => setDayChange(!dayChange);
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <View>
@@ -85,6 +64,16 @@ const SettingsList = ({navigation}) => {
           right={() => <Switch value={pin != ''} onValueChange={togglePin} />}
           onPress={togglePin}
         />
+         <List.Item
+        title="Aloita päivä kello 3:00"
+        description="Asettaa sivun vaihtumisen ajankohdan keskiyöstä kolmeen aamuyöstä."
+        left={(props) => <List.Icon {...props} icon="weather-night" />}
+        right={() => <Switch
+          value={dayChange}
+          onValueChange={toggleDayChange}
+        />}
+        onPress={toggleDayChange}
+      />
         {DebugViewListItem()}
       </View>
     </SafeAreaView>

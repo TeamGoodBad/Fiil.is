@@ -10,9 +10,9 @@ import {Text, Title, Divider, useTheme, Chip} from 'react-native-paper';
 
 import Stars from '../components/Stars';
 import {getStyles} from '../styles/analysisView';
+import TitleAndStars from '../components/TitleAndStars';
 
-const WINDOW_WIDTH = Dimensions.get('window').width;
-const WINDOW_HEIGHT = Dimensions.get('window').height;
+
 
 const AnalysisView = ({navigation}) => {
   const [rating, setRating] = useState(0);

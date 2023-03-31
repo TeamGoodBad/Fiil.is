@@ -1,17 +1,24 @@
 import { StyleSheet } from 'react-native';
-import { getStyle } from './baseStyle';
+import { getBaseStyle } from './baseStyle';
 
+const basestyle = getBaseStyle();
 
 export const getStyles = (theme) => StyleSheet.create({
-    base: getStyle().container,
-    containerCenter: {
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
+    ...basestyle,
     chipContainer: {
+        flex: 7,
         overflow: 'scroll',
-        flexDirection: 'column',
         rowGap: 10,
-        padding: '5%',
+        padding: "5%",
+    },
+    midContainer: {
+        flex: 7,
+        borderWidth: 1,
+        borderColor: theme.colors.onBackground,
+        borderRadius: 5,
+        margin: 10,
+    },
+    chipStyle: {
+        backgroundColor: theme.colors.onPrimaryContainer,
     }
 });

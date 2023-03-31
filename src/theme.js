@@ -51,12 +51,12 @@ export const CombinedDefaultTheme = {
       onSurfaceDisabled: "rgba(25, 28, 29, 0.38)",
       backdrop: "rgba(41, 50, 53, 0.4)",
       stars: {
-        star0: "#5a71ff",
-        star1: "#0ca4d6",
-        star2: "#0bcf63",
-        star3: "#b0d812",
-        star4: "#f7e900"
-  }
+        star0: "#787783",
+        star1: "#5782b1",
+        star2: "#2ed8c3",
+        star3: "#8cd919",
+        star4: "#f7ec00"
+      }
     },
 };
 
@@ -107,11 +107,11 @@ export const CombinedDarkTheme = {
         onSurfaceDisabled: "rgba(225, 227, 228, 0.38)",
         backdrop: "rgba(41, 50, 53, 0.4)",
         stars: {
-            star0: "#5a71ff",
-            star1: "#0ca4d6",
-            star2: "#0bcf63",
-            star3: "#b0d812",
-            star4: "#f7e900"
-      }
+            star0: "#787783",
+            star1: "#5782b1",
+            star2: "#2ed8c3",
+            star3: "#8cd919",
+            star4: "#f7ec00"
+          }
     }
 };

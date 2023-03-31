@@ -3,8 +3,6 @@ import {Pressable, View, Dimensions, Animated} from 'react-native';
 import {useTheme} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const WINDOW_HEIGHT = Dimensions.get('window').height;
-
 // rating - how many stars checked by indexes: 0,1,2,3,4
 // editable - is it possible to change rating
 const Stars = ({rating, editable, onChange}) => {
@@ -53,6 +51,7 @@ const Stars = ({rating, editable, onChange}) => {
         paddingBottom: 10,
         opacity: fadeAnim,
       }}>
+
       {stars.map((star, index) => {
         return (
           <Pressable
