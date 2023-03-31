@@ -12,8 +12,6 @@ import Stars from '../components/Stars';
 import {getStyles} from '../styles/analysisView';
 import TitleAndStars from '../components/TitleAndStars';
 
-
-
 const AnalysisView = ({navigation}) => {
   const [rating, setRating] = useState(0);
   const theme = useTheme();
