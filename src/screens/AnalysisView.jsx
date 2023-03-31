@@ -9,10 +9,9 @@ import {
 } from 'react-native-paper';
 
 import Stars from "../components/Stars";
-import { getStyles } from "../styles/analysisView"
+import TitleAndStars from '../components/TitleAndStars';
+import { getStyles } from "../styles/analysisView";
 
-const WINDOW_WIDTH = Dimensions.get('window').width;
-const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 const AnalysisView = ({navigation}) => {
   const [rating, setRating] = useState(0);
@@ -27,29 +26,22 @@ const AnalysisView = ({navigation}) => {
 
   return (
     <View style={styles.base}>
-      <View style={styles.containerCenter}>
-        <Title>
-          Valitse haluamasi tähtimäärä
-        </Title>
-      </View>
-
-      <Stars
-        rating={rating}
-        editable={true}
-        onChange={(handlePress)} />
-
-      <View style={styles.containerCenter}>
-        <Title>
-          {rating+1} tähden päivissä sanoja:
-        </Title>
-      </View>
-      <Divider />
-      <View
-        style={styles.chipContainer}>
-        <Chip>Sana</Chip>
-        <Chip>Sana</Chip>
-        <Chip>Sana</Chip>
-        <Chip>Sana</Chip>
+      <TitleAndStars
+        stars={{rating: rating, editable: true, onChange: handlePress}}
+        titleContent={"Valitse haluamasi tähtimäärä"} />
+      <View style={styles.midContainer}>
+        <View style={styles.titleContainer}>
+          <Title>
+            {rating+1} tähden päivissä sanoja:
+          </Title>
+        </View>
+        
+        <View style={styles.chipContainer}>
+          <Chip>Sana</Chip>
+          <Chip>Sana</Chip>
+          <Chip>Sana</Chip>
+          <Chip>Sana</Chip>
+        </View>
       </View>
     </View>
   );

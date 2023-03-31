@@ -4,10 +4,10 @@ import { useMMKVStorage } from "react-native-mmkv-storage";
 import moment from 'moment';
 
 import { CURRENT_TEXT_KEY, CURRENT_RATING_KEY, UserDB, setEntry, getEntries, CURRENT_EDITING_STARTED } from "../storage/userdata";
-import Stars from "../components/Stars";
 import { getStyles } from "../styles/mainview";
 import {  useEffect, useState } from 'react';
 import { DAY_CHANGE_KEY, SettingsDB } from '../storage/settings';
+import TitleAndStars from '../components/TitleAndStars';
 
 
 
@@ -80,32 +80,44 @@ const MainView = ({ navigation, route }) => {
   };
 
   return (
-    <View
-      style={styles.base}>
+    <View style={{flex: 1}}>
       <View style={styles.container}>
-        <View style={styles.topView}>
+        <TitleAndStars
+          stars={{
+            rating: rating,
+            editable: true,
+            onChange: handlePress
+          }}
+          titleContent={moment(editingStarted).format('DD.MM.YYYY').toString()}
+        />
+{/*         <View style={styles.titleContainer}>
           <Title>
             {moment(editingStarted).format('DD.MM.YYYY').toString()}
           </Title>
+        </View>
+        <View style={styles.starsContainer}>
           <Stars
             rating={rating}
             editable={true}
             onChange={(handlePress)} />
+        </View> */}
+        <View style={styles.textInputContainer}>
+          <TextInput
+            multiline={true}
+            mode="outlined"
+            placeholder={'Tänään...'}
+            style={styles.textInputStyle}
+            value={text}
+            onChangeText={text => { setText(text) }}
+          />
         </View>
-        <TextInput
-          multiline={true}
-          mode="outlined"
-          placeholder={'Tänään...'}
-          style={styles.textInputStyle}
-          value={text}
-          onChangeText={text => { setText(text) }}
-        />
-        <Button
-          style={styles.buttonStyle}
-          mode="contained"
-          onPress={() => saveEntry()}>
-          Tallenna
-        </Button>
+        <View style={styles.buttonContainer}>
+          <Button
+            mode="contained"
+            onPress={() => saveEntry()}>
+            Tallenna
+          </Button>
+        </View>
       </View>
     </View>
   );
