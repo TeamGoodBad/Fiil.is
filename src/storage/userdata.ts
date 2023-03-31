@@ -58,9 +58,10 @@ export const EMPTY_ENTRY: Entry = {
 
 
 /**
- * @returns the whole database in JSON format
+ * @param includeIndexes Should the dump contain index data?
+ * @returns the whole database in JSON format.
  */
-export const dump: () => Promise<string> = async () => {
+export const dump: (includeIndexes?: boolean) => Promise<string> = async (includeIndexes = true) => {
     const object: any = {};
 
     await Promise.all([
@@ -76,12 +77,32 @@ export const dump: () => Promise<string> = async () => {
         Promise.all((await UserDB.indexer.maps.getAll() as [string, any][])
             .map(async (field: [string, any]) => object[field[0]] = field[1])),
 
-        // and indexes
-        Promise.all((await UserDB.indexer.arrays.getAll() as [string, string[]][])
+        // and optionally indexes
+        Promise.all(!includeIndexes && [] || (await UserDB.indexer.arrays.getAll() as [string, string[]][])
             .map(async (field: [string, string[]]) => object[field[0]] = field[1])),
     ]); 
 
     return JSON.stringify(object);
+}
+
+
+/**
+ * Loads data to database from JSON dump.
+ * @param json Data to be loaded in JSON format.
+ */
+export const load: (json: string) => Promise<void> = async (json) => {
+    const data = JSON.parse(json);
+
+    // Add all entries to db
+    for (const key in data.keys) {
+        if (key.startsWith(ENTRY_KEY)) {
+            let entry: Entry = data[key];
+            entry.date = new Date(entry.date);
+            setEntry(entry);
+        }
+    }
+
+    // The indexes will update automatically via `setEntry(...)`
 }
 
 
