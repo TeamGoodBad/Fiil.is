@@ -94,11 +94,12 @@ export const load: (json: string) => Promise<void> = async (json) => {
     const data = JSON.parse(json);
 
     // Add all entries to db
-    for (const key in data.keys) {
+    for (const key of Object.keys(data)) {
         if (key.startsWith(ENTRY_KEY)) {
             let entry: Entry = data[key];
+            // Convert date string to date object
             entry.date = new Date(entry.date);
-            setEntry(entry);
+            await setEntry(entry);
         }
     }
 
@@ -200,7 +201,7 @@ export const removeEntry = async (date: Date) => {
 /** Pushes string data to index. */
 const pushToIndex = async (indexKey: string, data: string): Promise<void> => {
     let index = await UserDB.getArrayAsync(indexKey);
-    if (index == null) index = [];
+    if (!index) index = [];
     if (!index.includes(data)) index.push(data);
     await UserDB.setArrayAsync(indexKey, index);
 }
@@ -235,11 +236,17 @@ export const getEntry = async (date: Date): Promise<Entry | null> => {
     return entry;
 }
 
+/** Writes current schema to db */
+export const writeCurrentSchema = () => UserDB.setInt(SCHEMA_VERSION_KEY, SCHEMA_VERSION);
+
 
 /**
  * Clears all user data.
  */
-export const clearUserDB = () => UserDB.clearStore();
+export const clearUserDB = () => {
+    UserDB.clearStore();
+    writeCurrentSchema();
+}
 
 
 /** Represents a search query for entries. Used as an argument for `getEntries(...)`. */
@@ -400,8 +407,7 @@ const update: () => Promise<void> = async () => {
 
     // Just write current schema version if db is empty
     if (!Array.isArray(entries)) {
-        UserDB.setInt(SCHEMA_VERSION_KEY, SCHEMA_VERSION);
-        console.log("Db initiated");
+        writeCurrentSchema();
         return;
     }
 
@@ -440,7 +446,7 @@ const update: () => Promise<void> = async () => {
     }
 
     // Bump schema version
-    UserDB.setInt(SCHEMA_VERSION_KEY, SCHEMA_VERSION);
+    writeCurrentSchema();
 }
 // Update on init
 update();
