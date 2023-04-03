@@ -6,11 +6,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {Provider as PaperProvider} from 'react-native-paper';
 import {useColorScheme} from 'react-native';
 import {useMMKVStorage} from 'react-native-mmkv-storage';
-import notifee, {
-  TimestampTrigger,
-  TriggerType,
-  RepeatFrequency,
-} from '@notifee/react-native';
 
 import MainView from './src/screens/MainView';
 import CalendarView from './src/screens/CalendarView';
@@ -20,7 +15,6 @@ import AuthenticationView from './src/screens/AuthenticationView';
 import {CombinedDefaultTheme, CombinedDarkTheme} from './src/theme';
 import {PIN_KEY, SettingsDB} from './src/storage/settings';
 
-
 const App = () => {
   const scheme = useColorScheme();
 
@@ -28,32 +22,6 @@ const App = () => {
   const Stack = createNativeStackNavigator();
 
   const [pin, _] = useMMKVStorage(PIN_KEY, SettingsDB, '');
-
-  async function onCreateTriggerNotification() {
-    const date = new Date(Date.now());
-    date.setHours(16);
-    date.setMinutes(11);
-
-    // Create a time-based trigger
-    const trigger: TimestampTrigger = {
-      type: TriggerType.TIMESTAMP,
-      timestamp: date.getTime(), // fire at 11:10am (10 minutes before meeting)
-      repeatFrequency: RepeatFrequency.DAILY,
-    };
-
-    // Create a trigger notification
-    await notifee.createTriggerNotification(
-      {
-        title: 'Muistitko arvostella päiväsi?',
-        body: 'Käy kirjaamassa päiväsi ylös',
-        android: {
-          channelId: '1',
-        },
-      },
-      trigger,
-    );
-  }
-  onCreateTriggerNotification;
 
   /** Tab navigator */
   const Tabs = () => {
