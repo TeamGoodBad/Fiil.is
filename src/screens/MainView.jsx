@@ -5,7 +5,7 @@ import moment from 'moment';
 
 import { CURRENT_TEXT_KEY, CURRENT_RATING_KEY, UserDB, setEntry, getEntries, CURRENT_EDITING_STARTED } from "../storage/userdata";
 import { getStyles } from "../styles/mainview";
-import {  useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DAY_CHANGE_KEY, SettingsDB } from '../storage/settings';
 import TitleAndStars from '../components/TitleAndStars';
 
@@ -40,7 +40,7 @@ const MainView = ({ navigation, route }) => {
 
   // Lataa muistista tallennetun entryn halutulle päivälle. Jos entryä ei ole, ei tee mitään.
   const loadEntryFromDateIfSaved = async (date) => {
-    getEntries({minDate: date, maxDate: date}).then(entries => {
+    getEntries({ minDate: date, maxDate: date }).then(entries => {
       if (entries.length > 0) {
         setText(entries[0].text);
         setRating(entries[0].rating);
@@ -52,7 +52,7 @@ const MainView = ({ navigation, route }) => {
   useEffect(() => {
     let now = new Date();
     if (changeDayAt3am) now.setHours(now.getHours() - 3);
-    
+
     const then = new Date(editingStarted ? editingStarted : now);
     // `now.getMonth() * 40` is to wipe even if user manages to use app about a month apart
     if (now.getMonth() * 40 + now.getDate() != then.getMonth() * 40 + then.getDate()) {
@@ -78,9 +78,27 @@ const MainView = ({ navigation, route }) => {
     await setEntry(entry); // Save to db
     Keyboard.dismiss();
   };
+  /* 
+    return to todays date on press
+  */
+    function returnToday() {
+      const today = new Date(); // get today's date
+      const minDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const maxDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+    
+      getEntries({minDate, maxDate}).then(entries => {
+        if (entries.length > 0) {
+          setText(entries[0].text);
+          setRating(entries[0].rating);
+        }
+      });
+      setEditingStarted(today.toISOString()); // set editingStarted to today's date
+
+    }
+    
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <View style={styles.container}>
         <TitleAndStars
           stars={{
@@ -90,17 +108,17 @@ const MainView = ({ navigation, route }) => {
           }}
           titleContent={moment(editingStarted).format('DD.MM.YYYY').toString()}
         />
-{/*         <View style={styles.titleContainer}>
-          <Title>
-            {moment(editingStarted).format('DD.MM.YYYY').toString()}
-          </Title>
-        </View>
-        <View style={styles.starsContainer}>
-          <Stars
-            rating={rating}
-            editable={true}
-            onChange={(handlePress)} />
-        </View> */}
+        {/*         <View style={styles.titleContainer}>
+            <Title>
+              {moment(editingStarted).format('DD.MM.YYYY').toString()}
+            </Title>
+          </View>
+          <View style={styles.starsContainer}>
+            <Stars
+              rating={rating}
+              editable={true}
+              onChange={(handlePress)} />
+          </View> */}
         <View style={styles.textInputContainer}>
           <TextInput
             multiline={true}
@@ -116,6 +134,11 @@ const MainView = ({ navigation, route }) => {
             mode="contained"
             onPress={() => saveEntry()}>
             Tallenna
+          </Button>
+          <Button
+            mode="contained"
+            onPress={() => returnToday()}>
+            Palaa tähän päivään
           </Button>
         </View>
       </View>
