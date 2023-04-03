@@ -1,3 +1,4 @@
+
 import { StyleSheet } from 'react-native';
 import { getBaseStyle } from './baseStyle';
 
@@ -7,6 +8,7 @@ export const getStyles = (theme) => StyleSheet.create({
     container: {
       flex: 1,
       padding: 10,
+      height: '100%',
       backgroundColor: theme.colors.background,
     },
     scrollContainer: {
@@ -24,6 +26,7 @@ export const getStyles = (theme) => StyleSheet.create({
     text: {
       color: theme.colors.onBackground,
       fontFamily: theme.fontFamily,
+
       fontVariant: 'title',
     },
     dateSyles: {
@@ -33,10 +36,20 @@ export const getStyles = (theme) => StyleSheet.create({
 });
 
 export const getFin = () => {
-  const finDays = ['Ma','Ti','Ke','To','Pe','La','Su'];
-  const finMonths = ['Tammikuu','Helmikuu','Maaliskuu',
-                      'Huhtikuu','Toukokuu','Kesäkuu',
-                      'Heinäkuu','Elokuu','Syyskuu',
-                      'Lokakuu','Marraskuu','Joulukuu'];
+  const finDays = ['Ma', 'Ti', 'Ke', 'To', 'Pe', 'La', 'Su'];
+  const finMonths = [
+    'Tammikuu',
+    'Helmikuu',
+    'Maaliskuu',
+    'Huhtikuu',
+    'Toukokuu',
+    'Kesäkuu',
+    'Heinäkuu',
+    'Elokuu',
+    'Syyskuu',
+    'Lokakuu',
+    'Marraskuu',
+    'Joulukuu',
+  ];
   return {days: finDays, months: finMonths};
-}
+};

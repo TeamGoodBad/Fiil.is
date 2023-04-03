@@ -1,21 +1,30 @@
-import { useState } from 'react';
-import { Pressable, View, Dimensions } from 'react-native';
+import {useState, useRef, useEffect} from 'react';
 import {
-  Text,
-  Title,
-  Divider,
-  useTheme,
-  Chip,
-} from 'react-native-paper';
+  Pressable,
+  View,
+  Dimensions,
+  SafeAreaView,
+  Animated,
+} from 'react-native';
+import {Text, Title, Divider, useTheme, Chip} from 'react-native-paper';
 
-import Stars from "../components/Stars";
+import Stars from '../components/Stars';
+import {getStyles} from '../styles/analysisView';
 import TitleAndStars from '../components/TitleAndStars';
-import { getStyles } from "../styles/analysisView";
-
 
 const AnalysisView = ({navigation}) => {
   const [rating, setRating] = useState(0);
   const theme = useTheme();
+
+  const slideAnim = useRef(new Animated.Value(-300)).current; // Initial value for opacity: 0
+
+  useEffect(() => {
+    Animated.timing(slideAnim, {
+      toValue: 0,
+      duration: 1500,
+      useNativeDriver: false,
+    }).start();
+  }, [slideAnim]);
 
   const handlePress = index => {
     setRating(index);
@@ -25,25 +34,27 @@ const AnalysisView = ({navigation}) => {
   const styles = getStyles(theme);
 
   return (
-    <View style={styles.base}>
-      <TitleAndStars
-        stars={{rating: rating, editable: true, onChange: handlePress}}
-        titleContent={"Valitse haluamasi tähtimäärä"} />
-      <View style={styles.midContainer}>
-        <View style={styles.titleContainer}>
-          <Title>
-            {rating+1} tähden päivissä sanoja:
-          </Title>
+    <SafeAreaView style={{flex: 1}}>
+      <View style={styles.base}>
+        <View style={styles.containerCenter}>
+          <Title>Valitse haluamasi tähtimäärä</Title>
         </View>
-        
+
+        <Stars rating={rating} editable={true} onChange={handlePress} />
+
+        <View style={styles.containerCenter}>
+          <Title>{rating + 1} tähden päivissä sanoja:</Title>
+        </View>
+        <Divider />
         <View style={styles.chipContainer}>
-          <Chip>Sana</Chip>
-          <Chip>Sana</Chip>
-          <Chip>Sana</Chip>
-          <Chip>Sana</Chip>
+          <Chip style={{top: slideAnim}}>Sana</Chip>
+          <Chip style={{top: slideAnim}}>Sana</Chip>
+          <Chip style={{top: slideAnim}}>Sana</Chip>
+          <Chip style={{top: slideAnim}}>Sana</Chip>
+          <Chip style={{top: slideAnim}}>Sana</Chip>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

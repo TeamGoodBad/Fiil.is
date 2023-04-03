@@ -1,4 +1,11 @@
-import { View, Platform } from "react-native";
+import {
+  View,
+  Platform,
+  StyleSheet,
+  Dimensions,
+  SafeAreaView,
+  Button,
+} from 'react-native';
 import { useState } from "react";
 import { Snackbar, Switch, useTheme } from 'react-native-paper';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -18,7 +25,8 @@ const SettingsList = ({ navigation }) => {
   const [dayChange, setDayChange] = useMMKVStorage(DAY_CHANGE_KEY, SettingsDB, false);
 
   /** Returns correct right arrow -like icon for current platform */
-  const PlatformRight = () => Platform.OS == "ios" ? "chevron-right" : "arrow-right";
+  const PlatformRight = () =>
+    Platform.OS == 'ios' ? 'chevron-right' : 'arrow-right';
 
   const DebugViewListItem = () => {
     // Return nothing if not in debug mode
@@ -37,28 +45,26 @@ const SettingsList = ({ navigation }) => {
 
   // Called when user toggles pin setting
   const togglePin = async () => {
-    if (pin == "") {
-      navigation.navigate("Set PIN");
+    if (pin == '') {
+      navigation.navigate('Set PIN');
     } else {
       await clearPin();
     }
-  }
+  };
 
   const toggleDayChange = () => setDayChange(!dayChange);
 
   return (
-    <View>
-      <List.Item
-        title="PIN-lukitus"
-        description="Lukitsee sovelluksen PIN koodilla."
-        left={(props) => <List.Icon {...props} icon="safe" />}
-        right={() => <Switch
-          value={pin != ""}
-          onValueChange={togglePin}
-        />}
-        onPress={togglePin}
-      />
-      <List.Item
+    <SafeAreaView style={{flex: 1}}>
+      <View>
+        <List.Item
+          title="PIN-lukitus"
+          description="Lukitse sovellus PIN koodilla"
+          left={props => <List.Icon {...props} icon="safe" />}
+          right={() => <Switch value={pin != ''} onValueChange={togglePin} />}
+          onPress={togglePin}
+        />
+         <List.Item
         title="Aloita päivä kello 3:00"
         description="Asettaa sivun vaihtumisen ajankohdan keskiyöstä kolmeen aamuyöstä."
         left={(props) => <List.Icon {...props} icon="weather-night" />}
@@ -68,24 +74,24 @@ const SettingsList = ({ navigation }) => {
         />}
         onPress={toggleDayChange}
       />
-      {DebugViewListItem()}
-    </View>
+        {DebugViewListItem()}
+      </View>
+    </SafeAreaView>
   );
 };
 
-
 /** View for setting new pin */
-const SetPinView = ({ navigation }) => {
-  const [pinToConfirm, setPinToConfirm] = useState("");
+const SetPinView = ({navigation}) => {
+  const [pinToConfirm, setPinToConfirm] = useState('');
   const [hasFailedPinConfirm, setHasFailedPinConfirm] = useState(false);
   const theme = useTheme();
 
   const pinStyle = getPinStyles(theme);
 
   // 1st time pin
-  if (pinToConfirm == "") {
+  if (pinToConfirm == '') {
     return (
-      <View style={{flex:1}}>
+      <View style={{flex: 1}}>
         <CodePin
           number={4}
           checkPinCode={(code, callback) => {
@@ -106,8 +112,9 @@ const SetPinView = ({ navigation }) => {
           visible={hasFailedPinConfirm}
           onDismiss={() => setHasFailedPinConfirm(false)}
           duration={Snackbar.DURATION_MEDIUM}
-          action={{ icon: "close" }}
-        > Annetut PIN-koodit erosivat toisistaan!
+          action={{icon: 'close'}}>
+          {' '}
+          Annetut PIN-koodit erosivat toisistaan!
         </Snackbar>
       </View>
     );
@@ -121,13 +128,13 @@ const SetPinView = ({ navigation }) => {
         if (pinToConfirm == code) {
           // Pins match
           setPin(pinToConfirm);
-          setPinToConfirm("");
+          setPinToConfirm('');
           setHasFailedPinConfirm(false);
-          navigation.navigate("Top");
+          navigation.navigate('Top');
         } else {
           // Pins did not match
           setHasFailedPinConfirm(true);
-          setPinToConfirm("");
+          setPinToConfirm('');
         }
         callback(true);
       }}
@@ -144,7 +151,6 @@ const SetPinView = ({ navigation }) => {
   );
 };
 
-
 const SettingsView = () => {
   const Stack = createNativeStackNavigator();
   const theme = useTheme();
@@ -156,23 +162,14 @@ const SettingsView = () => {
         <Stack.Screen
           name="Top"
           component={SettingsList}
-          options={{ headerShown: false }}
+          options={{headerShown: false}}
         />
-        <Stack.Screen
-          name="Debug"
-          component={DebugView}
-        />
-        <Stack.Screen
-          name="Set PIN"
-          component={SetPinView}
-        />
-        <Stack.Screen
-          name="Entry List"
-          component={EntryList}
-        />
+        <Stack.Screen name="Debug" component={DebugView} />
+        <Stack.Screen name="Set PIN" component={SetPinView} />
+        <Stack.Screen name="Entry List" component={EntryList} />
       </Stack.Navigator>
     </View>
-  )
-}
+  );
+};
 
 export default SettingsView;
