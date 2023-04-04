@@ -106,17 +106,6 @@ const MainView = ({navigation, route}) => {
               .format('DD.MM.YYYY')
               .toString()}
           />
-          {/*         <View style={styles.titleContainer}>
-          <Title>
-            {moment(editingStarted).format('DD.MM.YYYY').toString()}
-          </Title>
-        </View>
-        <View style={styles.starsContainer}>
-          <Stars
-            rating={rating}
-            editable={true}
-            onChange={(handlePress)} />
-        </View> */}
           <View style={styles.textInputContainer}>
             <TextInput
               multiline={true}
@@ -124,9 +113,6 @@ const MainView = ({navigation, route}) => {
               placeholder={'Tänään...'}
               style={styles.textInputStyle}
               value={text}
-            />
-            <Button
-              style={styles.buttonStyle}
               onChangeText={text => {
                 setText(text);
               }}
