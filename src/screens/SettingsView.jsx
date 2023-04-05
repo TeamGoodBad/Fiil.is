@@ -5,11 +5,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { List } from "react-native-paper";
 import CodePin from 'react-native-pin-code';
 import { useMMKVStorage } from "react-native-mmkv-storage";
+import Share from "react-native-share";
 
 import { DebugView } from "./DebugView";
 import { SettingsDB, setPin, clearPin, PIN_KEY, DAY_CHANGE_KEY } from '../storage/settings';
 import EntryList from "../components/EntryList";
 import { getStyles, getPinStyles } from "../styles/settingsView";
+import { dump, UserDB } from "../storage/userdata";
 
 
 
@@ -68,6 +70,18 @@ const SettingsList = ({ navigation }) => {
         />}
         onPress={toggleDayChange}
       />
+      <List.Item
+        title="Vie"
+        description="Vie tietokanta muihin sovelluksiin."
+        left={(props) => <List.Icon {...props} icon="weather-night" />}
+        onPress={() => {
+          dump(false).then((dump => {
+            Share.open({ title: "Fiil.is database export", type: "application/json", message: dump })
+              .then((res) => { console.log(res); })
+              .catch((err) => { err && console.log(err); });
+          }))
+        }}
+      />
       {DebugViewListItem()}
     </View>
   );
@@ -85,7 +99,7 @@ const SetPinView = ({ navigation }) => {
   // 1st time pin
   if (pinToConfirm == "") {
     return (
-      <View style={{flex:1}}>
+      <View style={{ flex: 1 }}>
         <CodePin
           number={4}
           checkPinCode={(code, callback) => {
@@ -94,7 +108,7 @@ const SetPinView = ({ navigation }) => {
           }}
           text="Uusi PIN"
           keyboardType="numeric"
-          success={() => {}}
+          success={() => { }}
           obfuscation={true}
           containerStyle={pinStyle.container}
           containerPinStyle={pinStyle.containerPin}
@@ -131,7 +145,7 @@ const SetPinView = ({ navigation }) => {
         }
         callback(true);
       }}
-      success={() => {}}
+      success={() => { }}
       text="Vahvista PIN"
       keyboardType="numeric"
       obfuscation={true}
