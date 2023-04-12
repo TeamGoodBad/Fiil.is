@@ -61,7 +61,7 @@ const Stars = ({rating, editable, onChange}) => {
             <MaterialCommunityIcons
               color={theme.colors.stars[`star${index}`]}
               name={star ? 'star' : 'star-outline'}
-              size={60}
+              size={index === stars.indexOf(false) - 1 ? 70 : 60}
             />
           </Pressable>
         );
