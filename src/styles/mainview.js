@@ -1,15 +1,16 @@
-import { StyleSheet, Dimensions } from 'react-native';
-import { getBaseStyle as getBaseStyle } from './baseStyle';
+import {StyleSheet, Dimensions} from 'react-native';
+import {getBaseStyle as getBaseStyle} from './baseStyle';
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 const basestyle = getBaseStyle();
 
-export const getStyles = (theme) => StyleSheet.create({
+export const getStyles = theme =>
+  StyleSheet.create({
     ...basestyle,
     container: {
       flex: 1,
-      backgroundColor: theme.colors.background,
+      backgroundColor: 'red',
       justifyContent: 'flex-start',
       alignItems: 'center',
     },
@@ -22,9 +23,8 @@ export const getStyles = (theme) => StyleSheet.create({
       minWidth: '100%',
     },
     buttonContainer: {
-      flex:1,
+      flex: 1,
       padding: 5,
       minHeight: 20,
     },
-
-});
+  });

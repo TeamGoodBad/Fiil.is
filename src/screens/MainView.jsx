@@ -1,5 +1,5 @@
-import {View, Keyboard, SafeAreaView} from 'react-native';
-import {Title, Button, TextInput, useTheme} from 'react-native-paper';
+import {View, Keyboard, SafeAreaView, Pressable} from 'react-native';
+import {Title, Button, TextInput, useTheme, Text} from 'react-native-paper';
 import {useMMKVStorage} from 'react-native-mmkv-storage';
 import moment from 'moment';
 import {
@@ -14,6 +14,27 @@ import {getStyles} from '../styles/mainview';
 import {useEffect, useState} from 'react';
 import {DAY_CHANGE_KEY, SettingsDB} from '../storage/settings';
 import TitleAndStars from '../components/TitleAndStars';
+import LinearGradient from 'react-native-linear-gradient';
+
+function GetTimeOfDayIntro() {
+  var today = new Date();
+  const options = ['Huomenta', 'Päivää', 'Iltaa', 'Hyvää yötä'];
+
+  const currentH = today.getHours();
+
+  if (currentH < 10 && currentH > 6) {
+    return options[0];
+  }
+  if (currentH < 18 && currentH > 10) {
+    return options[1];
+  }
+  if (currentH < 22 && currentH > 18) {
+    return options[2];
+  } else {
+    return options[3];
+  }
+  console.log(currentH);
+}
 
 const MainView = ({navigation, route}) => {
   const theme = useTheme();
@@ -28,6 +49,8 @@ const MainView = ({navigation, route}) => {
     null,
   );
   const [changeDayAt3am] = useMMKVStorage(DAY_CHANGE_KEY, SettingsDB, false);
+
+  GetTimeOfDayIntro();
 
   const handlePress = index => {
     setRating(index);
@@ -93,53 +116,74 @@ const MainView = ({navigation, route}) => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <View style={{flex: 1}}>
-        <View style={styles.container}>
-          <TitleAndStars
-            stars={{
-              rating: rating,
-              editable: true,
-              onChange: handlePress,
-            }}
-            titleContent={moment(editingStarted)
-              .format('DD.MM.YYYY')
-              .toString()}
-          />
-          {/*         <View style={styles.titleContainer}>
-          <Title>
-            {moment(editingStarted).format('DD.MM.YYYY').toString()}
-          </Title>
+    <View style={{flex: 1, backgroundColor: '#051049'}}>
+      <LinearGradient
+        colors={['#0067CE', 'purple']}
+        style={{
+          display: 'flex',
+          height: '50%',
+          borderBottomStartRadius: 20,
+          borderBottomEndRadius: 20,
+          justifyContent: 'center',
+        }}
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 1}}>
+        <SafeAreaView />
+        <View>
+          <Text variant="displaySmall" style={{padding: 20, color: '#fff'}}>
+            {GetTimeOfDayIntro()}
+          </Text>
         </View>
-        <View style={styles.starsContainer}>
-          <Stars
-            rating={rating}
-            editable={true}
-            onChange={(handlePress)} />
-        </View> */}
-          <View style={styles.textInputContainer}>
-            <TextInput
-              multiline={true}
-              mode="outlined"
-              placeholder={'Tänään...'}
-              style={styles.textInputStyle}
-              value={text}
-            />
-            <Button
-              style={styles.buttonStyle}
-              onChangeText={text => {
-                setText(text);
-              }}
-            />
-          </View>
-          <View style={styles.buttonContainer}>
-            <Button mode="contained" onPress={() => saveEntry()}>
-              Tallenna
-            </Button>
-          </View>
-        </View>
+        <TitleAndStars
+          stars={{
+            rating: rating,
+            editable: true,
+            onChange: handlePress,
+          }}
+          titleContent={moment(editingStarted).format('DD.MM.YYYY').toString()}
+        />
+      </LinearGradient>
+      <View
+        style={{
+          width: '90%',
+          flex: 1,
+          backgroundColor: '#c7dcff',
+          zIndex: 999,
+          bottom: '5%',
+          alignSelf: 'center',
+          borderRadius: 20,
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+        }}>
+        <TextInput
+          multiline={true}
+          mode="outlined"
+          placeholder={'Tänään...'}
+          style={{margin: 15, flex: 1, borderRadius: 20}}
+          value={text}
+          onChangeText={text => {
+            setText(text);
+          }}></TextInput>
+        <Pressable
+          style={{
+            justifyContent: 'center',
+            backgroundColor: '#0067CE',
+            width: '30%',
+            height: '10%',
+            borderRadius: 20,
+            display: 'flex',
+            alignItems: 'center',
+            alignSelf: 'center',
+            marginBottom: 10,
+          }}
+          onPress={() => saveEntry()}>
+          <Text variant="headlineSmall" style={{color: '#fff'}}>
+            Tallenna
+          </Text>
+        </Pressable>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
