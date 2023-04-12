@@ -19,6 +19,8 @@
     "react-native": "0.71.3",
     "react-native-calendar": "^0.13.1",
     "react-native-calendar-picker": "^7.1.4",
+    "react-native-document-picker": "^8.2.0",
+    "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.9.0",
     "react-native-mmkv-storage": "^0.9.0",
     "react-native-paper": "^5.2.0",
@@ -62,7 +64,7 @@
       "node_modules/(?!(",
       "react-native|@react-native|react-native-vector-icons|",
       "react-native-mmkv-storage|react-native-pin-code|react-native-calendar-picker|",
-      "react-native-swipe-gestures",
+      "react-native-swipe-gestures|react-native-share|react-native-fs",
       ")/)"
     ],
     "testEnvironment": "jsdom",

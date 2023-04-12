@@ -1,4 +1,4 @@
-import { View, Platform } from "react-native";
+import { View, Platform, Alert } from "react-native";
 import { useState } from "react";
 import { Snackbar, Switch, useTheme } from 'react-native-paper';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -6,12 +6,14 @@ import { List } from "react-native-paper";
 import CodePin from 'react-native-pin-code';
 import { useMMKVStorage } from "react-native-mmkv-storage";
 import Share from "react-native-share";
+import DocumentPicker from 'react-native-document-picker';
+import { readFile } from "react-native-fs";
 
 import { DebugView } from "./DebugView";
 import { SettingsDB, setPin, clearPin, PIN_KEY, DAY_CHANGE_KEY } from '../storage/settings';
 import EntryList from "../components/EntryList";
 import { getStyles, getPinStyles } from "../styles/settingsView";
-import { dump, UserDB } from "../storage/userdata";
+import { dump, load, UserDB } from "../storage/userdata";
 
 
 
@@ -71,14 +73,36 @@ const SettingsList = ({ navigation }) => {
         onPress={toggleDayChange}
       />
       <List.Item
+        title="Tuo"
+        description="Tuo tietokanta tiedostosta."
+        left={(props) => <List.Icon {...props} icon="database-import" />}
+        onPress={() => {
+          DocumentPicker.pickSingle()
+            .then((response) => readFile(response.uri, "utf8"))
+            .then((contents) => {
+              load(contents);
+              Alert.alert("Tuonti", "Tuonti onnistui!");
+            })
+            .catch((err) => console.log(err.message, err.code));
+        }}
+      />
+      <List.Item
         title="Vie"
-        description="Vie tietokanta muihin sovelluksiin."
-        left={(props) => <List.Icon {...props} icon="weather-night" />}
+        description="Vie tietokanta tiedostoon."
+        left={(props) => <List.Icon {...props} icon="database-export" />}
         onPress={() => {
           dump(false).then((dump => {
-            Share.open({ title: "Fiil.is database export", type: "application/json", message: dump })
-              .then((res) => { console.log(res); })
-              .catch((err) => { err && console.log(err); });
+            const Buffer = require("buffer").Buffer;
+            const dump64 = new Buffer(dump).toString("base64");
+            const dateStr = (new Date()).toJSON();
+            Share.open({
+              title: "Fiil.is database export",
+              filename: `feelis-export-${dateStr}`,
+              url: `data:application/json;base64,${dump64}`,
+            }).then((res) => console.log(res))
+              .catch((err) => {
+                err && console.log(err);
+              });
           }))
         }}
       />
