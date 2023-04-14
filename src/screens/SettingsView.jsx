@@ -1,6 +1,6 @@
 import { View, ScrollView, Platform, SafeAreaView, Alert } from 'react-native';
 import { useState } from "react";
-import { Snackbar, Switch, useTheme } from 'react-native-paper';
+import { Snackbar, Switch, useTheme, Text } from 'react-native-paper';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { List } from "react-native-paper";
 import CodePin from 'react-native-pin-code';
@@ -9,11 +9,10 @@ import Share from "react-native-share";
 import DocumentPicker from 'react-native-document-picker';
 import { readFile } from "react-native-fs";
 
-import { DebugView } from "./DebugView";
 import { SettingsDB, setPin, clearPin, PIN_KEY, DAY_CHANGE_KEY } from '../storage/settings';
 import EntryList from "../components/EntryList";
 import { getStyles, getPinStyles } from "../styles/settingsView";
-import { clearUserDB, dump, load, UserDB } from "../storage/userdata";
+import { clearUserDB, dump, load } from "../storage/userdata";
 import { generateMockEntries } from '../storage/mock-entries';
 
 
@@ -142,6 +141,7 @@ const SettingsList = ({ navigation }) => {
           />
         </List.Section>
         {DebugSection(navigation)}
+        <Text style={{ textAlign: 'center' }}>Fiilis v.{require('../../package.json').version}</Text>
       </ScrollView>
     </SafeAreaView>
   );
