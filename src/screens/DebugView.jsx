@@ -3,7 +3,7 @@ import { useTheme, Button } from 'react-native-paper';
 import { generateMockEntries } from '../storage/mock-entries';
 import { dump, clearUserDB } from '../storage/userdata';
 
-import NewModuleButton from "../components/NewModuleButton";
+import NotificationButton from "../components/NotificationButton";
 
 
 export const DebugView = ({ navigation }) => {
@@ -38,7 +38,7 @@ export const DebugView = ({ navigation }) => {
         <Button mode="elevated" onPress={() => generateMockEntries()}>
           Luo puppumerkintöjä
         </Button>
-        <NewModuleButton />
+        <NotificationButton />
       </View>
     </View>
   );
