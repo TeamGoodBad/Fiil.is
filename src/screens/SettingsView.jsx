@@ -13,7 +13,7 @@ import { DebugView } from "./DebugView";
 import { SettingsDB, setPin, clearPin, PIN_KEY, DAY_CHANGE_KEY } from '../storage/settings';
 import EntryList from "../components/EntryList";
 import { getStyles, getPinStyles } from "../styles/settingsView";
-import { dump, load, UserDB } from "../storage/userdata";
+import { dump, load } from "../storage/userdata";
 
 
 const SettingsList = ({ navigation }) => {
