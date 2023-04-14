@@ -75,13 +75,30 @@ const SettingsList = ({ navigation }) => {
           description="Tuo tietokanta tiedostosta."
           left={(props) => <List.Icon {...props} icon="database-import" />}
           onPress={() => {
-            DocumentPicker.pickSingle()
-              .then((response) => readFile(response.uri, "utf8"))
-              .then((contents) => {
-                load(contents);
-                Alert.alert("Tuonti", "Tuonti onnistui!");
-              })
-              .catch((err) => console.log(err.message, err.code));
+            Alert.alert(
+              "Varoitus!",
+              "Operaatio ylikirjoittaa aikaisemmat merkinnät. Haluatko varmasti jatkaa?",
+              [
+                {
+                  text: "Peruuta",
+                  style: "cancel",
+                },
+                {
+                  text: "Ok",
+                  style: "default",
+                  onPress: () => DocumentPicker.pickSingle()
+                    .then((response) => readFile(response.uri, "utf8"))
+                    .then((contents) => {
+                      load(contents);
+                      Alert.alert("Tuonti", "Tuonti onnistui!");
+                    })
+                    .catch((err) => console.log(err.message, err.code))
+                }
+              ],
+              {
+                cancelable: true,
+              }
+            )
           }}
         />
         <List.Item

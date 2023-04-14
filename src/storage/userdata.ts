@@ -87,11 +87,14 @@ export const dump: (includeIndexes?: boolean) => Promise<string> = async (includ
 
 
 /**
- * Loads data to database from JSON dump.
+ * Loads entries from JSON dump.
  * @param json Data to be loaded in JSON format.
  */
-export const load: (json: string) => Promise<void> = async (json) => {
+export const load: (json: string, overwrite?: boolean) => Promise<void> = async (json, overwrite = false) => {
     const data = JSON.parse(json);
+
+    // Clear db if it is to be overwritten
+    if (overwrite) clearUserDB();
 
     // Add all entries to db
     for (const key of Object.keys(data)) {
