@@ -141,7 +141,7 @@ const SettingsList = ({ navigation }) => {
           />
         </List.Section>
         {DebugSection(navigation)}
-        <Text style={{ textAlign: 'center' }}>Fiilis v.{require('../../package.json').version}</Text>
+        <Text style={{ textAlign: 'center' }}>Fllis version {require('../../package.json').version}</Text>
       </ScrollView>
     </SafeAreaView>
   );
