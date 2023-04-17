@@ -18,11 +18,12 @@ public class NotificationModule extends ReactContextBaseJavaModule {
     public String getName() { return "NotificationModule"; }
 
     @ReactMethod
-    public void createNotification(String title, String mainText) {
+    public void createNotification(String title, String mainText, int hours, int minutes, int seconds) {
         Log.d("NotificationModule", "Create notification with title: " + title
                 + " and text: " + mainText);
-        //RepeatingNotification.onClick(getReactApplicationContext());
-        NotificationScheduler scheduler = new NotificationScheduler();
-        scheduler.scheduleNotification(getReactApplicationContext(), 5000);
+        RepeatingNotification rn = new RepeatingNotification();
+        rn.onClick(getReactApplicationContext(), hours, minutes, seconds);
+        //NotificationScheduler scheduler = new NotificationScheduler();
+        //scheduler.scheduleNotification(getReactApplicationContext(), 5000);
     }
 }
