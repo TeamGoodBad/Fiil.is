@@ -1,23 +1,19 @@
-import {
-  View,
-  Platform,
-  StyleSheet,
-  Dimensions,
-  SafeAreaView,
-  Button,
-} from 'react-native';
+import { View, Platform, SafeAreaView, Alert } from 'react-native';
 import { useState } from "react";
 import { Snackbar, Switch, useTheme } from 'react-native-paper';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { List } from "react-native-paper";
 import CodePin from 'react-native-pin-code';
 import { useMMKVStorage } from "react-native-mmkv-storage";
+import Share from "react-native-share";
+import DocumentPicker from 'react-native-document-picker';
+import { readFile } from "react-native-fs";
 
 import { DebugView } from "./DebugView";
 import { SettingsDB, setPin, clearPin, PIN_KEY, DAY_CHANGE_KEY } from '../storage/settings';
 import EntryList from "../components/EntryList";
 import { getStyles, getPinStyles } from "../styles/settingsView";
-
+import { dump, load, UserDB } from "../storage/userdata";
 
 
 const SettingsList = ({ navigation }) => {
@@ -55,7 +51,7 @@ const SettingsList = ({ navigation }) => {
   const toggleDayChange = () => setDayChange(!dayChange);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{ flex: 1 }}>
       <View>
         <List.Item
           title="PIN-lukitus"
@@ -64,16 +60,67 @@ const SettingsList = ({ navigation }) => {
           right={() => <Switch value={pin != ''} onValueChange={togglePin} />}
           onPress={togglePin}
         />
-         <List.Item
-        title="Aloita päivä kello 3:00"
-        description="Asettaa sivun vaihtumisen ajankohdan keskiyöstä kolmeen aamuyöstä."
-        left={(props) => <List.Icon {...props} icon="weather-night" />}
-        right={() => <Switch
-          value={dayChange}
-          onValueChange={toggleDayChange}
-        />}
-        onPress={toggleDayChange}
-      />
+        <List.Item
+          title="Aloita päivä kello 3:00"
+          description="Asettaa sivun vaihtumisen ajankohdan keskiyöstä kolmeen aamuyöstä."
+          left={(props) => <List.Icon {...props} icon="weather-night" />}
+          right={() => <Switch
+            value={dayChange}
+            onValueChange={toggleDayChange}
+          />}
+          onPress={toggleDayChange}
+        />
+        <List.Item
+          title="Tuo"
+          description="Tuo tietokanta tiedostosta."
+          left={(props) => <List.Icon {...props} icon="database-import" />}
+          onPress={() => {
+            Alert.alert(
+              "Varoitus!",
+              "Operaatio ylikirjoittaa aikaisemmat merkinnät. Haluatko varmasti jatkaa?",
+              [
+                {
+                  text: "Peruuta",
+                  style: "cancel",
+                },
+                {
+                  text: "Ok",
+                  style: "default",
+                  onPress: () => DocumentPicker.pickSingle()
+                    .then((response) => readFile(response.uri, "utf8"))
+                    .then((contents) => {
+                      load(contents);
+                      Alert.alert("Tuonti", "Tuonti onnistui!");
+                    })
+                    .catch((err) => console.log(err.message, err.code))
+                }
+              ],
+              {
+                cancelable: true,
+              }
+            )
+          }}
+        />
+        <List.Item
+          title="Vie"
+          description="Vie tietokanta tiedostoon."
+          left={(props) => <List.Icon {...props} icon="database-export" />}
+          onPress={() => {
+            dump(false).then((dump => {
+              const Buffer = require("buffer").Buffer;
+              const dump64 = new Buffer(dump).toString("base64");
+              const dateStr = (new Date()).toJSON();
+              Share.open({
+                title: "Fiil.is database export",
+                filename: `feelis-export-${dateStr}`,
+                url: `data:application/json;base64,${dump64}`,
+              }).then((res) => console.log(res))
+                .catch((err) => {
+                  err && console.log(err);
+                });
+            }))
+          }}
+        />
         {DebugViewListItem()}
       </View>
     </SafeAreaView>
@@ -81,7 +128,7 @@ const SettingsList = ({ navigation }) => {
 };
 
 /** View for setting new pin */
-const SetPinView = ({navigation}) => {
+const SetPinView = ({ navigation }) => {
   const [pinToConfirm, setPinToConfirm] = useState('');
   const [hasFailedPinConfirm, setHasFailedPinConfirm] = useState(false);
   const theme = useTheme();
@@ -91,7 +138,7 @@ const SetPinView = ({navigation}) => {
   // 1st time pin
   if (pinToConfirm == '') {
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <CodePin
           number={4}
           checkPinCode={(code, callback) => {
@@ -100,7 +147,7 @@ const SetPinView = ({navigation}) => {
           }}
           text="Uusi PIN"
           keyboardType="numeric"
-          success={() => {}}
+          success={() => { }}
           obfuscation={true}
           containerStyle={pinStyle.container}
           containerPinStyle={pinStyle.containerPin}
@@ -112,7 +159,7 @@ const SetPinView = ({navigation}) => {
           visible={hasFailedPinConfirm}
           onDismiss={() => setHasFailedPinConfirm(false)}
           duration={Snackbar.DURATION_MEDIUM}
-          action={{icon: 'close'}}>
+          action={{ icon: 'close' }}>
           {' '}
           Annetut PIN-koodit erosivat toisistaan!
         </Snackbar>
@@ -138,7 +185,7 @@ const SetPinView = ({navigation}) => {
         }
         callback(true);
       }}
-      success={() => {}}
+      success={() => { }}
       text="Vahvista PIN"
       keyboardType="numeric"
       obfuscation={true}
@@ -162,7 +209,7 @@ const SettingsView = () => {
         <Stack.Screen
           name="Top"
           component={SettingsList}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen name="Debug" component={DebugView} />
         <Stack.Screen name="Set PIN" component={SetPinView} />
