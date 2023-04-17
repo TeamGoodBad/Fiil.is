@@ -14,6 +14,7 @@ import {getStyles} from '../styles/mainview';
 import {useEffect, useState} from 'react';
 import {DAY_CHANGE_KEY, SettingsDB} from '../storage/settings';
 import TitleAndStars from '../components/TitleAndStars';
+import NotificationButton from '../components/NotificationButton';
 
 const MainView = ({navigation, route}) => {
   const theme = useTheme();
@@ -122,6 +123,7 @@ const MainView = ({navigation, route}) => {
             <Button mode="contained" onPress={() => saveEntry()}>
               Tallenna
             </Button>
+            <NotificationButton />
           </View>
         </View>
       </View>

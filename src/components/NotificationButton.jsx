@@ -12,8 +12,8 @@ const NewModuleButton = () => {
         NotificationModule.createNotification(
             'testiOtsikko',
             'testiTeksti',
-            14, //hours
-            5,  // minutes
+            15, //hours
+            43,  // minutes
             0   // seconds
         );
     };

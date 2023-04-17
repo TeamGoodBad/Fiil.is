@@ -38,7 +38,6 @@ export const DebugView = ({ navigation }) => {
         <Button mode="elevated" onPress={() => generateMockEntries()}>
           Luo puppumerkintöjä
         </Button>
-        <NotificationButton />
       </View>
     </View>
   );
