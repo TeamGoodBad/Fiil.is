@@ -10,10 +10,8 @@ const NewModuleButton = () => {
     const onPress = () => {
         console.log('We did invoke the native module here!');
         NotificationModule.createNotification(
-            'testiOtsikko',
-            'testiTeksti',
             10, //hours
-            28,  // minutes
+            35,  // minutes
             0   // seconds
         );
     };

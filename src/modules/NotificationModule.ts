@@ -21,8 +21,6 @@ const {NotificationModule} = NativeModules;
 
 interface NotificationInterface {
     createNotification(
-        title: string,
-        mainText: string,
         hours: number,
         minutes: number,
         seconds: number
