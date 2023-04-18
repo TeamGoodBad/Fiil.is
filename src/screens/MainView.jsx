@@ -123,7 +123,6 @@ const MainView = ({navigation, route}) => {
             <Button mode="contained" onPress={() => saveEntry()}>
               Tallenna
             </Button>
-            <NotificationButton />
           </View>
         </View>
       </View>

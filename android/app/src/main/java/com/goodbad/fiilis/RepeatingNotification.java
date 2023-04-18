@@ -23,7 +23,7 @@ public class RepeatingNotification extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        NotificationChannel(context);
+
 
         Intent repeatingIntent = new Intent(context, MainActivity.class);
         repeatingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -42,10 +42,11 @@ public class RepeatingNotification extends BroadcastReceiver {
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(0, builder.build());
         }
+        Log.d("RepeatingNotification", "Got to the end of onReceive");
     }
 
-    public void onClick(Context context, int hours, int minutes, int seconds) {
-
+    public void createNotification(Context context, int hours, int minutes, int seconds) {
+        NotificationChannel(context);
         int[] time = {21, 0, 0};
         if (hours >= 0 && hours < 24) {
             time[0] = hours;
@@ -72,10 +73,19 @@ public class RepeatingNotification extends BroadcastReceiver {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60, pendingIntent);
             // TODO: starting alarm when the device restarts - not happening now:
             // https://developer.android.com/training/scheduling/alarms#boot
         }
+        Log.d("RepeatingNotification", "Got to the end of createNotification");
+    }
+
+    public void stopNotification(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager notificationManager = context.getSystemService((NotificationManager.class));
+            notificationManager.deleteNotificationChannel(NOTIFICATION_CHANNEL_ID);
+        }
+        Log.d("RepeatingNotification", "Got to the end of stopNotification");
     }
 
     private void NotificationChannel(Context context) {
@@ -90,5 +100,6 @@ public class RepeatingNotification extends BroadcastReceiver {
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+        Log.d("RepeatingNotification", "Got to the end of NotificationChannel");
     }
 }

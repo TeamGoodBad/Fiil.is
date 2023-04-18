@@ -25,5 +25,7 @@ interface NotificationInterface {
         minutes: number,
         seconds: number
     ): void;
+
+    stopNotification(): void;
 }
 export default NotificationModule as NotificationInterface;

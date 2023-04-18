@@ -21,6 +21,13 @@ public class NotificationModule extends ReactContextBaseJavaModule {
     public void createNotification(int hours, int minutes, int seconds) {
         Log.d("NotificationModule", "Create notification with time: " + hours + ":" + minutes + ":" + seconds);
         RepeatingNotification rn = new RepeatingNotification();
-        rn.onClick(getReactApplicationContext(), hours, minutes, seconds);
+        rn.createNotification(getReactApplicationContext(), hours, minutes, seconds);
+    }
+
+    @ReactMethod
+    public void stopNotification() {
+        Log.d("NotificationModule", "NotificationChannel deleted");
+        RepeatingNotification rn = new RepeatingNotification();
+        rn.stopNotification(getReactApplicationContext());
     }
 }
