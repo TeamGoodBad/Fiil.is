@@ -26,7 +26,10 @@ const App = () => {
   /** Tab navigator */
   const Tabs = () => {
     return (
-      <Tab.Navigator labeled={false}>
+      
+      <Tab.Navigator
+      labeled={false}>
+
         <Tab.Screen
           name="Main"
           component={MainView}
