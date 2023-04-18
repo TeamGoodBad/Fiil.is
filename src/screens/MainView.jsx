@@ -120,7 +120,7 @@ const MainView = ({ navigation, route }) => {
       <View style={styles.container}>
 
       {x === 3 && (
-    <View style={{position: 'absolute', right: 20, marginTop: 30,}}>
+    <View style={{position: 'absolute', right: "10%", marginTop: "8%",}}>
       <Button
         mode="contained"
         onPress={() => returnToday()}>
