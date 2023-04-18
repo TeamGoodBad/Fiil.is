@@ -21,7 +21,7 @@ const MainView = ({ navigation, route }) => {
   const [changeDayAt3am] = useMMKVStorage(DAY_CHANGE_KEY, SettingsDB, false);
 
   const todayMoment = moment();
-  const [x, setX] = useState(2);
+  const [isToday, setIsToday] = useState(true);
 
 
 
@@ -103,14 +103,21 @@ const MainView = ({ navigation, route }) => {
   }
 
   useEffect(() => {
+    const today = new Date(); // get today's date
     const todayDate = moment();
     const dateMoment = editingStarted;
     if (todayDate.isSame(dateMoment, 'day')) {
-      setX(2);
+      setIsToday(false);
+      console.log("toimii");
     }
     else {
-      setX(3);
+      setIsToday(true);
     }
+    
+    if(editingStarted === null){
+      setEditingStarted(today.toISOString());
+    }
+
   }, [editingStarted]);
 
 
@@ -119,7 +126,7 @@ const MainView = ({ navigation, route }) => {
     <View style={{ flex: 1 }}>
       <View style={styles.container}>
 
-      {x === 3 && (
+      {isToday   && (
     <View style={{position: 'absolute', right: "10%", marginTop: "8%",}}>
       <Button
         mode="contained"
