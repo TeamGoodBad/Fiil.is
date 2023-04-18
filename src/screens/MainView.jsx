@@ -126,15 +126,6 @@ const MainView = ({ navigation, route }) => {
     <View style={{ flex: 1 }}>
       <View style={styles.container}>
 
-      {isToday   && (
-    <View style={{position: 'absolute', right: "10%", marginTop: "8%",}}>
-      <Button
-        mode="contained"
-        onPress={() => returnToday()}>
-        Palaa 
-      </Button>
-    </View>
-  )}
         <TitleAndStars
           stars={{
             rating: rating,
@@ -168,6 +159,16 @@ const MainView = ({ navigation, route }) => {
 
         </View>
       </View>
+      
+      {isToday   && (
+    <View style={{position: 'absolute', right: "10%", marginTop: "8%",}}>
+      <Button
+        mode="contained"
+        onPress={() => returnToday()}>
+        Palaa 
+      </Button>
+    </View>
+  )}
     </View>
   );
 };
