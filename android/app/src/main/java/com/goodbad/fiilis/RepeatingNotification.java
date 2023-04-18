@@ -56,8 +56,6 @@ public class RepeatingNotification extends BroadcastReceiver {
         if (seconds >= 0 && seconds < 60) {
             time[2] = seconds;
         }
-        String aika = time[0] + ":" + time[1] + ":" + time[2];
-        Log.d("RepeatingNotification", "Asetellaan juttuja (aika: " + aika + ")");
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, time[0]);
@@ -74,7 +72,7 @@ public class RepeatingNotification extends BroadcastReceiver {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000*60, pendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
             // TODO: starting alarm when the device restarts - not happening now:
             // https://developer.android.com/training/scheduling/alarms#boot
         }
@@ -83,7 +81,7 @@ public class RepeatingNotification extends BroadcastReceiver {
     private void NotificationChannel(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "Fiilis tänään", NotificationManager.IMPORTANCE_DEFAULT);
-            channel.setDescription("Muistutus päivän arvostelusta");
+            channel.setDescription("Päivittäinen muistutus päivän arvostelusta");
             channel.enableLights(true);
             channel.enableVibration(true);
             channel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
