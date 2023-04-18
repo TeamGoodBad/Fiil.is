@@ -46,7 +46,16 @@ public class RepeatingNotification extends BroadcastReceiver {
 
     public void onClick(Context context, int hours, int minutes, int seconds) {
 
-        int[] time = {hours, minutes, seconds};
+        int[] time = {21, 0, 0};
+        if (hours >= 0 && hours < 24) {
+            time[0] = hours;
+        }
+        if (minutes >= 0 && minutes < 60) {
+            time[1] = minutes;
+        }
+        if (seconds >= 0 && seconds < 60) {
+            time[2] = seconds;
+        }
         String aika = time[0] + ":" + time[1] + ":" + time[2];
         Log.d("RepeatingNotification", "Asetellaan juttuja (aika: " + aika + ")");
 
@@ -54,10 +63,6 @@ public class RepeatingNotification extends BroadcastReceiver {
         calendar.set(Calendar.HOUR_OF_DAY, time[0]);
         calendar.set(Calendar.MINUTE, time[1]);
         calendar.set(Calendar.SECOND, time[2]);
-
-        if (Calendar.getInstance().after(calendar)) {
-            calendar.add(Calendar.DAY_OF_MONTH,1);
-        }
 
         Intent intent = new Intent(context, RepeatingNotification.class);
 
@@ -70,7 +75,8 @@ public class RepeatingNotification extends BroadcastReceiver {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000*60, pendingIntent);
-            //alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            // TODO: starting alarm when the device restarts - not happening now:
+            // https://developer.android.com/training/scheduling/alarms#boot
         }
     }
 

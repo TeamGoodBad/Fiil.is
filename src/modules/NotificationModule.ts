@@ -20,6 +20,12 @@ import {NativeModules} from 'react-native';
 const {NotificationModule} = NativeModules;
 
 interface NotificationInterface {
-    createNotification(title: string, mainText: string, hours: number, minutes: number, seconds: number): void;
+    createNotification(
+        title: string,
+        mainText: string,
+        hours: number,
+        minutes: number,
+        seconds: number
+    ): void;
 }
 export default NotificationModule as NotificationInterface;
