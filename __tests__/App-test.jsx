@@ -24,6 +24,16 @@ jest.mock('react-native-mmkv-storage/dist/src/mmkv/init', () => {
     init: jest.fn(() => true)}
 });
 
+// Mock react-native-share
+jest.mock('react-native-share', () => ({
+  default: jest.fn(),
+}));
+
+// Mock react-native-fs
+jest.mock('react-native-fs', () => ({
+  default: jest.fn(),
+}));
+
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer';
 // include this line for mocking react-native-gesture-handler
