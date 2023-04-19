@@ -20,6 +20,7 @@ import java.util.Calendar;
 public class RepeatingNotification extends BroadcastReceiver {
 
     private static final String NOTIFICATION_CHANNEL_ID = "fiilisMuistutusID";
+    private static int PENDING_INTENT_REQ_CODE = 0;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -36,7 +37,7 @@ public class RepeatingNotification extends BroadcastReceiver {
                     .setContentText("Oletko jo tehnyt päivän merkintäsi?")
                     .setPriority(Notification.PRIORITY_DEFAULT)
                     .setAutoCancel(true)
-                    .setContentIntent(PendingIntent.getActivity(context, 0, repeatingIntent,
+                    .setContentIntent(PendingIntent.getActivity(context, PENDING_INTENT_REQ_CODE, repeatingIntent,
                             PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
 
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -69,7 +70,7 @@ public class RepeatingNotification extends BroadcastReceiver {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             flags |= PendingIntent.FLAG_MUTABLE;
         }
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, flags);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, PENDING_INTENT_REQ_CODE, intent, flags);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
@@ -81,10 +82,25 @@ public class RepeatingNotification extends BroadcastReceiver {
     }
 
     public void stopNotification(Context context) {
+
+        Intent intent = new Intent(context, RepeatingNotification.class);
+
+        int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            flags |= PendingIntent.FLAG_MUTABLE;
+        }
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, PENDING_INTENT_REQ_CODE, intent, flags);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+            alarmManager.cancel(pendingIntent);
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager notificationManager = context.getSystemService((NotificationManager.class));
             notificationManager.deleteNotificationChannel(NOTIFICATION_CHANNEL_ID);
         }
+
         Log.d("RepeatingNotification", "Got to the end of stopNotification");
     }
 

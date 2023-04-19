@@ -80,7 +80,7 @@ const SettingsList = ({ navigation }) => {
   const toggleNotification = () => {
     if (!notificationOn) {
       console.log("Herätetään native moduulia ??");
-      NotificationModule.createNotification(12, 54, 0);
+      NotificationModule.createNotification(11, 2, 0);
     }
     else {
       console.log("Lopetellaan nativemoduulin channel...?");

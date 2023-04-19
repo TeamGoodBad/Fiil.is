@@ -10,8 +10,8 @@ const NewModuleButton = () => {
     const onPress = () => {
         console.log('We did invoke the native module here!');
         NotificationModule.createNotification(
-            11, //hours
-            17,  // minutes
+            10, //hours
+            59,  // minutes
             0   // seconds
         );
     };
