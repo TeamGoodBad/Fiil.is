@@ -17,10 +17,10 @@ import { generateMockEntries } from '../storage/mock-entries';
 import NotificationModule from '../modules/NotificationModule';
 
 
-const SettingsList = ({ navigation }) => {
+const SettingsList = ({ navigation, notificationTime }) => {
   const [pin] = useMMKVStorage(PIN_KEY, SettingsDB, "");
   const [dayChange, setDayChange] = useMMKVStorage(DAY_CHANGE_KEY, SettingsDB, false);
-  const [notificationOn, setNotificationOn] = useMMKVStorage(NOTIFICATIONS_ON, SettingsDB, false); //TODO: Jätetäänkö switch tälle? Nyt aiheuttaa taustalla erroreita koska poistaa vaan notificationchannelin eikä poista varsinaista alarmia
+  const [notificationOn, setNotificationOn] = useMMKVStorage(NOTIFICATIONS_ON, SettingsDB, false);
 
   /** Returns correct right arrow -like icon for current platform */
   const PlatformRight = () =>
@@ -79,11 +79,9 @@ const SettingsList = ({ navigation }) => {
   const toggleDayChange = () => setDayChange(!dayChange);
   const toggleNotification = () => {
     if (!notificationOn) {
-      console.log("Herätetään native moduulia ??");
-      NotificationModule.createNotification(11, 2, 0);
+      NotificationModule.createNotification(21, 0, 0);
     }
     else {
-      console.log("Lopetellaan nativemoduulin channel...?");
       NotificationModule.stopNotification();
     }
     setNotificationOn(!notificationOn);

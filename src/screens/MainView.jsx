@@ -1,5 +1,5 @@
 import {View, Keyboard, SafeAreaView} from 'react-native';
-import {Title, Button, TextInput, useTheme} from 'react-native-paper';
+import {Button, TextInput, useTheme} from 'react-native-paper';
 import {useMMKVStorage} from 'react-native-mmkv-storage';
 import moment from 'moment';
 import {
@@ -11,10 +11,10 @@ import {
   CURRENT_EDITING_STARTED,
 } from '../storage/userdata';
 import {getStyles} from '../styles/mainview';
-import {useEffect, useState} from 'react';
-import {DAY_CHANGE_KEY, SettingsDB} from '../storage/settings';
+import {useEffect} from 'react';
+import {DAY_CHANGE_KEY, NOTIFICATIONS_ON, SettingsDB} from '../storage/settings';
 import TitleAndStars from '../components/TitleAndStars';
-import NotificationButton from '../components/NotificationButton';
+import NotificationModule from '../modules/NotificationModule';
 
 const MainView = ({navigation, route}) => {
   const theme = useTheme();
@@ -29,6 +29,7 @@ const MainView = ({navigation, route}) => {
     null,
   );
   const [changeDayAt3am] = useMMKVStorage(DAY_CHANGE_KEY, SettingsDB, false);
+  const [notificationOn] = useMMKVStorage(NOTIFICATIONS_ON, SettingsDB, false);
 
   const handlePress = index => {
     setRating(index);
@@ -77,6 +78,11 @@ const MainView = ({navigation, route}) => {
       //loadEntryFromDateIfSaved(new Date());
       setEditingStarted(now.toISOString());
     }
+  }, []);
+
+  // Make sure that createNotification is used if notifications are set ON
+  useEffect(() => {
+    if (notificationOn) NotificationModule.createNotification(21, 0, 0);
   }, []);
 
   /**
