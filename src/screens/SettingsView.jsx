@@ -112,7 +112,7 @@ const SettingsList = ({ navigation, notificationTime }) => {
             onPress={toggleDayChange}
           />
           <List.Item
-            title="Ilmoitus"
+            title="Ilmoitukset"
             description="Asettaa päivittäisen ilmoituksen klo 21.00"
             left={props => <List.Icon {...props} icon="bell-ring-outline"/>}
             right={() => <Switch
