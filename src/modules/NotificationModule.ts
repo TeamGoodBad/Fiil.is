@@ -28,4 +28,9 @@ interface NotificationInterface {
 
     stopNotification(): void;
 }
+
 export default NotificationModule as NotificationInterface;
+
+export const createNotification = () => {
+    NotificationModule.createNotification(21,0,0);
+} 

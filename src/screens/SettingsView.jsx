@@ -14,7 +14,7 @@ import EntryList from "../components/EntryList";
 import { getStyles, getPinStyles } from "../styles/settingsView";
 import { clearUserDB, dump, load } from "../storage/userdata";
 import { generateMockEntries } from '../storage/mock-entries';
-import NotificationModule from '../modules/NotificationModule';
+import { createNotification } from '../modules/NotificationModule';
 
 
 const SettingsList = ({ navigation, notificationTime }) => {
@@ -79,7 +79,7 @@ const SettingsList = ({ navigation, notificationTime }) => {
   const toggleDayChange = () => setDayChange(!dayChange);
   const toggleNotification = () => {
     if (!notificationOn) {
-      NotificationModule.createNotification(21, 0, 0);
+      createNotification();
       // TODO: johonkin kootusti notificationTime,
       // koska nyt tämä MainView:ssä ja täällä
     }

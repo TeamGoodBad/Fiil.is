@@ -14,7 +14,7 @@ import {getStyles} from '../styles/mainview';
 import {useEffect} from 'react';
 import {DAY_CHANGE_KEY, NOTIFICATIONS_ON, SettingsDB} from '../storage/settings';
 import TitleAndStars from '../components/TitleAndStars';
-import NotificationModule from '../modules/NotificationModule';
+import {createNotification} from '../modules/NotificationModule';
 
 const MainView = ({navigation, route}) => {
   const theme = useTheme();
@@ -82,7 +82,7 @@ const MainView = ({navigation, route}) => {
 
   // Make sure that createNotification is used if notifications are set ON
   useEffect(() => {
-    if (notificationOn) NotificationModule.createNotification(21, 0, 0);
+    if (notificationOn) createNotification();
     // TODO: johonkin kootusti notificationTime,
     // koska nyt tämä SettingsView:ssä ja täällä
   }, []);
