@@ -80,6 +80,8 @@ const SettingsList = ({ navigation, notificationTime }) => {
   const toggleNotification = () => {
     if (!notificationOn) {
       NotificationModule.createNotification(21, 0, 0);
+      // TODO: johonkin kootusti notificationTime,
+      // koska nyt tämä MainView:ssä ja täällä
     }
     else {
       NotificationModule.stopNotification();
