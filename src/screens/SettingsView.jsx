@@ -9,7 +9,7 @@ import Share from "react-native-share";
 import DocumentPicker from 'react-native-document-picker';
 import { readFile } from "react-native-fs";
 
-import { SettingsDB, setPin, clearPin, PIN_KEY, DAY_CHANGE_KEY, NOTIFICATIONS_ON } from '../storage/settings';
+import { SettingsDB, setPin, clearPin, PIN_KEY, DAY_CHANGE_KEY, NOTIFICATIONS_ON_KEY } from '../storage/settings';
 import EntryList from "../components/EntryList";
 import { getStyles, getPinStyles } from "../styles/settingsView";
 import { clearUserDB, dump, load } from "../storage/userdata";
@@ -20,7 +20,7 @@ import { createNotification } from '../modules/NotificationModule';
 const SettingsList = ({ navigation, notificationTime }) => {
   const [pin] = useMMKVStorage(PIN_KEY, SettingsDB, "");
   const [dayChange, setDayChange] = useMMKVStorage(DAY_CHANGE_KEY, SettingsDB, false);
-  const [notificationOn, setNotificationOn] = useMMKVStorage(NOTIFICATIONS_ON, SettingsDB, false);
+  const [notificationOn, setNotificationOn] = useMMKVStorage(NOTIFICATIONS_ON_KEY, SettingsDB, false);
 
   /** Returns correct right arrow -like icon for current platform */
   const PlatformRight = () =>

@@ -12,7 +12,7 @@ import {
 } from '../storage/userdata';
 import {getStyles} from '../styles/mainview';
 import {useEffect} from 'react';
-import {DAY_CHANGE_KEY, NOTIFICATIONS_ON, SettingsDB} from '../storage/settings';
+import {DAY_CHANGE_KEY, NOTIFICATIONS_ON_KEY, SettingsDB} from '../storage/settings';
 import TitleAndStars from '../components/TitleAndStars';
 import {createNotification} from '../modules/NotificationModule';
 
@@ -29,7 +29,7 @@ const MainView = ({navigation, route}) => {
     null,
   );
   const [changeDayAt3am] = useMMKVStorage(DAY_CHANGE_KEY, SettingsDB, false);
-  const [notificationOn] = useMMKVStorage(NOTIFICATIONS_ON, SettingsDB, false);
+  const [notificationOn] = useMMKVStorage(NOTIFICATIONS_ON_KEY, SettingsDB, false);
 
   const handlePress = index => {
     setRating(index);
