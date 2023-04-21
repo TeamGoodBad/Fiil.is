@@ -8,10 +8,9 @@ export const getStyles = theme =>
   StyleSheet.create({
     ...basestyle,
     chipContainer: {
-      flex: 7,
-      overflow: 'scroll',
+      padding: 10,
+      flex: 1,
       rowGap: 10,
-      padding: '5%',
     },
     containerCenter: {
       alignItems: 'center',

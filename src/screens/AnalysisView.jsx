@@ -5,8 +5,10 @@ import {
   Dimensions,
   SafeAreaView,
   Animated,
+  ScrollView,
 } from 'react-native';
 import {Text, Title, Divider, useTheme, Chip} from 'react-native-paper';
+import {ratingWords} from '../storage/analysis';
 
 import Stars from '../components/Stars';
 import {getStyles} from '../styles/analysisView';
@@ -14,9 +16,16 @@ import TitleAndStars from '../components/TitleAndStars';
 
 const AnalysisView = ({navigation}) => {
   const [rating, setRating] = useState(0);
+  const [words, setWords] = useState([]);
   const theme = useTheme();
 
   const slideAnim = useRef(new Animated.Value(-300)).current; // Initial value for opacity: 0
+
+  useEffect(() => {
+    ratingWords(rating).then(res => {
+      setWords(res);
+    });
+  }, [rating]);
 
   useEffect(() => {
     Animated.timing(slideAnim, {
@@ -46,13 +55,15 @@ const AnalysisView = ({navigation}) => {
           <Title>{rating + 1} tähden päivissä sanoja:</Title>
         </View>
         <Divider />
-        <View style={styles.chipContainer}>
-          <Chip style={{top: slideAnim}}>Sana</Chip>
-          <Chip style={{top: slideAnim}}>Sana</Chip>
-          <Chip style={{top: slideAnim}}>Sana</Chip>
-          <Chip style={{top: slideAnim}}>Sana</Chip>
-          <Chip style={{top: slideAnim}}>Sana</Chip>
-        </View>
+        <ScrollView style={styles.chipContainer}>
+          {words.map(word => {
+            return (
+              <Chip style={{marginBottom: 10}} key={word[0]}>
+                {word[0]}
+              </Chip>
+            );
+          })}
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
