@@ -1,6 +1,6 @@
-import {View, Keyboard, SafeAreaView} from 'react-native';
-import {Button, TextInput, useTheme} from 'react-native-paper';
-import {useMMKVStorage} from 'react-native-mmkv-storage';
+import { View, Keyboard, SafeAreaView, TouchableOpacity } from 'react-native';
+import { Button, TextInput, useTheme } from 'react-native-paper';
+import { useMMKVStorage } from 'react-native-mmkv-storage';
 import moment from 'moment';
 import {
   CURRENT_TEXT_KEY,
@@ -10,13 +10,13 @@ import {
   getEntries,
   CURRENT_EDITING_STARTED,
 } from '../storage/userdata';
-import {getStyles} from '../styles/mainview';
-import {useEffect} from 'react';
-import {DAY_CHANGE_KEY, NOTIFICATIONS_ON_KEY, SettingsDB} from '../storage/settings';
+import { getStyles } from '../styles/mainview';
+import { useEffect } from 'react';
+import { DAY_CHANGE_KEY, NOTIFICATIONS_ON_KEY, SettingsDB } from '../storage/settings';
 import TitleAndStars from '../components/TitleAndStars';
-import {createNotification} from '../modules/NotificationModule';
+import { createNotification } from '../modules/NotificationModule';
 
-const MainView = ({navigation, route}) => {
+const MainView = ({ navigation, route }) => {
   const theme = useTheme();
   const styles = getStyles(theme);
 
@@ -39,7 +39,7 @@ const MainView = ({navigation, route}) => {
   // Change to older entry if editing
   useEffect(() => {
     if (route.params && route.params.selectedEntry) {
-      const {selectedEntry} = route.params;
+      const { selectedEntry } = route.params;
       const parsedSelectedEntry = JSON.parse(selectedEntry);
 
       setText(parsedSelectedEntry.text);
@@ -51,7 +51,7 @@ const MainView = ({navigation, route}) => {
 
   // Lataa muistista tallennetun entryn halutulle päivälle. Jos entryä ei ole, ei tee mitään.
   const loadEntryFromDateIfSaved = async date => {
-    getEntries({minDate: date, maxDate: date}).then(entries => {
+    getEntries({ minDate: date, maxDate: date }).then(entries => {
       if (entries.length > 0) {
         setText(entries[0].text);
         setRating(entries[0].rating);
@@ -87,6 +87,12 @@ const MainView = ({navigation, route}) => {
     // koska nyt tämä SettingsView:ssä ja täällä
   }, []);
 
+  // Remove focus from text input if keyboard is closed
+  // https://github.com/facebook/react-native/issues/19366
+  Keyboard.addListener('keyboardDidHide', () => {
+    this.input.blur();
+  })
+
   /**
    * Saves current temporary entry to database with given date
    * @param {Date} date Entry date. Time of day is ignored.
@@ -102,8 +108,8 @@ const MainView = ({navigation, route}) => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <View style={{flex: 1}}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
         <View style={styles.container}>
           <TitleAndStars
             stars={{
@@ -116,16 +122,20 @@ const MainView = ({navigation, route}) => {
               .toString()}
           />
           <View style={styles.textInputContainer}>
-            <TextInput
-              multiline={true}
-              mode="outlined"
-              placeholder={'Tänään...'}
+            <TouchableOpacity
               style={styles.textInputStyle}
-              value={text}
-              onChangeText={text => {
-                setText(text);
-              }}
-            />
+              onPress={() => this.input.focus()}
+            >
+              <TextInput
+                ref={(input) => { this.input = input; }}
+                multiline={true}
+                mode="outlined"
+                placeholder={'Tänään...'}
+                style={styles.textInputStyle}
+                value={text}
+                onChangeText={text => setText(text)}
+              />
+            </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
             <Button mode="contained" onPress={() => saveEntry()}>
