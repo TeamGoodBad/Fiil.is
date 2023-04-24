@@ -83,8 +83,6 @@ const MainView = ({navigation, route}) => {
   // Make sure that createNotification is used if notifications are set ON
   useEffect(() => {
     if (notificationOn) createNotification();
-    // TODO: johonkin kootusti notificationTime,
-    // koska nyt tämä SettingsView:ssä ja täällä
   }, []);
 
   /**

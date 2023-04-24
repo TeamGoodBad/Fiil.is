@@ -14,7 +14,7 @@ import EntryList from "../components/EntryList";
 import { getStyles, getPinStyles } from "../styles/settingsView";
 import { clearUserDB, dump, load } from "../storage/userdata";
 import { generateMockEntries } from '../storage/mock-entries';
-import { createNotification } from '../modules/NotificationModule';
+import { createNotification, stopNotification } from '../modules/NotificationModule';
 
 
 const SettingsList = ({ navigation, notificationTime }) => {
@@ -80,11 +80,9 @@ const SettingsList = ({ navigation, notificationTime }) => {
   const toggleNotification = () => {
     if (!notificationOn) {
       createNotification();
-      // TODO: johonkin kootusti notificationTime,
-      // koska nyt tämä MainView:ssä ja täällä
     }
     else {
-      NotificationModule.stopNotification();
+      stopNotification();
     }
     setNotificationOn(!notificationOn);
   };
