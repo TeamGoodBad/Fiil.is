@@ -9,16 +9,18 @@ import Share from "react-native-share";
 import DocumentPicker from 'react-native-document-picker';
 import { readFile } from "react-native-fs";
 
-import { SettingsDB, setPin, clearPin, PIN_KEY, DAY_CHANGE_KEY } from '../storage/settings';
+import { SettingsDB, setPin, clearPin, PIN_KEY, DAY_CHANGE_KEY, NOTIFICATIONS_ON_KEY } from '../storage/settings';
 import EntryList from "../components/EntryList";
 import { getStyles, getPinStyles } from "../styles/settingsView";
 import { clearUserDB, dump, load } from "../storage/userdata";
 import { generateMockEntries } from '../storage/mock-entries';
+import { createNotification } from '../modules/NotificationModule';
 
 
-const SettingsList = ({ navigation }) => {
+const SettingsList = ({ navigation, notificationTime }) => {
   const [pin] = useMMKVStorage(PIN_KEY, SettingsDB, "");
   const [dayChange, setDayChange] = useMMKVStorage(DAY_CHANGE_KEY, SettingsDB, false);
+  const [notificationOn, setNotificationOn] = useMMKVStorage(NOTIFICATIONS_ON_KEY, SettingsDB, false);
 
   /** Returns correct right arrow -like icon for current platform */
   const PlatformRight = () =>
@@ -75,6 +77,17 @@ const SettingsList = ({ navigation }) => {
   };
 
   const toggleDayChange = () => setDayChange(!dayChange);
+  const toggleNotification = () => {
+    if (!notificationOn) {
+      createNotification();
+      // TODO: johonkin kootusti notificationTime,
+      // koska nyt tämä MainView:ssä ja täällä
+    }
+    else {
+      NotificationModule.stopNotification();
+    }
+    setNotificationOn(!notificationOn);
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -99,6 +112,16 @@ const SettingsList = ({ navigation }) => {
               onValueChange={toggleDayChange}
             />}
             onPress={toggleDayChange}
+          />
+          <List.Item
+            title="Ilmoitukset"
+            description="Asettaa päivittäisen ilmoituksen klo 21.00"
+            left={props => <List.Icon {...props} icon="bell-ring-outline"/>}
+            right={() => <Switch
+              value={notificationOn}
+              onValueChange={toggleNotification}
+            />}
+            onPress={toggleNotification}
           />
         </List.Section>
         <List.Section>
