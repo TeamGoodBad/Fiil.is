@@ -16,7 +16,7 @@ const SCHEMA_VERSION = 2;
 /** Worst possible rating */
 const MIN_RATING = -1;
 /** Best possible rating */
-const MAX_RATING = 4;
+export const MAX_RATING = 4;
 
 
 const dateToKey = (date: Date) => `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
@@ -112,7 +112,7 @@ export const load: (json: string, overwrite?: boolean) => Promise<void> = async 
 
 
 /** Splits text to individual words in lowercase. */
-const splitToWords = (text: string): string[] => text
+export const splitToWords = (text: string): string[] => text
     .toLocaleLowerCase()
     .split("\n") // Split string by newlines
     .flatMap(a => a.split(" ")) // ...and spaces
