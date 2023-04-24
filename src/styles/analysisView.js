@@ -27,6 +27,3 @@ export const getStyles = theme =>
       backgroundColor: theme.colors.onPrimaryContainer,
     },
   });
-
-// Fetch all words with rating 2 and put them to console
-ratingWords(1).then(result => console.log(result));
