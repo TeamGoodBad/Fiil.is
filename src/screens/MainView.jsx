@@ -1,5 +1,5 @@
 import { View, Keyboard } from 'react-native';
-import { Title, Button, TextInput, useTheme } from 'react-native-paper';
+import { useTheme, Button, TextInput } from 'react-native-paper';
 import { useMMKVStorage } from "react-native-mmkv-storage";
 import moment from 'moment';
 
@@ -8,6 +8,8 @@ import { getStyles } from "../styles/mainview";
 import { useEffect, useState } from 'react';
 import { DAY_CHANGE_KEY, SettingsDB } from '../storage/settings';
 import TitleAndStars from '../components/TitleAndStars';
+
+
 
 
 
@@ -125,15 +127,21 @@ const MainView = ({ navigation, route }) => {
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.container}>
+    
 
-        <TitleAndStars
-          stars={{
-            rating: rating,
-            editable: true,
-            onChange: handlePress
-          }}        
-          titleContent={moment(editingStarted).format('DD.MM.YYYY').toString()}
-        />
+
+
+      <TitleAndStars
+        stars={{
+          rating: rating,
+          editable: true,
+          onChange: handlePress
+        }}
+        buttonContent={{isButton: isToday, onPress: returnToday, text: "Palaa"}}
+        titleContent={moment(editingStarted).format('DD.MM.YYYY').toString()}
+
+      />
+
 
 
 
@@ -159,16 +167,8 @@ const MainView = ({ navigation, route }) => {
 
         </View>
       </View>
-      
-      {isToday   && (
-    <View style={{position: 'absolute', right: "10%", marginTop: "8%",}}>
-      <Button
-        mode="contained"
-        onPress={() => returnToday()}>
-        Palaa 
-      </Button>
-    </View>
-  )}
+
+
     </View>
   );
 };
