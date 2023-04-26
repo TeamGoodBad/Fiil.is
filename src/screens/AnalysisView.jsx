@@ -59,7 +59,10 @@ const AnalysisView = ({navigation}) => {
         start={{x: 0, y: 0}}
         end={{x: 0, y: 1}}>
         <SafeAreaView />
-        <TitleAndStars stars={rating} titleContent={'Valitse tähtimäärä'} />
+        <TitleAndStars
+          stars={{rating: rating, editable: true, onChange: handlePress}}
+          titleContent={'Valitse tähtimäärä'}
+        />
       </LinearGradient>
       <Divider />
       <ScrollView style={styles.chipContainer}>
