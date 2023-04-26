@@ -15,7 +15,78 @@ const App = () => {
 
   const [pin, _] = useMMKVStorage(PIN_KEY, SettingsDB, '');
 
-  const notificationTime = {hours: 12, minutes: 0, seconds: 0};
+
+  /** Tab navigator */
+  const Tabs = () => {
+    return (
+      
+      <Tab.Navigator
+      labeled={false}>
+
+        <Tab.Screen
+          name="Main"
+          component={MainView}
+          options={{
+            tabBarIcon: ({color}) => (
+              <MaterialCommunityIcons
+                name="notebook-edit"
+                color={color}
+                size={26}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Calendar"
+          component={CalendarView}
+          options={{
+            tabBarIcon: ({color}) => (
+              <MaterialCommunityIcons name="calendar" color={color} size={26} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Analysis"
+          component={AnalysisView}
+          options={{
+            tabBarIcon: ({color}) => (
+              <MaterialCommunityIcons
+                name="lightbulb-on-outline"
+                color={color}
+                size={26}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Settings"
+          component={SettingsView}
+          options={{
+            tabBarIcon: ({color}) => (
+              <MaterialCommunityIcons name="cog" color={color} size={26} />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+    );
+  };
+
+  /** Wraps authentication view with rest of the app */
+  const AuthenticationWrapper = (
+    <Stack.Navigator initialRouteName={pin != '' ? 'Authentication' : 'Tabs'}>
+      <Stack.Screen
+        name="Authentication"
+        component={AuthenticationView}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Tabs"
+        component={Tabs}
+        options={{headerShown: false}}
+      />
+    </Stack.Navigator>
+  );
+
 
   return (
     <PaperProvider

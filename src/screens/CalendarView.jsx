@@ -96,6 +96,7 @@ const CalendarView = ({ navigation }) => {
           contentContainerStyle={styles.modalContainer}>
           <TitleAndStars
             stars={{rating:selectedEntry.rating, editable: false}}
+            buttonContent={{isButton: true, onPress: hideModal, text:"X"}}
             titleContent={startDate} />
           <View style={{flex:8}}>
             <ScrollView showsVerticalScrollIndicator={true}>
@@ -108,13 +109,7 @@ const CalendarView = ({ navigation }) => {
               onPress={handleEditPress}
               mode="elevated"
               style={{ margin: 5 }}>
-              muokkaa
-            </Button>
-            <Button
-              mode="elevated"
-              onPress={hideModal}
-              style={{ margin: 5 }}>
-              Takaisin
+              Muokkaa
             </Button>
           </View>
         </Modal> 
