@@ -1,24 +1,41 @@
-import {View} from 'react-native';
-import {Title} from 'react-native-paper';
+
+import { View } from 'react-native';
+import { Title, Button } from 'react-native-paper';
 
 import Stars from './Stars';
 import {getBaseStyle} from '../styles/baseStyle';
 
-const TitleAndStars = ({stars, titleContent}) => {
-  const styles = getBaseStyle();
+const TitleAndStars = ({ stars, titleContent, buttonContent }) => {
+    const styles = getBaseStyle();
 
-  return (
+    let button = null;
+    if (buttonContent) {
+        if (buttonContent.isButton) {
+            button = (
+                <View>
+                    <Button
+                        mode="elevated"
+                        onPress={() => buttonContent.onPress()}>
+                        {buttonContent.text}
+                    </Button>
+                </View>
+            )
+        }
+    }
+    return (
     <View style={styles.titleAndStarsContainer}>
-      <View style={styles.titleContainer}>
-        <Title>{titleContent}</Title>
-      </View>
-      <View style={styles.starsContainer}>
-        <Stars
-          rating={stars.rating}
-          editable={stars.editable}
-          onChange={stars.onChange}
-        />
-      </View>
+        <View style={styles.titleContainer}>
+            <Title style={{paddingLeft: '4%'}}>
+                {titleContent}
+            </Title>
+            {button}
+        </View>
+        <View style={styles.starsContainer}>
+            <Stars
+                rating={stars.rating}
+                editable={stars.editable}
+                onChange={stars.onChange} />
+        </View>
     </View>
   );
 };
