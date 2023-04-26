@@ -17,7 +17,7 @@ export default TabScreens = () => {
           name='Main'
           component={MainView}
           options={{
-            tabBarLabel: 'Merkintä',
+            tabBarLabel: 'Fiilis',
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="notebook-edit" color={color} size={26} />
             ),

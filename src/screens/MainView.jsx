@@ -1,17 +1,22 @@
-import { View, Keyboard } from 'react-native';
-import { useTheme, Button, TextInput } from 'react-native-paper';
-import { useMMKVStorage } from "react-native-mmkv-storage";
+
+import { View, Keyboard, SafeAreaView, TouchableOpacity } from 'react-native';
+import { Button, TextInput, useTheme } from 'react-native-paper';
+import { useMMKVStorage } from 'react-native-mmkv-storage';
 import moment from 'moment';
+import {
+  CURRENT_TEXT_KEY,
+  CURRENT_RATING_KEY,
+  UserDB,
+  setEntry,
+  getEntries,
+  CURRENT_EDITING_STARTED,
+} from '../storage/userdata';
+import { getStyles } from '../styles/mainview';
+import { useEffect } from 'react';
+import { DAY_CHANGE_KEY, NOTIFICATIONS_ON_KEY, SettingsDB } from '../storage/settings';
 
-import { CURRENT_TEXT_KEY, CURRENT_RATING_KEY, UserDB, setEntry, getEntries, CURRENT_EDITING_STARTED } from "../storage/userdata";
-import { getStyles } from "../styles/mainview";
-import { useEffect, useState } from 'react';
-import { DAY_CHANGE_KEY, SettingsDB } from '../storage/settings';
 import TitleAndStars from '../components/TitleAndStars';
-
-
-
-
+import { createNotification } from '../modules/NotificationModule';
 
 const MainView = ({ navigation, route }) => {
   const theme = useTheme();
@@ -21,6 +26,7 @@ const MainView = ({ navigation, route }) => {
   const [rating, setRating] = useMMKVStorage(CURRENT_RATING_KEY, UserDB, -1);
   const [editingStarted, setEditingStarted] = useMMKVStorage(CURRENT_EDITING_STARTED, UserDB, null);
   const [changeDayAt3am] = useMMKVStorage(DAY_CHANGE_KEY, SettingsDB, false);
+  const [notificationOn] = useMMKVStorage(NOTIFICATIONS_ON_KEY, SettingsDB, false);
 
   const todayMoment = moment();
   const [isToday, setIsToday] = useState(true);
@@ -46,7 +52,9 @@ const MainView = ({ navigation, route }) => {
   }, [route.params]);
 
   // Lataa muistista tallennetun entryn halutulle päivälle. Jos entryä ei ole, ei tee mitään.
-  const loadEntryFromDateIfSaved = async (date) => {
+
+  const loadEntryFromDateIfSaved = async date => {
+
     getEntries({ minDate: date, maxDate: date }).then(entries => {
       if (entries.length > 0) {
         setText(entries[0].text);
@@ -71,6 +79,20 @@ const MainView = ({ navigation, route }) => {
     }
   }, []);
 
+
+  // Make sure that createNotification is used if notifications are set ON
+  useEffect(() => {
+    if (notificationOn) createNotification();
+    // TODO: johonkin kootusti notificationTime,
+    // koska nyt tämä SettingsView:ssä ja täällä
+  }, []);
+
+  // Remove focus from text input if keyboard is closed
+  // https://github.com/facebook/react-native/issues/19366
+  Keyboard.addListener('keyboardDidHide', () => {
+    this.input.blur();
+  })
+g
 
   /**
    * Saves current temporary entry to database with given date
@@ -125,6 +147,7 @@ const MainView = ({ navigation, route }) => {
 
 
   return (
+
     <View style={{ flex: 1 }}>
       <View style={styles.container}>
     
@@ -164,6 +187,7 @@ const MainView = ({ navigation, route }) => {
           </Button>
 
           
+
 
         </View>
       </View>

@@ -16,7 +16,7 @@ const SCHEMA_VERSION = 2;
 /** Worst possible rating */
 const MIN_RATING = -1;
 /** Best possible rating */
-const MAX_RATING = 4;
+export const MAX_RATING = 4;
 
 
 const dateToKey = (date: Date) => `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
@@ -58,9 +58,10 @@ export const EMPTY_ENTRY: Entry = {
 
 
 /**
- * @returns the whole database in JSON format
+ * @param includeIndexes Should the dump contain index data?
+ * @returns the whole database in JSON format.
  */
-export const dump: () => Promise<string> = async () => {
+export const dump: (includeIndexes?: boolean) => Promise<string> = async (includeIndexes = true) => {
     const object: any = {};
 
     await Promise.all([
@@ -76,8 +77,8 @@ export const dump: () => Promise<string> = async () => {
         Promise.all((await UserDB.indexer.maps.getAll() as [string, any][])
             .map(async (field: [string, any]) => object[field[0]] = field[1])),
 
-        // and indexes
-        Promise.all((await UserDB.indexer.arrays.getAll() as [string, string[]][])
+        // and optionally indexes
+        Promise.all(!includeIndexes && [] || (await UserDB.indexer.arrays.getAll() as [string, string[]][])
             .map(async (field: [string, string[]]) => object[field[0]] = field[1])),
     ]); 
 
@@ -85,8 +86,33 @@ export const dump: () => Promise<string> = async () => {
 }
 
 
+/**
+ * Loads entries from JSON dump.
+ * @param json Data to be loaded in JSON format.
+ * @param overwrite Should old data be overwritten?
+ */
+export const load: (json: string, overwrite?: boolean) => Promise<void> = async (json, overwrite = false) => {
+    const data = JSON.parse(json);
+
+    // Clear db if it is to be overwritten
+    if (overwrite) clearUserDB();
+
+    // Add all entries to db
+    for (const key of Object.keys(data)) {
+        if (key.startsWith(ENTRY_KEY)) {
+            let entry: Entry = data[key];
+            // Convert date string to date object
+            entry.date = new Date(entry.date);
+            await setEntry(entry);
+        }
+    }
+
+    // The indexes will update automatically via `setEntry(...)`
+}
+
+
 /** Splits text to individual words in lowercase. */
-const splitToWords = (text: string): string[] => text
+export const splitToWords = (text: string): string[] => text
     .toLocaleLowerCase()
     .split("\n") // Split string by newlines
     .flatMap(a => a.split(" ")) // ...and spaces
@@ -179,7 +205,7 @@ export const removeEntry = async (date: Date) => {
 /** Pushes string data to index. */
 const pushToIndex = async (indexKey: string, data: string): Promise<void> => {
     let index = await UserDB.getArrayAsync(indexKey);
-    if (index == null) index = [];
+    if (!index) index = [];
     if (!index.includes(data)) index.push(data);
     await UserDB.setArrayAsync(indexKey, index);
 }
@@ -214,11 +240,17 @@ export const getEntry = async (date: Date): Promise<Entry | null> => {
     return entry;
 }
 
+/** Writes current schema to db */
+export const writeCurrentSchema = () => UserDB.setInt(SCHEMA_VERSION_KEY, SCHEMA_VERSION);
+
 
 /**
  * Clears all user data.
  */
-export const clearUserDB = () => UserDB.clearStore();
+export const clearUserDB = () => {
+    UserDB.clearStore();
+    writeCurrentSchema();
+}
 
 
 /** Represents a search query for entries. Used as an argument for `getEntries(...)`. */
@@ -379,8 +411,7 @@ const update: () => Promise<void> = async () => {
 
     // Just write current schema version if db is empty
     if (!Array.isArray(entries)) {
-        UserDB.setInt(SCHEMA_VERSION_KEY, SCHEMA_VERSION);
-        console.log("Db initiated");
+        writeCurrentSchema();
         return;
     }
 
@@ -419,7 +450,7 @@ const update: () => Promise<void> = async () => {
     }
 
     // Bump schema version
-    UserDB.setInt(SCHEMA_VERSION_KEY, SCHEMA_VERSION);
+    writeCurrentSchema();
 }
 // Update on init
 update();

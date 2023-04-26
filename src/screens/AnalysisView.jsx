@@ -1,22 +1,31 @@
 import {useState, useRef, useEffect} from 'react';
-import {
-  Pressable,
-  View,
-  Dimensions,
-  SafeAreaView,
-  Animated,
-} from 'react-native';
-import {Text, Title, Divider, useTheme, Chip} from 'react-native-paper';
+import {View, SafeAreaView, Animated, ScrollView} from 'react-native';
+import {Text, Title, Divider, useTheme, ProgressBar} from 'react-native-paper';
+import {ratingWords} from '../storage/analysis';
 
 import Stars from '../components/Stars';
 import {getStyles} from '../styles/analysisView';
-import TitleAndStars from '../components/TitleAndStars';
 
 const AnalysisView = ({navigation}) => {
   const [rating, setRating] = useState(0);
-  const theme = useTheme();
+  const [words, setWords] = useState([]);
+  const [most, setMost] = useState(0);
 
+  const theme = useTheme();
   const slideAnim = useRef(new Animated.Value(-300)).current; // Initial value for opacity: 0
+
+  useEffect(() => {
+    ratingWords(rating).then(res => {
+      setWords(res);
+      const values = res.map(a => {
+        return a[1];
+      });
+      const sorted = values.sort(function (a, b) {
+        return a - b;
+      });
+      setMost(sorted[sorted.length - 1]);
+    });
+  }, [rating]);
 
   useEffect(() => {
     Animated.timing(slideAnim, {
@@ -46,13 +55,36 @@ const AnalysisView = ({navigation}) => {
           <Title>{rating + 1} tähden päivissä sanoja:</Title>
         </View>
         <Divider />
-        <View style={styles.chipContainer}>
-          <Chip style={{top: slideAnim}}>Sana</Chip>
-          <Chip style={{top: slideAnim}}>Sana</Chip>
-          <Chip style={{top: slideAnim}}>Sana</Chip>
-          <Chip style={{top: slideAnim}}>Sana</Chip>
-          <Chip style={{top: slideAnim}}>Sana</Chip>
-        </View>
+        <ScrollView style={styles.chipContainer}>
+          {words.map(word => {
+            return (
+              <View
+                style={{
+                  marginBottom: 10,
+                  backgroundColor: '#deefe9',
+                  flex: 1,
+                  padding: 10,
+                  borderRadius: 10,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}
+                key={word[0]}>
+                <Text style={{width: '50%'}}> {word[0]}</Text>
+                <View style={{width: '50%'}}>
+                  <View
+                    style={{
+                      backgroundColor: '#F78725',
+                      width: `${(word[1] / most) * 100}%`,
+                      height: '80%',
+                      borderRadius: 10,
+                    }}
+                  />
+                </View>
+              </View>
+            );
+          })}
+        </ScrollView>
       </View>
     </SafeAreaView>
   );

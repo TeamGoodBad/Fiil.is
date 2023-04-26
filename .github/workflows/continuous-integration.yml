@@ -16,6 +16,10 @@ jobs:
       - uses: actions/setup-node@master
         with:
           cache: 'npm'
+          # Node 19 introduced a bug in tests, don't use it for now
+          # https://github.com/facebook/react-native/issues/36440
+          # TODO: Allow newest version if the bug is fixed
+          node-version: '18.15.0'
 
       - name: Install node modules
         run: |
