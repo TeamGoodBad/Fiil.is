@@ -29,7 +29,7 @@ const MainView = ({navigation, route}) => {
     null,
   );
   const [changeDayAt3am] = useMMKVStorage(DAY_CHANGE_KEY, SettingsDB, false);
-  const [notificationOn] = useMMKVStorage(NOTIFICATIONS_ON_KEY, SettingsDB, false);
+  //const [notificationOn] = useMMKVStorage(NOTIFICATIONS_ON_KEY, SettingsDB, false);
 
   const handlePress = index => {
     setRating(index);
@@ -81,9 +81,9 @@ const MainView = ({navigation, route}) => {
   }, []);
 
   // Make sure that createNotification is used if notifications are set ON
-  useEffect(() => {
+/*   useEffect(() => {
     if (notificationOn) createNotification();
-  }, []);
+  }, []); */
 
   /**
    * Saves current temporary entry to database with given date
