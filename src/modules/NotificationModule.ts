@@ -33,4 +33,8 @@ export default NotificationModule as NotificationInterface;
 
 export const createNotification = () => {
     NotificationModule.createNotification(21,0,0);
-} 
+}
+
+export const stopNotification = () => {
+    NotificationModule.stopNotification();
+}
