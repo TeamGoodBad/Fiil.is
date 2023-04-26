@@ -50,7 +50,7 @@ const AnalysisView = ({navigation}) => {
         colors={[theme.colors.primary, theme.colors.background]}
         style={{
           display: 'flex',
-          height: '40%',
+          flex: 3,
           borderBottomStartRadius: 20,
           borderBottomEndRadius: 20,
           justifyContent: 'center',
@@ -65,40 +65,45 @@ const AnalysisView = ({navigation}) => {
         />
       </LinearGradient>
       <Divider />
-      <ScrollView style={styles.chipContainer}>
-        {words.map(word => {
-          return (
-            <View
-              style={{
-                marginBottom: 10,
-                backgroundColor: theme.colors.primaryContainer,
-                flex: 1,
-                padding: 10,
-                borderRadius: 10,
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-              key={word[0]}>
-              <Text
-                style={{width: '50%', color: theme.colors.onPrimaryContainer}}>
-                {' '}
-                {word[0]}
-              </Text>
-              <View style={{width: '50%'}}>
-                <View
+      <View style={styles.chipContainer}>
+        <ScrollView>
+          {words.map(word => {
+            return (
+              <View
+                style={{
+                  marginBottom: 10,
+                  backgroundColor: theme.colors.primaryContainer,
+                  flex: 1,
+                  padding: 10,
+                  borderRadius: 10,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}
+                key={word[0]}>
+                <Text
                   style={{
-                    backgroundColor: '#F78725',
-                    width: `${(word[1] / most) * 100}%`,
-                    height: '80%',
-                    borderRadius: 10,
-                  }}
-                />
+                    width: '50%',
+                    color: theme.colors.onPrimaryContainer,
+                  }}>
+                  {' '}
+                  {word[0]}
+                </Text>
+                <View style={{width: '50%'}}>
+                  <View
+                    style={{
+                      backgroundColor: '#F78725',
+                      width: `${(word[1] / most) * 100}%`,
+                      height: '80%',
+                      borderRadius: 10,
+                    }}
+                  />
+                </View>
               </View>
-            </View>
-          );
-        })}
-      </ScrollView>
+            );
+          })}
+        </ScrollView>
+      </View>
     </View>
   );
 };

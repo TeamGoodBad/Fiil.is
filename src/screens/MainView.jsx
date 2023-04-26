@@ -181,7 +181,7 @@ const MainView = ({navigation, route}) => {
         colors={[theme.colors.primary, theme.colors.background]}
         style={{
           display: 'flex',
-          height: '40%',
+          flex: 3,
           borderBottomStartRadius: 20,
           borderBottomEndRadius: 20,
           justifyContent: 'center',
@@ -221,7 +221,11 @@ const MainView = ({navigation, route}) => {
         </TouchableOpacity>
       </View>
       <View style={styles.buttonContainer}>
-        <Button mode="contained" onPress={() => saveEntry()}>
+        <Button
+          compact={true}
+          style={{paddingHorizontal: 20}}
+          mode="contained"
+          onPress={() => saveEntry()}>
           Tallenna
         </Button>
       </View>

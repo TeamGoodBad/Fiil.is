@@ -1,18 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {View, ScrollView, SafeAreaView} from 'react-native';
-import {
-  Button,
-  Text,
-  Modal,
-  Portal,
-  useTheme,
-  Paragraph,
-} from 'react-native-paper';
+import {Button, Modal, Portal, useTheme, Paragraph} from 'react-native-paper';
 import CalendarPicker from 'react-native-calendar-picker';
 import moment from 'moment';
 import TitleAndStars from '../components/TitleAndStars';
 
-import Stars from '../components/Stars';
 import {getStyles, getFin} from '../styles/calendarView';
 import {EMPTY_ENTRY, getEntries} from '../storage/userdata';
 
@@ -94,7 +86,11 @@ const CalendarView = ({navigation}) => {
             <TitleAndStars
               stars={{rating: selectedEntry.rating, editable: false}}
               titleContent={startDate}
-              buttonContent={{isButton: true, onPress: hideModal, text: 'X'}}
+              buttonContent={{
+                isButton: true,
+                onPress: hideModal,
+                text: '  ✕  ',
+              }}
             />
             <View style={{flex: 8}}>
               <ScrollView showsVerticalScrollIndicator={true}>

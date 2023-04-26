@@ -9,7 +9,7 @@ export const getStyles = theme =>
     ...basestyle,
     chipContainer: {
       padding: 10,
-      flex: 1,
+      flex: 7,
       rowGap: 10,
     },
     containerCenter: {
