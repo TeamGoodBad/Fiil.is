@@ -18,7 +18,6 @@ import {getStyles, getFin} from '../styles/calendarView';
 import {EMPTY_ENTRY, getEntries} from '../storage/userdata';
 
 
-
 const CalendarView = ({ navigation }) => {
   //Navigoi main menuun
   const handleEditPress = () => {
@@ -96,7 +95,8 @@ const CalendarView = ({ navigation }) => {
           contentContainerStyle={styles.modalContainer}>
           <TitleAndStars
             stars={{rating:selectedEntry.rating, editable: false}}
-            titleContent={startDate} />
+            titleContent={startDate}
+            buttonContent={{isButton:true, onPress:hideModal, text:"X"}} />
           <View style={{flex:8}}>
             <ScrollView showsVerticalScrollIndicator={true}>
               <Paragraph>
@@ -108,13 +108,7 @@ const CalendarView = ({ navigation }) => {
               onPress={handleEditPress}
               mode="elevated"
               style={{ margin: 5 }}>
-              muokkaa
-            </Button>
-            <Button
-              mode="elevated"
-              onPress={hideModal}
-              style={{ margin: 5 }}>
-              Takaisin
+              Muokkaa
             </Button>
           </View>
         </Modal> 

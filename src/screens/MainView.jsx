@@ -11,7 +11,8 @@ import {
   CURRENT_EDITING_STARTED,
 } from '../storage/userdata';
 import { getStyles } from '../styles/mainview';
-import { useEffect } from 'react';
+import { useEffect, useState
+ } from 'react';
 import { DAY_CHANGE_KEY, NOTIFICATIONS_ON_KEY, SettingsDB } from '../storage/settings';
 import TitleAndStars from '../components/TitleAndStars';
 import { createNotification } from '../modules/NotificationModule';
@@ -22,6 +23,8 @@ const MainView = ({ navigation, route }) => {
 
   const [text, setText] = useMMKVStorage(CURRENT_TEXT_KEY, UserDB, '');
   const [rating, setRating] = useMMKVStorage(CURRENT_RATING_KEY, UserDB, -1);
+
+  const [isToday, setIsToday] = useState(true);
 
   const [editingStarted, setEditingStarted] = useMMKVStorage(
     CURRENT_EDITING_STARTED,
@@ -104,6 +107,45 @@ const MainView = ({ navigation, route }) => {
     await setEntry(entry); // Save to db
     Keyboard.dismiss();
   };
+/**
+ *  changes date to today if null date
+ */
+
+useEffect(() => {
+  const today = new Date(); // get today's date
+  const todayDate = moment();
+  const dateMoment = editingStarted;
+  if (todayDate.isSame(dateMoment, 'day')) {
+    setIsToday(true);
+    console.log("toimii");
+  }
+  else {
+    setIsToday(false);
+  }
+  
+  if(editingStarted === null){
+    setEditingStarted(today.toISOString());
+  }
+
+}, [editingStarted]);
+
+/* return to todays date on press
+  */
+    function returnToday() {
+
+      const today = new Date(); // get today's date
+      const minDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const maxDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+  
+      getEntries({ minDate, maxDate }).then(entries => {
+        if (entries.length > 0) {
+          setText(entries[0].text);
+          setRating(entries[0].rating);
+        }
+      });
+      setEditingStarted(today.toISOString()); // set editingStarted to today's date
+  
+    }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -115,6 +157,7 @@ const MainView = ({ navigation, route }) => {
               editable: true,
               onChange: handlePress,
             }}
+            buttonContent={{isButton: !isToday, text: "Palaa", onPress: returnToday}}
             titleContent={moment(editingStarted)
               .format('DD.MM.YYYY')
               .toString()}
