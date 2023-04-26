@@ -10,9 +10,13 @@ import {
   getEntries,
   CURRENT_EDITING_STARTED,
 } from '../storage/userdata';
-import { getStyles } from '../styles/mainview';
-import { useEffect, useState} from 'react';
-import { DAY_CHANGE_KEY, NOTIFICATIONS_ON_KEY, SettingsDB } from '../storage/settings';
+import {getStyles} from '../styles/mainview';
+import {useEffect, useState} from 'react';
+import {
+  DAY_CHANGE_KEY,
+  NOTIFICATIONS_ON_KEY,
+  SettingsDB,
+} from '../storage/settings';
 
 import TitleAndStars from '../components/TitleAndStars';
 import LinearGradient from 'react-native-linear-gradient';
@@ -34,7 +38,7 @@ function GetTimeOfDayIntro() {
   } else {
     return options[3];
   }
-  console.log(currentH);
+  //console.log(currentH);
 }
 
 const MainView = ({navigation, route}) => {
@@ -68,7 +72,7 @@ const MainView = ({navigation, route}) => {
       setText(parsedSelectedEntry.text);
       setRating(parsedSelectedEntry.rating);
       setEditingStarted(moment(parsedSelectedEntry.date).toISOString());
-      console.log(parsedSelectedEntry);
+      //console.log(parsedSelectedEntry);
     }
   }, [route.params]);
 
@@ -127,45 +131,49 @@ const MainView = ({navigation, route}) => {
     await setEntry(entry); // Save to db
     Keyboard.dismiss();
   };
-/**
- *  changes date to today if null date
- */
+  /**
+   *  changes date to today if null date
+   */
 
-useEffect(() => {
-  const today = new Date(); // get today's date
-  const todayDate = moment();
-  const dateMoment = editingStarted;
-  if (todayDate.isSame(dateMoment, 'day')) {
-    setIsToday(true);
-    console.log("toimii");
-  }
-  else {
-    setIsToday(false);
-  }
-  
-  if(editingStarted === null){
-    setEditingStarted(today.toISOString());
-  }
-
-}, [editingStarted]);
-
-/* return to todays date on press
-  */
-    function returnToday() {
-
-      const today = new Date(); // get today's date
-      const minDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-      const maxDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
-  
-      getEntries({ minDate, maxDate }).then(entries => {
-        if (entries.length > 0) {
-          setText(entries[0].text);
-          setRating(entries[0].rating);
-        }
-      });
-      setEditingStarted(today.toISOString()); // set editingStarted to today's date
-  
+  useEffect(() => {
+    const today = new Date(); // get today's date
+    const todayDate = moment();
+    const dateMoment = editingStarted;
+    if (todayDate.isSame(dateMoment, 'day')) {
+      setIsToday(true);
+      //console.log('toimii');
+    } else {
+      setIsToday(false);
     }
+
+    if (editingStarted === null) {
+      setEditingStarted(today.toISOString());
+    }
+  }, [editingStarted]);
+
+  /* return to todays date on press
+   */
+  function returnToday() {
+    const today = new Date(); // get today's date
+    const minDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+    );
+    const maxDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() + 1,
+    );
+
+    getEntries({minDate, maxDate}).then(entries => {
+      if (entries.length > 0) {
+        setText(entries[0].text);
+        setRating(entries[0].rating);
+      }
+    });
+    setEditingStarted(today.toISOString()); // set editingStarted to today's date
+  }
 
   return (
     <View style={{flex: 1}}>
@@ -187,8 +195,12 @@ useEffect(() => {
             editable: true,
             onChange: handlePress,
           }}
-          titleContent={moment(editingStarted).format('DD.MM.YYYY').toString()
-          buttonContent={{isButton: !isToday, text: "Palaa", onPress: returnToday}}
+          titleContent={moment(editingStarted).format('DD.MM.YYYY').toString()}
+          buttonContent={{
+            isButton: !isToday,
+            text: 'Palaa',
+            onPress: returnToday,
+          }}
         />
       </LinearGradient>
       <View style={styles.textInputContainer}>

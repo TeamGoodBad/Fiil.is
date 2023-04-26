@@ -12,18 +12,16 @@ import CalendarPicker from 'react-native-calendar-picker';
 import moment from 'moment';
 import TitleAndStars from '../components/TitleAndStars';
 
-
 import Stars from '../components/Stars';
 import {getStyles, getFin} from '../styles/calendarView';
 import {EMPTY_ENTRY, getEntries} from '../storage/userdata';
 
-
-const CalendarView = ({ navigation }) => {
+const CalendarView = ({navigation}) => {
   //Navigoi main menuun
   const handleEditPress = () => {
-    console.log(selectedEntry)
+    //console.log(selectedEntry)
     hideModal();
-    navigation.navigate('Main', { selectedEntry: JSON.stringify(selectedEntry)});
+    navigation.navigate('Main', {selectedEntry: JSON.stringify(selectedEntry)});
   };
 
   const theme = useTheme();
@@ -87,45 +85,43 @@ const CalendarView = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{flex: 1, height: '100%'}}>
-    <View style={styles.base}>
-      <Portal> 
-        <Modal
-          visible={modalVisible}
-          onDismiss={hideModal}
-          contentContainerStyle={styles.modalContainer}>
-          <TitleAndStars
-            stars={{rating:selectedEntry.rating, editable: false}}
-            titleContent={startDate}
-            buttonContent={{isButton:true, onPress:hideModal, text:"X"}} />
-          <View style={{flex:8}}>
-            <ScrollView showsVerticalScrollIndicator={true}>
-              <Paragraph>
-                {selectedEntry.text}
-              </Paragraph>
-            </ScrollView>
-            <Button
-              title="Edit" 
-              onPress={handleEditPress}
-              mode="elevated"
-              style={{ margin: 5 }}>
-              Muokkaa
-            </Button>
-          </View>
-        </Modal> 
-
-      </Portal>
-      <CalendarPicker
-        weekdays={fin.days}
-        months={fin.months}
-        startFromMonday={true}
-        previousTitle={"⟽"} // "Edellinen"
-        nextTitle={"⟾"}     // "Seuraava"
-        textStyle={styles.text}
-        customDatesStyles={customDatesStyles}
-        onDateChange={(date) => setSelectedDate(date)}
-        onMonthChange={(date) => setCurrentMonth(date)}
-      />
-    </View>
+      <View style={styles.base}>
+        <Portal>
+          <Modal
+            visible={modalVisible}
+            onDismiss={hideModal}
+            contentContainerStyle={styles.modalContainer}>
+            <TitleAndStars
+              stars={{rating: selectedEntry.rating, editable: false}}
+              titleContent={startDate}
+              buttonContent={{isButton: true, onPress: hideModal, text: 'X'}}
+            />
+            <View style={{flex: 8}}>
+              <ScrollView showsVerticalScrollIndicator={true}>
+                <Paragraph>{selectedEntry.text}</Paragraph>
+              </ScrollView>
+              <Button
+                title="Edit"
+                onPress={handleEditPress}
+                mode="elevated"
+                style={{margin: 5}}>
+                Muokkaa
+              </Button>
+            </View>
+          </Modal>
+        </Portal>
+        <CalendarPicker
+          weekdays={fin.days}
+          months={fin.months}
+          startFromMonday={true}
+          previousTitle={'⟽'} // "Edellinen"
+          nextTitle={'⟾'} // "Seuraava"
+          textStyle={styles.text}
+          customDatesStyles={customDatesStyles}
+          onDateChange={date => setSelectedDate(date)}
+          onMonthChange={date => setCurrentMonth(date)}
+        />
+      </View>
     </SafeAreaView>
   );
 };
