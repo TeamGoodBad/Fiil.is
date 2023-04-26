@@ -16,8 +16,9 @@ export const getBaseStyle = () => StyleSheet.create({
       },
     titleContainer: {
         flex: 1,
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
     },
     titleAndStarsContainer: {
         flex: 2,
