@@ -1,6 +1,6 @@
-import { View, Keyboard, SafeAreaView, TouchableOpacity } from 'react-native';
-import { Button, TextInput, useTheme } from 'react-native-paper';
-import { useMMKVStorage } from 'react-native-mmkv-storage';
+import {View, Keyboard, SafeAreaView, TouchableOpacity} from 'react-native';
+import {Button, TextInput, useTheme, Text} from 'react-native-paper';
+import {useMMKVStorage} from 'react-native-mmkv-storage';
 import moment from 'moment';
 import {
   CURRENT_TEXT_KEY,
@@ -10,13 +10,37 @@ import {
   getEntries,
   CURRENT_EDITING_STARTED,
 } from '../storage/userdata';
-import { getStyles } from '../styles/mainview';
-import { useEffect } from 'react';
-import { DAY_CHANGE_KEY, NOTIFICATIONS_ON_KEY, SettingsDB } from '../storage/settings';
+import {getStyles} from '../styles/mainview';
+import {useEffect} from 'react';
+import {
+  DAY_CHANGE_KEY,
+  NOTIFICATIONS_ON_KEY,
+  SettingsDB,
+} from '../storage/settings';
 import TitleAndStars from '../components/TitleAndStars';
-import { createNotification } from '../modules/NotificationModule';
+import LinearGradient from 'react-native-linear-gradient';
 
-const MainView = ({ navigation, route }) => {
+function GetTimeOfDayIntro() {
+  var today = new Date();
+  const options = ['Huomenta', 'Päivää', 'Iltaa', 'Hyvää yötä'];
+
+  const currentH = today.getHours();
+
+  if (currentH < 10 && currentH > 6) {
+    return options[0];
+  }
+  if (currentH < 18 && currentH > 10) {
+    return options[1];
+  }
+  if (currentH < 22 && currentH > 18) {
+    return options[2];
+  } else {
+    return options[3];
+  }
+  console.log(currentH);
+}
+
+const MainView = ({navigation, route}) => {
   const theme = useTheme();
   const styles = getStyles(theme);
 
@@ -39,7 +63,7 @@ const MainView = ({ navigation, route }) => {
   // Change to older entry if editing
   useEffect(() => {
     if (route.params && route.params.selectedEntry) {
-      const { selectedEntry } = route.params;
+      const {selectedEntry} = route.params;
       const parsedSelectedEntry = JSON.parse(selectedEntry);
 
       setText(parsedSelectedEntry.text);
@@ -51,7 +75,7 @@ const MainView = ({ navigation, route }) => {
 
   // Lataa muistista tallennetun entryn halutulle päivälle. Jos entryä ei ole, ei tee mitään.
   const loadEntryFromDateIfSaved = async date => {
-    getEntries({ minDate: date, maxDate: date }).then(entries => {
+    getEntries({minDate: date, maxDate: date}).then(entries => {
       if (entries.length > 0) {
         setText(entries[0].text);
         setRating(entries[0].rating);
@@ -81,7 +105,7 @@ const MainView = ({ navigation, route }) => {
   }, []);
 
   // Make sure that createNotification is used if notifications are set ON
-/*   useEffect(() => {
+  /*   useEffect(() => {
     if (notificationOn) createNotification();
   }, []); */
 
@@ -89,7 +113,7 @@ const MainView = ({ navigation, route }) => {
   // https://github.com/facebook/react-native/issues/19366
   Keyboard.addListener('keyboardDidHide', () => {
     this.input.blur();
-  })
+  });
 
   /**
    * Saves current temporary entry to database with given date
@@ -106,43 +130,51 @@ const MainView = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ flex: 1 }}>
-        <View style={styles.container}>
-          <TitleAndStars
-            stars={{
-              rating: rating,
-              editable: true,
-              onChange: handlePress,
+    <View style={{flex: 1}}>
+      <LinearGradient
+        colors={[theme.colors.primary, theme.colors.background]}
+        style={{
+          display: 'flex',
+          height: '40%',
+          borderBottomStartRadius: 20,
+          borderBottomEndRadius: 20,
+          justifyContent: 'center',
+        }}
+        start={{x: 0, y: 0}}
+        end={{x: 0, y: 1}}>
+        <SafeAreaView />
+        <TitleAndStars
+          stars={{
+            rating: rating,
+            editable: true,
+            onChange: handlePress,
+          }}
+          titleContent={moment(editingStarted).format('DD.MM.YYYY').toString()}
+        />
+      </LinearGradient>
+      <View style={styles.textInputContainer}>
+        <TouchableOpacity
+          style={styles.textInputStyle}
+          onPress={() => this.input.focus()}>
+          <TextInput
+            ref={input => {
+              this.input = input;
             }}
-            titleContent={moment(editingStarted)
-              .format('DD.MM.YYYY')
-              .toString()}
+            multiline={true}
+            mode="outlined"
+            placeholder={'Tänään...'}
+            style={styles.textInputStyle}
+            value={text}
+            onChangeText={text => setText(text)}
           />
-          <View style={styles.textInputContainer}>
-            <TouchableOpacity
-              style={styles.textInputStyle}
-              onPress={() => this.input.focus()}
-            >
-              <TextInput
-                ref={(input) => { this.input = input; }}
-                multiline={true}
-                mode="outlined"
-                placeholder={'Tänään...'}
-                style={styles.textInputStyle}
-                value={text}
-                onChangeText={text => setText(text)}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.buttonContainer}>
-            <Button mode="contained" onPress={() => saveEntry()}>
-              Tallenna
-            </Button>
-          </View>
-        </View>
+        </TouchableOpacity>
       </View>
-    </SafeAreaView>
+      <View style={styles.buttonContainer}>
+        <Button mode="contained" onPress={() => saveEntry()}>
+          Tallenna
+        </Button>
+      </View>
+    </View>
   );
 };
 
