@@ -65,7 +65,8 @@
       "node_modules/(?!(",
       "react-native|@react-native|react-native-vector-icons|",
       "react-native-mmkv-storage|react-native-pin-code|react-native-calendar-picker|",
-      "react-native-swipe-gestures|react-native-share|react-native-fs",
+      "react-native-swipe-gestures|react-native-share|react-native-fs|",
+      "react-native-linear-gradient",
       ")/)"
     ],
     "testEnvironment": "jsdom",
